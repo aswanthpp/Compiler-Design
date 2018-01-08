@@ -1,0 +1,87 @@
+
+ Symbol Table:
+ 		Lexeme			Token
+
+   #include<stdio.h>        Preprocessor Statement
+
+                 int                       Keyword
+                main                       Keyword
+                   (                    Punctuator
+                   )                    Punctuator
+                   {                    Punctuator
+
+
+                 int                       Keyword
+                   a                    Identifier
+                   =                 Assignment Op
+                   0                      Constant
+                   ,                    Punctuator
+                   b                    Identifier
+                   =                 Assignment Op
+                   0                      Constant
+                   ,                    Punctuator
+                   c                    Identifier
+                   =                 Assignment Op
+                   5                      Constant
+                   ;                    Punctuator
+
+                   s                    Identifier
+                   c                    Identifier
+                   a                    Identifier
+                   n                    Identifier
+                   f                    Identifier
+                   (                    Punctuator
+                   %                 Arithmetic Op
+                   d                    Identifier
+                   %                 Arithmetic Op
+                   d                    Identifier
+                   ,                    Punctuator
+                   &                    Logical Op
+                   a                    Identifier
+                   ,                    Punctuator
+                   &                    Logical Op
+                   b                    Identifier
+                   )                    Punctuator
+                   ;                    Punctuator
+
+                 int                       Keyword
+                   s                    Identifier
+                   u                    Identifier
+                   m                    Identifier
+                   =                 Assignment Op
+                   0                      Constant
+                   ;                    Punctuator
+
+                   s                    Identifier
+                   u                    Identifier
+                   m                    Identifier
+                   =                 Assignment Op
+                   a                    Identifier
+                   +                 Arithmetic Op
+                   b                    Identifier
+                   ;                    Punctuator
+
+                   p                    Identifier
+                   r                    Identifier
+                 int                       Keyword
+                   f                    Identifier
+                   (                    Punctuator
+                   n                    Identifier
+                   u                    Identifier
+                   m                    Identifier
+                   :                    Punctuator
+                   %                 Arithmetic Op
+                   d                    Identifier
+                   n                    Identifier
+                   ,                    Punctuator
+                   s                    Identifier
+                   u                    Identifier
+                   m                    Identifier
+                   )                    Punctuator
+                   ;                    Punctuator
+
+              return                       Keyword
+                   1                      Constant
+                   ;                    Punctuator
+
+                   }                    Punctuator
