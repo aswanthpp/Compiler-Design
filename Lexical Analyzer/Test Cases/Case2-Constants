@@ -1,9 +1,0 @@
-// Test case to check int and char constants
-
-#include<stdio.h>
-void main(){
-	int a=25;
-	char c='h';
-	
-
-}
