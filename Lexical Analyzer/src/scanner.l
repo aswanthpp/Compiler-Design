@@ -3,15 +3,8 @@
 #include <stdlib.h>
 #include <malloc.h>
 #include <string.h>
-int found=0,var_cnt=0,i,nestedComment=0,bracCount=0,lineCount=0,flag=0;
 void write_OP(char *yytext,char type);
 int c;
-struct holder
-{
-	char *name,token[20];
-	int val;
-	struct holder *next;
-}*st,*head;
 %}
 
 D  [0-9]
