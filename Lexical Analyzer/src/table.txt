@@ -27,11 +27,7 @@
                    5                      Constant
                    ;                    Punctuator
 
-                   s                    Identifier
-                   c                    Identifier
-                   a                    Identifier
-                   n                    Identifier
-                   f                    Identifier
+               scanf                       Keyword
                    (                    Punctuator
                    %                 Arithmetic Op
                    d                    Identifier
@@ -63,10 +59,7 @@
                    b                    Identifier
                    ;                    Punctuator
 
-                   p                    Identifier
-                   r                    Identifier
-                 int                       Keyword
-                   f                    Identifier
+              printf                       Keyword
                    (                    Punctuator
                    n                    Identifier
                    u                    Identifier

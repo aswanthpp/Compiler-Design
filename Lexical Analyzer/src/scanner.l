@@ -5,12 +5,13 @@
 #include <string.h>
 int found=0,var_cnt=0,i,nestedComment=0,cBrac=0,cLine=0,flag=0;
 char *comment;
+void write_OP(char *yytext, char type);
 void disp_comment(char *yytext);
 %}
 
 D  [0-9]
 L  [a-zA-Z]
-keyword "auto"|"break"|"case"|"char"|"const"|"continue"|"default"|"do"|"double"|"else"|"enum"|"extern"|"float"|"for"|"goto"|"if"|"int"|"long"|"main"|"register"|"return"|"short"|"signed"|"sizeof"|"static"|"struct"|"switch"|"typedef"|"union"|"unsigned"|"void"|"volatile"|"while"
+keyword "auto"|"break"|"case"|"char"|"const"|"continue"|"default"|"do"|"double"|"else"|"enum"|"extern"|"float"|"for"|"goto"|"if"|"int"|"long"|"main"|"printf"|"register"|"return"|"scanf"|"short"|"signed"|"sizeof"|"static"|"struct"|"switch"|"typedef"|"union"|"unsigned"|"void"|"volatile"|"while"
 ident [a-z]([a-z][A-Z][0-9])*
 relop >|<|<=|>=|!=|==
 lop \&|\^|\~
