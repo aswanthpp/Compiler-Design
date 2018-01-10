@@ -1,6 +1,10 @@
 #include<stdio.h>
 int main(){
 
+	/*This is 
+	a sample
+	program*/
+
 	int a=0,b=0,c=5;
 	scanf("%d %d",&a,&b);
 	int sum=0;
