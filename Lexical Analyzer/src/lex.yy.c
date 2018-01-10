@@ -570,6 +570,7 @@ char *yytext;
 #include <stdlib.h>
 #include <malloc.h>
 #include <string.h>
+<<<<<<< HEAD:Lexical Analyzer/lex.yy.c
 int found=0,var_cnt=0,i,nestedComment=0,cBrac=0,cLine=0,flag=0;
 char *comment;
 void disp_comment(char *yytext);
@@ -577,6 +578,11 @@ void write_OP(char *yytext,char type);
 #line 577 "lex.yy.c"
 
 #line 579 "lex.yy.c"
+=======
+void write_OP(char *yytext,char type);
+int c;
+#line 593 "lex.yy.c"
+>>>>>>> 1e6399a4c7a0cad1220876be88e4db9be9829691:Lexical Analyzer/src/lex.yy.c
 
 #define INITIAL 0
 #define DETECT_COMMENT 1
@@ -797,10 +803,15 @@ YY_DECL
 		}
 
 	{
-#line 28 "scanner.l"
+#line 21 "scanner.l"
 
+<<<<<<< HEAD:Lexical Analyzer/lex.yy.c
 
 #line 803 "lex.yy.c"
+=======
+  /* Rules */
+#line 817 "lex.yy.c"
+>>>>>>> 1e6399a4c7a0cad1220876be88e4db9be9829691:Lexical Analyzer/src/lex.yy.c
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -860,56 +871,57 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 30 "scanner.l"
+#line 23 "scanner.l"
 write_OP(yytext,'d');
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 31 "scanner.l"
+#line 24 "scanner.l"
 write_OP(yytext,'k');
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 32 "scanner.l"
+#line 25 "scanner.l"
 write_OP(yytext,'i');
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 33 "scanner.l"
+#line 26 "scanner.l"
 write_OP(yytext,'r');
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 34 "scanner.l"
+#line 27 "scanner.l"
 write_OP(yytext,'p');
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 35 "scanner.l"
+#line 28 "scanner.l"
 write_OP(yytext,'o');
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 36 "scanner.l"
+#line 29 "scanner.l"
 write_OP(yytext,'c');
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 37 "scanner.l"
+#line 30 "scanner.l"
 write_OP(yytext,'e');
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 38 "scanner.l"
+#line 31 "scanner.l"
 write_OP(yytext,'l');
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 39 "scanner.l"
+#line 32 "scanner.l"
 write_OP(yytext,'d');
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
+<<<<<<< HEAD:Lexical Analyzer/lex.yy.c
 #line 40 "scanner.l"
 ;
 	YY_BREAK
@@ -983,6 +995,27 @@ YY_RULE_SETUP
 ECHO;
 	YY_BREAK
 #line 985 "lex.yy.c"
+=======
+#line 33 "scanner.l"
+c++;
+	YY_BREAK
+case 12:
+YY_RULE_SETUP
+#line 34 "scanner.l"
+c++;
+	YY_BREAK
+case 13:
+YY_RULE_SETUP
+#line 35 "scanner.l"
+c++;
+	YY_BREAK
+case 14:
+YY_RULE_SETUP
+#line 36 "scanner.l"
+ECHO;
+	YY_BREAK
+#line 945 "lex.yy.c"
+>>>>>>> 1e6399a4c7a0cad1220876be88e4db9be9829691:Lexical Analyzer/src/lex.yy.c
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(DETECT_COMMENT):
 	yyterminate();
@@ -1991,7 +2024,12 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
+<<<<<<< HEAD:Lexical Analyzer/lex.yy.c
 #line 77 "scanner.l"
+=======
+#line 36 "scanner.l"
+
+>>>>>>> 1e6399a4c7a0cad1220876be88e4db9be9829691:Lexical Analyzer/src/lex.yy.c
 
 
 int main()

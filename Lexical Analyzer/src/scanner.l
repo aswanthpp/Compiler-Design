@@ -6,7 +6,6 @@
 int found=0,var_cnt=0,i,nestedComment=0,cBrac=0,cLine=0,flag=0;
 char *comment;
 void disp_comment(char *yytext);
-void write_OP(char *yytext,char type);
 %}
 
 D  [0-9]
