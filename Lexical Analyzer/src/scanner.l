@@ -188,8 +188,8 @@ void write_OP(char *yytext,char type)
 	    			break;
 	    		}
 	    		current = current->next;
-	    		if(current==NULL)
-	    		break;
+	    		/*if(current==NULL)
+	    		break;*/
 	    }	
 	    if(i==var)
 	    {    	
@@ -212,9 +212,9 @@ void write_OP(char *yytext,char type)
 	    		}    
 		    	current->next = temp;
 		   	}
-	    }
-
+		   	
     	var++;	
+	    }
     }
 
    fprintf(yyout,"\n%20s%30s%30d",yytext,token,i);

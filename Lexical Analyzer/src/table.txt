@@ -3,63 +3,63 @@
  		Lexeme			Token					Attribute Value
 
   #include <stdio.h>        Preprocessor Statement                             0
-                 int                       Keyword                             0
-                main                       Keyword                             0
-                   (                    Punctuator                             0
-                   )                    Punctuator                             0
-                   {                    Punctuator                             0
-                 int                       Keyword                             0
-                   a                    Identifier                             0
-                   =                 Assignment Op                             0
-                   0                      Constant                             0
-                   ,                    Punctuator                             0
-                   b                    Identifier                             0
-                   =                 Assignment Op                             0
-                   0                      Constant                             0
-                   ,                    Punctuator                             0
-                   c                    Identifier                             0
-                   =                 Assignment Op                             0
-                   5                      Constant                             0
-                   ;                    Punctuator                             0
-               scanf                       Keyword                             0
-                   (                    Punctuator                             0
-             "%d %d"                String Literal                             0
-                   ,                    Punctuator                             0
-                   &                    Logical Op                             0
-                   a                    Identifier                             0
-                   ,                    Punctuator                             0
-                   &                    Logical Op                             0
-                   b                    Identifier                             0
-                   )                    Punctuator                             0
-                   ;                    Punctuator                             0
-                 int                       Keyword                             0
-                 sum                    Identifier                             0
-                   =                 Assignment Op                             0
-                   0                      Constant                             0
-                   ;                    Punctuator                             0
-                 sum                    Identifier                             0
-                   =                 Assignment Op                             0
-                   a                    Identifier                             0
-                   +                 Arithmetic Op                             0
-                   b                    Identifier                             0
-                   ;                    Punctuator                             0
-              printf                       Keyword                             0
-                   (                    Punctuator                             0
-    "\n Sum : %d \n"                String Literal                             0
-                   ,                    Punctuator                             0
-                 sum                    Identifier                             0
-                   )                    Punctuator                             0
-                   ;                    Punctuator                             0
-                char                       Keyword                             0
-                   *                 Arithmetic Op                             0
-                name                    Identifier                             0
-                   =                 Assignment Op                             0
-            "Arvind"                String Literal                             0
-                   ;                    Punctuator                             0
-              return                       Keyword                             0
-                   1                      Constant                             0
-                   ;                    Punctuator                             0
-                   }                    Punctuator                             0
+                 int                       Keyword                             1
+                main                       Keyword                             2
+                   (                    Punctuator                             3
+                   )                    Punctuator                             4
+                   {                    Punctuator                             5
+                 int                       Keyword                             1
+                   a                    Identifier                             6
+                   =                 Assignment Op                             7
+                   0                      Constant                             8
+                   ,                    Punctuator                             9
+                   b                    Identifier                            10
+                   =                 Assignment Op                             7
+                   0                      Constant                             8
+                   ,                    Punctuator                             9
+                   c                    Identifier                            11
+                   =                 Assignment Op                             7
+                   5                      Constant                            12
+                   ;                    Punctuator                            13
+               scanf                       Keyword                            14
+                   (                    Punctuator                             3
+             "%d %d"                String Literal                            15
+                   ,                    Punctuator                             9
+                   &                    Logical Op                            16
+                   a                    Identifier                             6
+                   ,                    Punctuator                             9
+                   &                    Logical Op                            16
+                   b                    Identifier                            10
+                   )                    Punctuator                             4
+                   ;                    Punctuator                            13
+                 int                       Keyword                             1
+                 sum                    Identifier                            17
+                   =                 Assignment Op                             7
+                   0                      Constant                             8
+                   ;                    Punctuator                            13
+                 sum                    Identifier                            17
+                   =                 Assignment Op                             7
+                   a                    Identifier                             6
+                   +                 Arithmetic Op                            18
+                   b                    Identifier                            10
+                   ;                    Punctuator                            13
+              printf                       Keyword                            19
+                   (                    Punctuator                             3
+    "\n Sum : %d \n"                String Literal                            20
+                   ,                    Punctuator                             9
+                 sum                    Identifier                            17
+                   )                    Punctuator                             4
+                   ;                    Punctuator                            13
+                char                       Keyword                            21
+                   *                 Arithmetic Op                            22
+                name                    Identifier                            23
+                   =                 Assignment Op                             7
+            "Arvind"                String Literal                            24
+                   ;                    Punctuator                            13
+              return                       Keyword                            25
+                   1                      Constant                            26
+                   ;                    Punctuator                            13
+                   }                    Punctuator                            27
 
 
 Comment (5 lines):
