@@ -7,12 +7,12 @@ int found=0,var_cnt=0,i,nestedComment=0,cBrac=0,cLine=0,flag=0;
 char *comment;
 void write_OP(char *yytext, char type);
 void disp_comment(char *yytext);
+
 %}
 
-D  [0-9]
-L  [a-zA-Z]
+dig  [0-9]
+letter  [a-zA-Z]
 keyword "auto"|"break"|"case"|"char"|"const"|"continue"|"default"|"do"|"double"|"else"|"enum"|"extern"|"float"|"for"|"goto"|"if"|"int"|"long"|"main"|"printf"|"register"|"return"|"scanf"|"short"|"signed"|"sizeof"|"static"|"struct"|"switch"|"typedef"|"union"|"unsigned"|"void"|"volatile"|"while"
-ident [a-z]([a-z][A-Z][0-9])*
 relop >|<|<=|>=|!=|==
 lop \&|\^|\~
 punc \(|\)|\[|\]|;|,|\{|\}|\:|\.
@@ -23,30 +23,34 @@ quote \'|\"|\\
 comm (\/\/.*)
 comstart (\/\*)
 comend (\*\/)
+newline "\n"
 %x DETECT_COMMENT
 
 %%
 
 ^#([-a-zA-Z0-9.]|{relop}|{ws})* write_OP(yytext,'d');
-{keyword} write_OP(yytext,'k');
-{ident} write_OP(yytext,'i');
+{keyword} {
+		if(nestedComment<=0)
+			write_OP(yytext,'k');
+		}
+{letter}({letter}|{dig})* write_OP(yytext,'i');
+{dig}+({letter}|{dig})+ printf("ERROR : Invalid Identifier");
 {relop} write_OP(yytext,'r');
 {punc} write_OP(yytext,'p');
 {op} write_OP(yytext,'o');
-{D} write_OP(yytext,'c');
+{dig} write_OP(yytext,'c');
 {eq} write_OP(yytext,'e');
 {lop} write_OP(yytext,'l');
-preproc write_OP(yytext,'d');
-{L} ;
 {quote} ;
 {ws} ;
+{newline} ;
 {comm} ;
 
 {comstart}          {  
                         BEGIN(DETECT_COMMENT);
                         nestedComment++;
                         cLine++;
-                        disp_comment("\n");
+                        disp_comment("\n\t");
                     }
 
 <DETECT_COMMENT>{comstart} { 
@@ -81,7 +85,7 @@ int main()
 	comment = (char*)malloc(100*sizeof(char));
 	yyin=fopen("input.c","r");
 	yyout=fopen("table.txt","w");
-	fprintf(yyout,"\n Symbol Table:\n \t\tLexeme\t\t\tToken\n");
+	fprintf(yyout,"\n Symbol Table:\n \t\tLexeme\t\t\t\t\t\t\t\t\tToken\n");
 	yylex();
 
     if(nestedComment!=0)
@@ -121,7 +125,7 @@ void disp_comment(char *yytext)
 void write_OP(char *yytext,char type)
 {
     int l1 = strlen(yytext);
-    char token[20];
+    char token[40];
     switch(type)
     {
 	case 'i':
@@ -133,13 +137,10 @@ void write_OP(char *yytext,char type)
 	case 'e':
             strcpy(token,"Assignment Op");
             break;
-        case 'v':
-            strcpy(token,"Variable");
-            break;
-        case 'p':
+    case 'p':
             strcpy(token,"Punctuator");
             break;
-        case 'r':
+    case 'r':
             strcpy(token,"Relational Op");
             break;
 	case 'l':
@@ -148,17 +149,18 @@ void write_OP(char *yytext,char type)
 	case 'o':
             strcpy(token,"Arithmetic Op");
             break;
-        case 'k':
+    case 'k':
             strcpy(token,"Keyword");
             break;
-        case 's':
+    case 's':
             strcpy(token,"String Literal");
             break;
 	case 'd':
             strcpy(token,"Preprocessor Statement");
             break;
     }
-   fprintf(yyout,"\n%20s%30.30s",yytext,token);
+
+   fprintf(yyout,"\n%20s%30s",yytext,token);
   
 }
                                                                                                     

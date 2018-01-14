@@ -1,18 +1,13 @@
 
  Symbol Table:
- 		Lexeme			Token
+ 		Lexeme									Token
 
-   #include<stdio.h>        Preprocessor Statement
-
+  #include <stdio.h>        Preprocessor Statement
                  int                       Keyword
                 main                       Keyword
                    (                    Punctuator
                    )                    Punctuator
                    {                    Punctuator
-
-
-
-
                  int                       Keyword
                    a                    Identifier
                    =                 Assignment Op
@@ -26,7 +21,6 @@
                    =                 Assignment Op
                    5                      Constant
                    ;                    Punctuator
-
                scanf                       Keyword
                    (                    Punctuator
                    %                 Arithmetic Op
@@ -41,49 +35,37 @@
                    b                    Identifier
                    )                    Punctuator
                    ;                    Punctuator
-
                  int                       Keyword
-                   s                    Identifier
-                   u                    Identifier
-                   m                    Identifier
+                 sum                    Identifier
                    =                 Assignment Op
                    0                      Constant
                    ;                    Punctuator
-
-                   s                    Identifier
-                   u                    Identifier
-                   m                    Identifier
+                 sum                    Identifier
                    =                 Assignment Op
                    a                    Identifier
                    +                 Arithmetic Op
                    b                    Identifier
                    ;                    Punctuator
-
               printf                       Keyword
                    (                    Punctuator
                    n                    Identifier
-                   u                    Identifier
-                   m                    Identifier
+                 Sum                    Identifier
                    :                    Punctuator
                    %                 Arithmetic Op
                    d                    Identifier
                    n                    Identifier
                    ,                    Punctuator
-                   s                    Identifier
-                   u                    Identifier
-                   m                    Identifier
+                 sum                    Identifier
                    )                    Punctuator
                    ;                    Punctuator
-
               return                       Keyword
                    1                      Constant
                    ;                    Punctuator
-
                    }                    Punctuator
 
 
-
-Comment (3 lines):
-This is 
+Comment (4 lines):
+	 This is 
 	a sample
-	program
+	multi-line 
+	comment

@@ -1,9 +1,11 @@
-#include<stdio.h>
-int main(){
+#include <stdio.h>
 
-	/*This is 
+int main()
+{
+	/* This is 
 	a sample
-	program*/
+	multi-line 
+	comment*/
 
 	int a=0,b=0,c=5;
 	scanf("%d %d",&a,&b);
