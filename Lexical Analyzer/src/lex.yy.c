@@ -568,7 +568,7 @@ char *yytext;
 #include <stdlib.h>
 #include <malloc.h>
 #include <string.h>
-int found=0,var=0,i,nc=0,cBrac=0,cLine=0,flag=0;
+int var=0,i,nc=0,cBrac=0,cLine=0,flag=0;
 char *comment;
 void write_OP(char *yytext, char type);
 void disp_comment(char *yytext);
@@ -2134,7 +2134,7 @@ void write_OP(char *yytext,char type)
 		    	current->next = temp;
 		   	}
 	    }
-	       
+
     	var++;	
     }
 
