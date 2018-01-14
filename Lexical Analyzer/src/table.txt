@@ -1,67 +1,67 @@
 
  Symbol Table:
- 		Lexeme									Token
+ 		Lexeme			Token					Attribute Value
 
-  #include <stdio.h>        Preprocessor Statement
-                 int                       Keyword
-                main                       Keyword
-                   (                    Punctuator
-                   )                    Punctuator
-                   {                    Punctuator
-                 int                       Keyword
-                   a                    Identifier
-                   =                 Assignment Op
-                   0                      Constant
-                   ,                    Punctuator
-                   b                    Identifier
-                   =                 Assignment Op
-                   0                      Constant
-                   ,                    Punctuator
-                   c                    Identifier
-                   =                 Assignment Op
-                   5                      Constant
-                   ;                    Punctuator
-               scanf                       Keyword
-                   (                    Punctuator
-                   %                 Arithmetic Op
-                   d                    Identifier
-                   %                 Arithmetic Op
-                   d                    Identifier
-                   ,                    Punctuator
-                   &                    Logical Op
-                   a                    Identifier
-                   ,                    Punctuator
-                   &                    Logical Op
-                   b                    Identifier
-                   )                    Punctuator
-                   ;                    Punctuator
-                 int                       Keyword
-                 sum                    Identifier
-                   =                 Assignment Op
-                   0                      Constant
-                   ;                    Punctuator
-                 sum                    Identifier
-                   =                 Assignment Op
-                   a                    Identifier
-                   +                 Arithmetic Op
-                   b                    Identifier
-                   ;                    Punctuator
-              printf                       Keyword
-                   (                    Punctuator
-                   n                    Identifier
-                 Sum                    Identifier
-                   :                    Punctuator
-                   %                 Arithmetic Op
-                   d                    Identifier
-                   n                    Identifier
-                   ,                    Punctuator
-                 sum                    Identifier
-                   )                    Punctuator
-                   ;                    Punctuator
-              return                       Keyword
-                   1                      Constant
-                   ;                    Punctuator
-                   }                    Punctuator
+  #include <stdio.h>        Preprocessor Statement                             0
+                 int                       Keyword                             1
+                main                       Keyword                             1
+                   (                    Punctuator                             3
+                   )                    Punctuator                             3
+                   {                    Punctuator                             3
+                 int                       Keyword                             1
+                   a                    Identifier                             2
+                   =                 Assignment Op                             4
+                   0                      Constant                             8
+                   ,                    Punctuator                             3
+                   b                    Identifier                             2
+                   =                 Assignment Op                             4
+                   0                      Constant                             8
+                   ,                    Punctuator                             3
+                   c                    Identifier                             2
+                   =                 Assignment Op                             4
+                   5                      Constant                             8
+                   ;                    Punctuator                             3
+               scanf                       Keyword                             1
+                   (                    Punctuator                             3
+                   %                 Arithmetic Op                             7
+                   d                    Identifier                             2
+                   %                 Arithmetic Op                             7
+                   d                    Identifier                             2
+                   ,                    Punctuator                             3
+                   &                    Logical Op                             6
+                   a                    Identifier                             2
+                   ,                    Punctuator                             3
+                   &                    Logical Op                             6
+                   b                    Identifier                             2
+                   )                    Punctuator                             3
+                   ;                    Punctuator                             3
+                 int                       Keyword                             1
+                 sum                    Identifier                             2
+                   =                 Assignment Op                             4
+                   0                      Constant                             8
+                   ;                    Punctuator                             3
+                 sum                    Identifier                             2
+                   =                 Assignment Op                             4
+                   a                    Identifier                             2
+                   +                 Arithmetic Op                             7
+                   b                    Identifier                             2
+                   ;                    Punctuator                             3
+              printf                       Keyword                             1
+                   (                    Punctuator                             3
+                   n                    Identifier                             2
+                 Sum                    Identifier                             2
+                   :                    Punctuator                             3
+                   %                 Arithmetic Op                             7
+                   d                    Identifier                             2
+                   n                    Identifier                             2
+                   ,                    Punctuator                             3
+                 sum                    Identifier                             2
+                   )                    Punctuator                             3
+                   ;                    Punctuator                             3
+              return                       Keyword                             1
+                   1                      Constant                             8
+                   ;                    Punctuator                             3
+                   }                    Punctuator                             3
 
 
 Comment (4 lines):

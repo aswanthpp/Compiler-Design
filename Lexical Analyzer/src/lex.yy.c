@@ -2000,7 +2000,7 @@ int main()
 	comment = (char*)malloc(100*sizeof(char));
 	yyin=fopen("input.c","r");
 	yyout=fopen("table.txt","w");
-	fprintf(yyout,"\n Symbol Table:\n \t\tLexeme\t\t\t\t\t\t\t\t\tToken\n");
+	fprintf(yyout,"\n Symbol Table:\n \t\tLexeme\t\t\tToken\t\t\t\t\tAttribute Value\n");
 	yylex();
 
     if(nestedComment!=0)
@@ -2040,42 +2040,65 @@ void disp_comment(char *yytext)
 void write_OP(char *yytext,char type)
 {
     int l1 = strlen(yytext);
-    char token[40];
+    char token[30];
+    
+    //Attribute Value
+    int av;
+
     switch(type)
     {
-	case 'i':
-            strcpy(token,"Identifier");
-            break;      
-	case 'c':
-            strcpy(token,"Constant");
-            break;
-	case 'e':
-            strcpy(token,"Assignment Op");
-            break;
-    case 'p':
-            strcpy(token,"Punctuator");
-            break;
-    case 'r':
-            strcpy(token,"Relational Op");
-            break;
-	case 'l':
-            strcpy(token,"Logical Op");
-            break;
-	case 'o':
-            strcpy(token,"Arithmetic Op");
-            break;
-    case 'k':
-            strcpy(token,"Keyword");
-            break;
-    case 's':
-            strcpy(token,"String Literal");
-            break;
-	case 'd':
+    	case 'd':
             strcpy(token,"Preprocessor Statement");
+            av=0;
+            break;
+
+      case 'k':
+            strcpy(token,"Keyword");
+            av=1;
+            break;
+
+      case 'i':
+			      strcpy(token,"Identifier");
+			      av=2;
+			      break;
+
+      case 'p':
+            strcpy(token,"Punctuator");
+            av=3;
+            break;
+
+      case 'e':
+            strcpy(token,"Assignment Op");
+            av=4;
+            break;
+
+      case 'r':
+            strcpy(token,"Relational Op");
+            av=5;
+            break;
+
+      case 'l':
+            strcpy(token,"Logical Op");
+            av=6;
+            break;
+
+      case 'o':
+            strcpy(token,"Arithmetic Op");
+            av=7;
+            break;                              
+			
+			case 'c':
+            strcpy(token,"Constant");
+            av=8;
+            break;
+
+    	case 's':
+            strcpy(token,"String Literal");
+            av=9;
             break;
     }
 
-   fprintf(yyout,"\n%20s%30s",yytext,token);
+   fprintf(yyout,"\n%20s%30s%30d",yytext,token,av);
   
 }
                                                                                                     
