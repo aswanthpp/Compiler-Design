@@ -2,7 +2,8 @@
 
 int main()
 {
-	/* This is 
+	/* My name is Arvind.
+	This is
 	a sample
 	multi-line 
 	comment*/
@@ -12,5 +13,6 @@ int main()
 	int sum=0;
 	sum=a+b;
 	printf("\n Sum : %d \n",sum);
+	char *name = "Arvind";
 	return 1;
 }
