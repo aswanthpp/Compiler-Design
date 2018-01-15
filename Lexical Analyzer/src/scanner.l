@@ -4,6 +4,8 @@
 #include <malloc.h>
 #include <string.h>
 int var=0,i,nc=0,cBrac=0,cLine=0,flag=0;
+int lineNumber=1;
+char *inputFile;
 char *comment;
 void write_OP(char *yytext, char type);
 void disp_comment(char *yytext);
@@ -19,6 +21,9 @@ struct token *head=NULL;
 dig  [0-9]
 letter  [a-zA-Z]
 keyword "auto"|"break"|"case"|"char"|"const"|"continue"|"default"|"do"|"double"|"else"|"enum"|"extern"|"float"|"for"|"goto"|"if"|"int"|"long"|"main"|"printf"|"register"|"return"|"scanf"|"short"|"signed"|"sizeof"|"static"|"struct"|"switch"|"typedef"|"union"|"unsigned"|"void"|"volatile"|"while"
+datatype "int"|"char"
+sign "signed"|"unsigned"
+modifiers "long"|"short"
 relop >|<|<=|>=|!=|==
 lop \&|\^|\~
 punc \(|\)|\[|\]|;|,|\{|\}|\:|\.
@@ -30,17 +35,23 @@ comm (\/\/.*)
 comstart (\/\*)
 comend (\*\/)
 newline "\n"
+ident ({letter}({letter}|{dig})*)|"_"({letter}|{dig})+
+structure "struct"
+
 %x DETECT_COMMENT
 
 %%
 
 ^#([-a-zA-Z0-9.]|{relop}|{ws})* write_OP(yytext,'d');
 {keyword} {
-		if(nc<=0)
+		        if(nc<=0)
 			write_OP(yytext,'k');
 		}
-{letter}({letter}|{dig})* write_OP(yytext,'i');
-{dig}+({letter}|{dig})+ printf("ERROR : Invalid Identifier");
+{sign}?{ws}{modifiers}?{ws}"int"|"float" write_OP(yytext,'k');
+{ident}\[{dig}*\] write_OP(yytext,'a');
+\*{ident} write_OP(yytext,'q');
+{ident} write_OP(yytext,'i');
+{dig}+({letter}|{dig})+|"_" printf("%s : %d : Invalid Identifier\n",inputFile,lineNumber);
 {relop} write_OP(yytext,'r');
 {punc} write_OP(yytext,'p');
 {op} write_OP(yytext,'o');
@@ -50,7 +61,7 @@ newline "\n"
 \"(.)*\" write_OP(yytext,'s');
 {quote} ;
 {ws} ;
-{newline} ;
+{newline} lineNumber++;
 {comm} ;
 
 {comstart}  {  
@@ -64,7 +75,7 @@ newline "\n"
                             nc++;
                             if(nc>1)
                             {
-                                printf("ERROR: Nested Comment\n");
+				printf("%s : %d : Nested Comment\n",inputFile,lineNumber);
                                 flag = 1;
                             }
                          }
@@ -73,7 +84,7 @@ newline "\n"
                             if(nc>0)
                                 nc--;
                             else
-                            printf("ERROR: */ found before /*\n");
+			    printf("%s : %d : */ found before /*\n",inputFile,lineNumber);
                             
                             if(nc==0)
                             BEGIN(INITIAL);
@@ -81,32 +92,36 @@ newline "\n"
 
 <DETECT_COMMENT>\n   {  
                  cLine++;
+                 lineNumber++;
                  disp_comment("\n");
                 }
 
 <DETECT_COMMENT>. {disp_comment(yytext);}
+
+
 %%
 
-int main()
+int main(int argc,char **argv)
 {
 	comment = (char*)malloc(100*sizeof(char));
-	yyin=fopen("input.c","r");
+	yyin=fopen(argv[1],"r");
+	inputFile=argv[1];
 	yyout=fopen("table.txt","w");
-	fprintf(yyout,"\n Symbol Table:\n \t\tLexeme\t\t\tToken\t\t\t\t\tAttribute Value\n");
+	fprintf(yyout,"\n Symbol Table:\n \t\tLexeme\t\t\tToken\t\t\t\t\tAttribute Value\t\t\tLine Number\n");
 	yylex();
 
     if(nc!=0)
-    printf("ERROR: Comment does not end\n");
+    printf("%s : %d : Comment Does Not End\n",inputFile,lineNumber);
     
     if(cBrac!=0)
-    printf("ERROR: Bracket mismatch\n");
+    printf("%s : %d : Bracket Mismatch\n",inputFile,lineNumber);
     
     fprintf(yyout,"\n");
     if(flag==1)
     {
         cLine = 0;
         fprintf(yyout,"\n\nComment (%d lines):\n",cLine);
-        fprintf(yyout,"ERROR: Nested Comment");
+        printf("%s : %d : Nested Comment\n",inputFile,lineNumber);
     }
     else
     {
@@ -137,8 +152,19 @@ void write_OP(char *yytext,char type)
 
     switch(type)
     {
+	case 'a':
+		strcpy(token,"Array");
+		break;
+ 
+        case 'w':
+		strcpy(token,"Structure");
+		break;
     	case 'd':
             strcpy(token,"Preprocessor Statement");
+            break;
+
+	case 'q' :	
+            strcpy(token,"Pointer");
             break;
 
       case 'k':
@@ -146,8 +172,8 @@ void write_OP(char *yytext,char type)
             break;
 
       case 'i':
-			      strcpy(token,"Identifier");
-			      break;
+	      strcpy(token,"Identifier");
+	        break;
 
       case 'p':
             strcpy(token,"Punctuator");
@@ -217,7 +243,7 @@ void write_OP(char *yytext,char type)
 	    }
     }
 
-   fprintf(yyout,"\n%20s%30s%30d",yytext,token,i);
+   fprintf(yyout,"\n%20s%30s%30d%35d",yytext,token,i,lineNumber);
 }
                                                                                                     
 int yywrap()

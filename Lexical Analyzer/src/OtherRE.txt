@@ -1,0 +1,4 @@
+
+Not included in scanner code
+
+{structure}{ws}{ident}\{{newline}({ws}{datatype}{ws}{ident}\;{newline})*{newline}\}\;  write_OP(yytext,'w');    ===> structure RE
