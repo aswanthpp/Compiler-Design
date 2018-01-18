@@ -13,12 +13,6 @@ struct Node {
 	int av;
 	struct Node *next;
 }*head=NULL;
-struct Symbol{
-	int av;
-	int lineNumber;
-	char *tname;
-	struct Symbol *next;
-}*symbolHead=NULL;
 %}
 digit  [0-9]
 letter  [a-zA-Z]
@@ -109,10 +103,16 @@ int main(int argc,char **argv)
 	comment = (char*)malloc(100*sizeof(char));
 	yyin=fopen(argv[1],"r");
 	inputFile=argv[1];
-	yyout=fopen("table.txt","w");
+	yyout=fopen("symbol.txt","a");
 	fprintf(yyout,"\n Symbol Table:\n \t\tLexeme\t\t\tToken\t\t\t\t\tAttribute Value\t\t\tLine Number\n");
+	fclose(yyout);
+	yyout=fopen("constants.txt","a");
+	fprintf(yyout,"\n Constats Table:\n \t\tLexeme\t\t\tToken\t\t\t\t\tAttribute Value\t\t\tLine Number\n");
+	fclose(yyout);
+	yyout=fopen("table.txt","a");
+	fprintf(yyout,"\n Table:\n \t\tLexeme\t\t\tToken\t\t\t\t\tAttribute Value\t\t\tLine Number\n");
 	yylex();
-
+	
     if(nc!=0)
     printf("%s : %d : Comment Does Not End\n",inputFile,lineNumber);
     
@@ -130,12 +130,8 @@ int main(int argc,char **argv)
         fputs(comment,yyout);
     }
     
+
     
-    printf("\n\t\t\tSymbol Table\n");
-    struct Symbol *current=symbolHead;
-    while(current!=NULL){
-    	printf("\n%s %d %d",current->tname,current->av,current->lineNumber);
-    }
 	fclose(yyout);	
 }
 
@@ -231,34 +227,24 @@ void insertToTable(char *yytext,char type)
 	    			current = current->next;
 	    		}    
 		    	current->next = temp;
-		   	}
+		}
 		   	
     	var++;	
 	    }
     }
 	if(type =='i' || type == 'a' || type == 'q'){
-		if(symbolHead==NULL){
-			struct Symbol *temp=(struct Symbol *)malloc(sizeof(struct Symbol));
-			temp->av=i;
-			strcpy(temp->tname,yytext);
-			temp->lineNumber=lineNumber;
-			temp->next=NULL;
-			symbolHead=temp;
-		}	
-		else{
-			struct Symbol *current=symbolHead;
-			while(current->next!=NULL){
-				current=current->next;
-			}
-			struct Symbol *temp=(struct Symbol *)malloc(sizeof(struct Symbol));
-			temp->av=i;
-			strcpy(temp->tname,yytext);
-			temp->lineNumber=lineNumber;
-			temp->next=NULL;
-			current->next=temp;
-			
-		}
-		
+		fclose(yyout);
+		yyout=fopen("symbol.txt","a");
+		fprintf(yyout,"\n%20s%30s%30d%35d",yytext,token,i,lineNumber);
+		fclose(yyout);
+		yyout=fopen("table.txt","a");
+	}
+	if(type =='c'){
+		fclose(yyout);
+		yyout=fopen("constants.txt","a");
+		fprintf(yyout,"\n%20s%30s%30d%35d",yytext,token,i,lineNumber);
+		fclose(yyout);
+		yyout=fopen("table.txt","a");
 	}
    fprintf(yyout,"\n%20s%30s%30d%35d",yytext,token,i,lineNumber);
 }
