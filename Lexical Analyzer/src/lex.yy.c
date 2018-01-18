@@ -646,6 +646,7 @@ char *yytext;
 #include <string.h>
 int var=0,i,nc=0,cLine=0,flag=0;
 int lineNumber=1;
+FILE *ptr1,*ptr2;
 char *comment,*inputFile;
 void insertToTable(char *yytext,char type);
 void displayComment(char *yytext);
@@ -655,7 +656,7 @@ struct Node {
 	struct Node *next;
 }*head=NULL;
 
-#line 659 "lex.yy.c"
+#line 660 "lex.yy.c"
 
 #define INITIAL 0
 #define DETECT_COMMENT 1
@@ -877,9 +878,9 @@ YY_DECL
 		}
 
 	{
-#line 39 "symbol_table.l"
+#line 40 "symbol_table.l"
 
-#line 883 "lex.yy.c"
+#line 884 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -939,103 +940,103 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 40 "symbol_table.l"
+#line 41 "symbol_table.l"
 insertToTable(yytext,'d');
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 42 "symbol_table.l"
+#line 43 "symbol_table.l"
 insertToTable(yytext,'k');
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 43 "symbol_table.l"
+#line 44 "symbol_table.l"
 insertToTable(yytext,'k');
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 45 "symbol_table.l"
+#line 46 "symbol_table.l"
 insertToTable(yytext,'a');
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 46 "symbol_table.l"
+#line 47 "symbol_table.l"
 insertToTable(yytext,'q');
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 47 "symbol_table.l"
+#line 48 "symbol_table.l"
 insertToTable(yytext,'i');
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 48 "symbol_table.l"
+#line 49 "symbol_table.l"
 { printf("%s : %d : Invalid Identifier\n",inputFile,lineNumber); }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 50 "symbol_table.l"
+#line 51 "symbol_table.l"
 insertToTable(yytext,'r');
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 51 "symbol_table.l"
+#line 52 "symbol_table.l"
 insertToTable(yytext,'l');
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 52 "symbol_table.l"
+#line 53 "symbol_table.l"
 insertToTable(yytext,'o');
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 53 "symbol_table.l"
+#line 54 "symbol_table.l"
 insertToTable(yytext,'e');
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 54 "symbol_table.l"
+#line 55 "symbol_table.l"
 insertToTable(yytext,'p');
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 56 "symbol_table.l"
+#line 57 "symbol_table.l"
 insertToTable(yytext,'c');
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 58 "symbol_table.l"
+#line 59 "symbol_table.l"
 insertToTable(yytext,'s');
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 59 "symbol_table.l"
+#line 60 "symbol_table.l"
 {printf("%s : %d : String Does Not End\n",inputFile,lineNumber);}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 60 "symbol_table.l"
+#line 61 "symbol_table.l"
 ;
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 61 "symbol_table.l"
+#line 62 "symbol_table.l"
 ;
 	YY_BREAK
 case 18:
 /* rule 18 can match eol */
 YY_RULE_SETUP
-#line 62 "symbol_table.l"
+#line 63 "symbol_table.l"
 lineNumber++;
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 64 "symbol_table.l"
+#line 65 "symbol_table.l"
 
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 66 "symbol_table.l"
+#line 67 "symbol_table.l"
 {  
                 BEGIN(DETECT_COMMENT);
                 nc++;
@@ -1045,7 +1046,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 73 "symbol_table.l"
+#line 74 "symbol_table.l"
 { 
                             nc++;
                             if(nc>1)
@@ -1057,7 +1058,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 82 "symbol_table.l"
+#line 83 "symbol_table.l"
 {
                             if(nc>0)
                                 nc--;
@@ -1071,7 +1072,7 @@ YY_RULE_SETUP
 case 23:
 /* rule 23 can match eol */
 YY_RULE_SETUP
-#line 92 "symbol_table.l"
+#line 93 "symbol_table.l"
 {  
                  cLine++;
                  lineNumber++;
@@ -1080,15 +1081,15 @@ YY_RULE_SETUP
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 98 "symbol_table.l"
+#line 99 "symbol_table.l"
 {displayComment(yytext);}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 101 "symbol_table.l"
+#line 102 "symbol_table.l"
 ECHO;
 	YY_BREAK
-#line 1092 "lex.yy.c"
+#line 1093 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(DETECT_COMMENT):
 	yyterminate();
@@ -2093,7 +2094,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 101 "symbol_table.l"
+#line 102 "symbol_table.l"
 
 
 
@@ -2102,13 +2103,13 @@ int main(int argc,char **argv)
 	comment = (char*)malloc(100*sizeof(char));
 	yyin=fopen(argv[1],"r");
 	inputFile=argv[1];
-	yyout=fopen("symbol.txt","a");
-	fprintf(yyout,"\n Symbol Table:\n \t\tLexeme\t\t\tToken\t\t\t\t\tAttribute Value\t\t\tLine Number\n");
-	fclose(yyout);
-	yyout=fopen("constants.txt","a");
-	fprintf(yyout,"\n Constats Table:\n \t\tLexeme\t\t\tToken\t\t\t\t\tAttribute Value\t\t\tLine Number\n");
-	fclose(yyout);
-	yyout=fopen("table.txt","a");
+	ptr1=fopen("symbol.txt","w");
+	fprintf(ptr1,"\n Symbol Table:\n \t\tLexeme\t\t\tToken\t\t\t\t\tAttribute Value\t\t\tLine Number\n");
+	//fclose(ptr1);
+	ptr2=fopen("constants.txt","w");
+	fprintf(ptr2,"\n Constats Table:\n \t\tLexeme\t\t\tToken\t\t\t\t\tAttribute Value\t\t\tLine Number\n");
+	//fclose(ptr2);
+	yyout=fopen("table.txt","w");
 	fprintf(yyout,"\n Table:\n \t\tLexeme\t\t\tToken\t\t\t\t\tAttribute Value\t\t\tLine Number\n");
 	yylex();
 	
@@ -2243,18 +2244,18 @@ void insertToTable(char *yytext,char type)
     }
 
 	if(type =='i' || type == 'a' || type == 'q'){
-		fclose(yyout);
-		yyout=fopen("symbol.txt","a");
-		fprintf(yyout,"\n%20s%30s%30d%35d",yytext,token,i,lineNumber);
-		fclose(yyout);
-		yyout=fopen("table.txt","a");
+		//fclose(yyout);
+		//yyout=fopen("symbol.txt","a");
+		fprintf(ptr1,"\n%20s%30s%30d%35d",yytext,token,i,lineNumber);
+		//fclose(yyout);
+		//yyout=fopen("table.txt","a");
 	}
 	if(type =='c'){
-		fclose(yyout);
-		yyout=fopen("constants.txt","a");
-		fprintf(yyout,"\n%20s%30s%30d%35d",yytext,token,i,lineNumber);
-		fclose(yyout);
-		yyout=fopen("table.txt","a");
+		//fclose(yyout);
+		//yyout=fopen("constants.txt","a");
+		fprintf(ptr2,"\n%20s%30s%30d%35d",yytext,token,i,lineNumber);
+		//fclose(yyout);
+		//yyout=fopen("table.txt","a");
 		
 	}
    fprintf(yyout,"\n%20s%30s%30d%35d",yytext,token,i,lineNumber);

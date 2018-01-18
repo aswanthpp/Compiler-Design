@@ -5,6 +5,7 @@
 #include <string.h>
 int var=0,i,nc=0,cLine=0,flag=0;
 int lineNumber=1;
+FILE *ptr1,*ptr2;
 char *comment,*inputFile;
 void insertToTable(char *yytext,char type);
 void displayComment(char *yytext);
@@ -105,13 +106,13 @@ int main(int argc,char **argv)
 	comment = (char*)malloc(100*sizeof(char));
 	yyin=fopen(argv[1],"r");
 	inputFile=argv[1];
-	yyout=fopen("symbol.txt","a");
-	fprintf(yyout,"\n Symbol Table:\n \t\tLexeme\t\t\tToken\t\t\t\t\tAttribute Value\t\t\tLine Number\n");
-	fclose(yyout);
-	yyout=fopen("constants.txt","a");
-	fprintf(yyout,"\n Constats Table:\n \t\tLexeme\t\t\tToken\t\t\t\t\tAttribute Value\t\t\tLine Number\n");
-	fclose(yyout);
-	yyout=fopen("table.txt","a");
+	ptr1=fopen("symbol.txt","w");
+	fprintf(ptr1,"\n Symbol Table:\n \t\tLexeme\t\t\tToken\t\t\t\t\tAttribute Value\t\t\tLine Number\n");
+	//fclose(ptr1);
+	ptr2=fopen("constants.txt","w");
+	fprintf(ptr2,"\n Constats Table:\n \t\tLexeme\t\t\tToken\t\t\t\t\tAttribute Value\t\t\tLine Number\n");
+	//fclose(ptr2);
+	yyout=fopen("table.txt","w");
 	fprintf(yyout,"\n Table:\n \t\tLexeme\t\t\tToken\t\t\t\t\tAttribute Value\t\t\tLine Number\n");
 	yylex();
 	
@@ -246,18 +247,18 @@ void insertToTable(char *yytext,char type)
     }
 
 	if(type =='i' || type == 'a' || type == 'q'){
-		fclose(yyout);
-		yyout=fopen("symbol.txt","a");
-		fprintf(yyout,"\n%20s%30s%30d%35d",yytext,token,i,lineNumber);
-		fclose(yyout);
-		yyout=fopen("table.txt","a");
+		//fclose(yyout);
+		//yyout=fopen("symbol.txt","a");
+		fprintf(ptr1,"\n%20s%30s%30d%35d",yytext,token,i,lineNumber);
+		//fclose(yyout);
+		//yyout=fopen("table.txt","a");
 	}
 	if(type =='c'){
-		fclose(yyout);
-		yyout=fopen("constants.txt","a");
-		fprintf(yyout,"\n%20s%30s%30d%35d",yytext,token,i,lineNumber);
-		fclose(yyout);
-		yyout=fopen("table.txt","a");
+		//fclose(yyout);
+		//yyout=fopen("constants.txt","a");
+		fprintf(ptr2,"\n%20s%30s%30d%35d",yytext,token,i,lineNumber);
+		//fclose(yyout);
+		//yyout=fopen("table.txt","a");
 		
 	}
    fprintf(yyout,"\n%20s%30s%30d%35d",yytext,token,i,lineNumber);
