@@ -20,6 +20,7 @@ struct Symbol{
 	struct Symbol *next;
 }*symbolHead=NULL;
 %}
+
 digit  [0-9]
 letter  [a-zA-Z]
 keyword	"auto"|"break"|"case"|"char"|"const"|"continue"|"default"|"do"|"double"|"else"|"enum"|"extern"|"float"|"for"|"goto"|"if"|"int"|"long"|"printf"|"register"|"return"|"scanf"|"short"|"signed"|"sizeof"|"static"|"struct"|"switch"|"typedef"|"union"|"unsigned"|"void"|"volatile"|"while"
@@ -61,6 +62,7 @@ identifier ({letter}({letter}|{digit})*)|"_"({letter}|{digit})+
 {digit}+ insertToTable(yytext,'c');
 
 \"(.)*\" insertToTable(yytext,'s');
+\"(.)*   {printf("%s : %d : String Does Not End\n",inputFile,lineNumber);}
 {quote} ;
 {whitespace} ;
 {newline} lineNumber++;
@@ -160,44 +162,55 @@ void insertToTable(char *yytext,char type)
 
     switch(type)
     {
-	case 'd':
+		case 'd':
             strcpy(token,"Preprocessor Statement");
             break;
+
         case 'k':
             strcpy(token,"Keyword");
             break;
             
-	case 'a':
-		strcpy(token,"Array");
-		break;
-	case 'q' :	
+		case 'a':
+			strcpy(token,"Array");
+			break;
+
+		case 'q' :	
             strcpy(token,"Pointer");
             break;
+        
         case 'i':
-	      strcpy(token,"Identifier");
+	    	strcpy(token,"Identifier");
 	        break;
-	 case 'r':
+	 	
+	 	case 'r':
             strcpy(token,"Relational Op");
             break;
-          case 'p':
+
+        case 'p':
             strcpy(token,"Punctuator");
             break;
-       	  case 'o':
+       	
+       	case 'o':
             strcpy(token,"Arithmetic Op");
             break;   
-           case 'c':
+        
+        case 'c':
             strcpy(token,"Constant");
             break;                                
-      case 'e':
+      	
+      	case 'e':
             strcpy(token,"Assignment Op");
             break;
-      case 'l':
+      	
+      	case 'l':
             strcpy(token,"Logical Op");
             break;	
+    	
     	case 's':
             strcpy(token,"String Literal");
             break;
     }
+
     if(nc<=0)
     {
 	    current = head;
@@ -208,9 +221,8 @@ void insertToTable(char *yytext,char type)
 	    			break;
 	    		}
 	    		current = current->next;
-	    		/*if(current==NULL)
-	    		break;*/
-	    }	
+	    }
+
 	    if(i==var)
 	    {    	
 	    	temp = (struct Node *)malloc(sizeof(struct Node));
@@ -236,6 +248,7 @@ void insertToTable(char *yytext,char type)
     	var++;	
 	    }
     }
+
 	if(type =='i' || type == 'a' || type == 'q'){
 		if(symbolHead==NULL){
 			struct Symbol *temp=(struct Symbol *)malloc(sizeof(struct Symbol));
@@ -255,8 +268,7 @@ void insertToTable(char *yytext,char type)
 			strcpy(temp->tname,yytext);
 			temp->lineNumber=lineNumber;
 			temp->next=NULL;
-			current->next=temp;
-			
+			current->next=temp;			
 		}
 		
 	}
