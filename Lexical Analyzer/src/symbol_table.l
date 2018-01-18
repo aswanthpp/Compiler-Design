@@ -5,10 +5,14 @@
 #include <string.h>
 int var=0,i,nc=0,cLine=0,flag=0;
 int lineNumber=1;
+
 FILE *ptr1,*ptr2;
+
 char *comment,*inputFile;
+
 void insertToTable(char *yytext,char type);
 void displayComment(char *yytext);
+
 struct Node {
 	char *tname;
 	int av;
@@ -106,34 +110,34 @@ int main(int argc,char **argv)
 	comment = (char*)malloc(100*sizeof(char));
 	yyin=fopen(argv[1],"r");
 	inputFile=argv[1];
+
 	ptr1=fopen("symbol.txt","w");
 	fprintf(ptr1,"\n Symbol Table:\n \t\tLexeme\t\t\tToken\t\t\t\t\tAttribute Value\t\t\tLine Number\n");
-	//fclose(ptr1);
+
 	ptr2=fopen("constants.txt","w");
 	fprintf(ptr2,"\n Constats Table:\n \t\tLexeme\t\t\tToken\t\t\t\t\tAttribute Value\t\t\tLine Number\n");
-	//fclose(ptr2);
+
 	yyout=fopen("table.txt","w");
 	fprintf(yyout,"\n Table:\n \t\tLexeme\t\t\tToken\t\t\t\t\tAttribute Value\t\t\tLine Number\n");
+
 	yylex();
 	
-    if(nc!=0)
-    printf("%s : %d : Comment Does Not End\n",inputFile,lineNumber);
+    	if(nc!=0)
+    		printf("%s : %d : Comment Does Not End\n",inputFile,lineNumber);
     
     
-    fprintf(yyout,"\n");
-    if(flag==1)
-    {
-        cLine = 0;
-        fprintf(yyout,"\n\nComment (%d lines):\n",cLine);
-        printf("%s : %d : Nested Comment\n",inputFile,lineNumber);
-    }
-    else
-    {
-        fprintf(yyout,"\n\nComment (%d lines):",cLine);
-        fputs(comment,yyout);
-    }
-    
-
+    	fprintf(yyout,"\n");
+    	if(flag==1)
+    	{
+		cLine = 0;
+		fprintf(yyout,"\n\nComment (%d lines):\n",cLine);
+		printf("%s : %d : Nested Comment\n",inputFile,lineNumber);
+    	}
+    	else
+    	{
+		fprintf(yyout,"\n\nComment (%d lines):",cLine);
+		fputs(comment,yyout);
+   	}
     
 	fclose(yyout);	
 }
@@ -159,53 +163,29 @@ void insertToTable(char *yytext,char type)
 
     switch(type)
     {
-		case 'd':
-            strcpy(token,"Preprocessor Statement");
-            break;
+	case 'd': strcpy(token,"Preprocessor Statement");break;
 
-        case 'k':
-            strcpy(token,"Keyword");
-            break;
-            
-		case 'a':
-			strcpy(token,"Array");
-			break;
+        case 'k':strcpy(token,"Keyword");break;
+                       
+        case 'a':strcpy(token,"Array");break;
 
-		case 'q' :	
-            strcpy(token,"Pointer");
-            break;
+	case 'q' :strcpy(token,"Pointer");break;
         
-        case 'i':
-	    	strcpy(token,"Identifier");
-	        break;
+        case 'i':strcpy(token,"Identifier");break;
 	 	
-	 	case 'r':
-            strcpy(token,"Relational Op");
-            break;
+	case 'r':strcpy(token,"Relational Op");break;
 
-        case 'p':
-            strcpy(token,"Punctuator");
-            break;
+        case 'p':strcpy(token,"Punctuator");break;
        	
-       	case 'o':
-            strcpy(token,"Arithmetic Op");
-            break;   
+       	case 'o':strcpy(token,"Arithmetic Op");break;   
         
-        case 'c':
-            strcpy(token,"Constant");
-            break;                                
+        case 'c':strcpy(token,"Constant");break;                                
       	
-      	case 'e':
-            strcpy(token,"Assignment Op");
-            break;
+      	case 'e':strcpy(token,"Assignment Op");break;
       	
-      	case 'l':
-            strcpy(token,"Logical Op");
-            break;	
+      	case 'l':strcpy(token,"Logical Op");break;	
     	
-    	case 's':
-            strcpy(token,"String Literal");
-            break;
+    	case 's':strcpy(token,"String Literal");break;
     }
 
     if(nc<=0)
@@ -242,23 +222,15 @@ void insertToTable(char *yytext,char type)
 		    	current->next = temp;
 		}
 		   	
-    	var++;	
+    		var++;	
 	    }
     }
 
 	if(type =='i' || type == 'a' || type == 'q'){
-		//fclose(yyout);
-		//yyout=fopen("symbol.txt","a");
 		fprintf(ptr1,"\n%20s%30s%30d%35d",yytext,token,i,lineNumber);
-		//fclose(yyout);
-		//yyout=fopen("table.txt","a");
 	}
 	if(type =='c'){
-		//fclose(yyout);
-		//yyout=fopen("constants.txt","a");
 		fprintf(ptr2,"\n%20s%30s%30d%35d",yytext,token,i,lineNumber);
-		//fclose(yyout);
-		//yyout=fopen("table.txt","a");
 		
 	}
    fprintf(yyout,"\n%20s%30s%30d%35d",yytext,token,i,lineNumber);
