@@ -1,9 +1,0 @@
-
- Constats Table:
- 		Lexeme			Token					Attribute Value			Line Number
-
-                   0                      Constant                            15                                 13
-                   0                      Constant                            15                                 13
-                   5                      Constant                            19                                 13
-                   0                      Constant                            15                                 17
-                   1                      Constant                            29                                 21
