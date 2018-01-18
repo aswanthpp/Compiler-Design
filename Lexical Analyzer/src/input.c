@@ -25,6 +25,7 @@ int main()
 
 
 }
-void abc(){
+void abc()
+{
 	printf("\nTest function ");
 }

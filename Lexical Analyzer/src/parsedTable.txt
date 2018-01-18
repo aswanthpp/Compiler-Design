@@ -1,0 +1,75 @@
+
+ Table:
+ 		Lexeme			Token					Attribute Value			Line Number
+
+  #include <stdio.h>        Preprocessor Statement                             0                                  1
+          int main()                     Procedure                             1                                  2
+                   {                    Punctuator                             2                                  3
+              struct                       Keyword                             3                                  9
+                node                      Variable                             4                                  9
+                   {                    Punctuator                             2                                  9
+                 int                       Keyword                             5                                 10
+                   a                      Variable                             6                                 10
+                   ;                    Punctuator                             7                                 10
+                char                       Keyword                             8                                 11
+                name                      Variable                             9                                 11
+                   ;                    Punctuator                             7                                 11
+                   }                    Punctuator                            10                                 12
+                   ;                    Punctuator                             7                                 12
+                 int                       Keyword                             5                                 13
+                  _a                      Variable                            11                                 13
+                   =                 Assignment Op                            12                                 13
+                   0                      Constant                            13                                 13
+                   ,                    Punctuator                            14                                 13
+                   b                      Variable                            15                                 13
+                   =                 Assignment Op                            12                                 13
+                   0                      Constant                            13                                 13
+                   ,                    Punctuator                            14                                 13
+                   c                      Variable                            16                                 13
+                   =                 Assignment Op                            12                                 13
+                   5                      Constant                            17                                 13
+                   ;                    Punctuator                             7                                 13
+            unsigned                       Keyword                            18                                 14
+                 int                       Keyword                             5                                 14
+             arr[50]                         Array                            19                                 14
+                   ;                    Punctuator                             7                                 14
+                char                       Keyword                             8                                 15
+                *ptr                       Pointer                            20                                 15
+                   ;                    Punctuator                             7                                 15
+               scanf                       Keyword                            21                                 16
+                   (                    Punctuator                            22                                 16
+                 int                       Keyword                             5                                 17
+                 sum                      Variable                            23                                 17
+                   =                 Assignment Op                            12                                 17
+                   0                      Constant                            13                                 17
+                   ;                    Punctuator                             7                                 17
+                 sum                      Variable                            23                                 18
+                   =                 Assignment Op                            12                                 18
+                   a                      Variable                             6                                 18
+                   +                 Arithmetic Op                            24                                 18
+                   b                      Variable                            15                                 18
+                   ;                    Punctuator                             7                                 18
+              printf                       Keyword                            25                                 19
+                   (                    Punctuator                            22                                 19
+                char                       Keyword                             8                                 20
+               *name                       Pointer                            26                                 20
+                   =                 Assignment Op                            12                                 20
+              return                       Keyword                            27                                 21
+                   1                      Constant                            28                                 21
+                   ;                    Punctuator                             7                                 21
+                   }                    Punctuator                            10                                 27
+          void abc()                     Procedure                            29                                 28
+                   {                    Punctuator                             2                                 29
+              printf                       Keyword                            25                                 30
+                   (                    Punctuator                            22                                 30
+                   }                    Punctuator                            10                                 31
+
+
+Comment (7 lines):
+	 My name is Arvind.
+	This is
+	a sample
+	multi-line 
+	comment
+	heelo
+	world
