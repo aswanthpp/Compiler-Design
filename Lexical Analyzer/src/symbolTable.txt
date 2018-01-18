@@ -11,9 +11,12 @@
                    c                      Variable                            16                                 13
              arr[50]                         Array                            19                                 14
                 *ptr                       Pointer                            20                                 15
-                 sum                      Variable                            23                                 17
-                 sum                      Variable                            23                                 18
+                   a                      Variable                             6                                 16
+                   b                      Variable                            15                                 16
+                 sum                      Variable                            26                                 17
+                 sum                      Variable                            26                                 18
                    a                      Variable                             6                                 18
                    b                      Variable                            15                                 18
-               *name                       Pointer                            26                                 20
-          void abc()                     Procedure                            29                                 28
+                 sum                      Variable                            26                                 19
+               *name                       Pointer                            30                                 20
+          void abc()                     Procedure                            34                                 23

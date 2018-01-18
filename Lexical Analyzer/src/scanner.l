@@ -6,7 +6,7 @@
 int var=0,i,nc=0,cLine=0,flag=0;
 int lineNumber=1;
 
-FILE *ptr1,*ptr2;
+FILE *symbol,*constants;
 
 char *comment,*inputFile;
 
@@ -52,7 +52,6 @@ identifier ({letter}({letter}|{digit})*)|"_"({letter}|{digit})+
 \*{identifier} insertToTable(yytext,'q');
 {identifier} insertToTable(yytext,'i');
 {digit}+({letter}|{digit})+|"_" { printf("%s : %d : Invalid Identifier\n",inputFile,lineNumber); }
-
 {relational} insertToTable(yytext,'r');
 {logical} insertToTable(yytext,'l');
 {arithmatic} insertToTable(yytext,'o');
@@ -62,7 +61,6 @@ identifier ({letter}({letter}|{digit})*)|"_"({letter}|{digit})+
 {digit}+ insertToTable(yytext,'c');
 
 \"(.)*\" insertToTable(yytext,'s');
-\"(.)*   {printf("%s : %d : String Does Not End\n",inputFile,lineNumber);}
 {quote} ;
 {whitespace} ;
 {newline} lineNumber++;
@@ -112,11 +110,11 @@ int main(int argc,char **argv)
 	yyin=fopen(argv[1],"r");
 	inputFile=argv[1];
 
-	ptr1=fopen("symbolTable.txt","w");
-	fprintf(ptr1,"\n Symbol Table:\n \t\tLexeme\t\t\tType\t\t\t\t\tAttribute Value\t\t\tLine Number\n");
+	symbol=fopen("symbolTable.txt","w");
+	fprintf(symbol,"\n Symbol Table:\n \t\tLexeme\t\t\tType\t\t\t\t\tAttribute Value\t\t\tLine Number\n");
 
-	ptr2=fopen("constantTable.txt","w");
-	fprintf(ptr2,"\n Constats Table:\n \t\tLexeme\t\t\tType\t\t\t\t\tAttribute Value\t\t\tLine Number\n");
+	constants=fopen("constantTable.txt","w");
+	fprintf(constants,"\n Constats Table:\n \t\tLexeme\t\t\tType\t\t\t\t\tAttribute Value\t\t\tLine Number\n");
 
 	yyout=fopen("parsedTable.txt","w");
 	fprintf(yyout,"\n Table:\n \t\tLexeme\t\t\tToken\t\t\t\t\tAttribute Value\t\t\tLine Number\n");
@@ -140,7 +138,9 @@ int main(int argc,char **argv)
 		fputs(comment,yyout);
    	}
     
-	fclose(yyout);	
+	fclose(yyout);
+	fclose(symbol);
+	fclose(constants);	
 }
 
 void displayComment(char *yytext)
@@ -231,13 +231,15 @@ void insertToTable(char *yytext,char type)
     }
 
 	if(type =='i' || type == 'a' || type == 'q' || type=='j'){
-		fprintf(ptr1,"\n%20s%30s%30d%35d",yytext,token,i,lineNumber);
+	
+		fprintf(symbol,"\n%20s%30s%30d%35d",yytext,token,i,lineNumber);
 	}
 	if(type =='c'){
-		fprintf(ptr2,"\n%20s%30s%30d%35d",yytext,token,i,lineNumber);
+		
+		fprintf(constants,"\n%20s%30s%30d%35d",yytext,token,i,lineNumber);
 		
 	}
-   fprintf(yyout,"\n%20s%30s%30d%35d",yytext,token,i,lineNumber);
+   	fprintf(yyout,"\n%20s%30s%30d%35d",yytext,token,i,lineNumber);
 }
                                                                                                     
 int yywrap()

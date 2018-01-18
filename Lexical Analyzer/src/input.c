@@ -19,11 +19,6 @@ int main()
 	printf("\n Sum : %d \n",sum);
 	char *name = "Arvind";
 	return 1;
-	/*heelo
-	world*/
-	
-
-
 }
 void abc()
 {

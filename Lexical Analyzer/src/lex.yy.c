@@ -375,8 +375,8 @@ static void yy_fatal_error (yyconst char msg[]  );
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
 
-#define YY_NUM_RULES 26
-#define YY_END_OF_BUFFER 27
+#define YY_NUM_RULES 25
+#define YY_END_OF_BUFFER 26
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -386,20 +386,20 @@ struct yy_trans_info
 	};
 static yyconst flex_int16_t yy_accept[283] =
     {   0,
-        0,    0,    0,    0,   27,   26,   18,   19,   26,   16,
-       11,   10,   17,   13,   11,   11,   14,    9,   12,    9,
+        0,    0,    0,    0,   26,   25,   17,   18,   25,   16,
+       11,   10,   16,   13,   11,   11,   14,    9,   12,    9,
         7,    8,    7,    7,    7,    7,    7,    7,    7,    7,
-        7,    7,    7,    7,    7,    7,    7,    7,   18,    1,
-        7,    7,    7,    7,    7,    7,   25,   24,   25,   25,
-       18,    0,    0,    9,   16,   15,    6,    0,   21,   20,
+        7,    7,    7,    7,    7,    7,    7,    7,   17,    1,
+        7,    7,    7,    7,    7,    7,   24,   23,   24,   24,
+       17,    0,    0,    9,    0,   15,    6,    0,   20,   19,
         8,    8,    7,    0,    7,    7,    7,    7,    7,    7,
         7,    3,    7,    7,    7,    7,    7,    7,    3,    7,
         7,    7,    7,    7,    7,    7,    7,    7,    7,    7,
-        7,    7,   18,    0,    0,    0,    0,    0,    1,    0,
+        7,    7,   17,    0,    0,    0,    0,    0,    1,    0,
 
         1,    1,    0,    1,    7,    7,    7,    7,    7,    7,
-        7,   23,   22,    0,    0,    0,    0,    0,    6,    6,
-       20,    0,    5,    7,    7,    7,    7,    7,    7,    7,
+        7,   22,   21,    0,    0,    0,    0,    0,    6,    6,
+       19,    0,    5,    7,    7,    7,    7,    7,    7,    7,
         7,    7,    7,    7,    7,    7,    7,    7,    7,    7,
         7,    7,    7,    7,    7,    7,    7,    7,    7,    7,
         7,    7,    0,    0,    0,    0,    0,    0,    0,    0,
@@ -724,7 +724,7 @@ char *yytext;
 int var=0,i,nc=0,cLine=0,flag=0;
 int lineNumber=1;
 
-FILE *ptr1,*ptr2;
+FILE *symbol,*constants;
 
 char *comment,*inputFile;
 
@@ -1063,68 +1063,63 @@ YY_RULE_SETUP
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 56 "scanner.l"
+#line 55 "scanner.l"
 insertToTable(yytext,'r');
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 57 "scanner.l"
+#line 56 "scanner.l"
 insertToTable(yytext,'l');
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 58 "scanner.l"
+#line 57 "scanner.l"
 insertToTable(yytext,'o');
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 59 "scanner.l"
+#line 58 "scanner.l"
 insertToTable(yytext,'e');
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 60 "scanner.l"
+#line 59 "scanner.l"
 insertToTable(yytext,'p');
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 62 "scanner.l"
+#line 61 "scanner.l"
 insertToTable(yytext,'c');
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 64 "scanner.l"
+#line 63 "scanner.l"
 insertToTable(yytext,'s');
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 65 "scanner.l"
-{printf("%s : %d : String Does Not End\n",inputFile,lineNumber);}
+#line 64 "scanner.l"
+;
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 66 "scanner.l"
+#line 65 "scanner.l"
 ;
 	YY_BREAK
 case 18:
+/* rule 18 can match eol */
 YY_RULE_SETUP
-#line 67 "scanner.l"
-;
+#line 66 "scanner.l"
+lineNumber++;
 	YY_BREAK
 case 19:
-/* rule 19 can match eol */
 YY_RULE_SETUP
 #line 68 "scanner.l"
-lineNumber++;
+
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
 #line 70 "scanner.l"
-
-	YY_BREAK
-case 21:
-YY_RULE_SETUP
-#line 72 "scanner.l"
 {  
                 BEGIN(DETECT_COMMENT);
                 nc++;
@@ -1132,9 +1127,9 @@ YY_RULE_SETUP
                 displayComment("\n\t");
             }
 	YY_BREAK
-case 22:
+case 21:
 YY_RULE_SETUP
-#line 79 "scanner.l"
+#line 77 "scanner.l"
 { 
                             nc++;
                             if(nc>1)
@@ -1144,9 +1139,9 @@ YY_RULE_SETUP
                             }
                          }
 	YY_BREAK
-case 23:
+case 22:
 YY_RULE_SETUP
-#line 88 "scanner.l"
+#line 86 "scanner.l"
 {
                             if(nc>0)
                                 nc--;
@@ -1157,27 +1152,27 @@ YY_RULE_SETUP
                             BEGIN(INITIAL);
                     }
 	YY_BREAK
-case 24:
-/* rule 24 can match eol */
+case 23:
+/* rule 23 can match eol */
 YY_RULE_SETUP
-#line 98 "scanner.l"
+#line 96 "scanner.l"
 {  
                  cLine++;
                  lineNumber++;
                  displayComment("\n");
                 }
 	YY_BREAK
-case 25:
+case 24:
 YY_RULE_SETUP
-#line 104 "scanner.l"
+#line 102 "scanner.l"
 {displayComment(yytext);}
 	YY_BREAK
-case 26:
+case 25:
 YY_RULE_SETUP
-#line 107 "scanner.l"
+#line 105 "scanner.l"
 ECHO;
 	YY_BREAK
-#line 1181 "lex.yy.c"
+#line 1176 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(DETECT_COMMENT):
 	yyterminate();
@@ -2182,7 +2177,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 107 "scanner.l"
+#line 105 "scanner.l"
 
 
 
@@ -2192,11 +2187,11 @@ int main(int argc,char **argv)
 	yyin=fopen(argv[1],"r");
 	inputFile=argv[1];
 
-	ptr1=fopen("symbolTable.txt","w");
-	fprintf(ptr1,"\n Symbol Table:\n \t\tLexeme\t\t\tType\t\t\t\t\tAttribute Value\t\t\tLine Number\n");
+	symbol=fopen("symbolTable.txt","w");
+	fprintf(symbol,"\n Symbol Table:\n \t\tLexeme\t\t\tType\t\t\t\t\tAttribute Value\t\t\tLine Number\n");
 
-	ptr2=fopen("constantTable.txt","w");
-	fprintf(ptr2,"\n Constats Table:\n \t\tLexeme\t\t\tType\t\t\t\t\tAttribute Value\t\t\tLine Number\n");
+	constants=fopen("constantTable.txt","w");
+	fprintf(constants,"\n Constats Table:\n \t\tLexeme\t\t\tType\t\t\t\t\tAttribute Value\t\t\tLine Number\n");
 
 	yyout=fopen("parsedTable.txt","w");
 	fprintf(yyout,"\n Table:\n \t\tLexeme\t\t\tToken\t\t\t\t\tAttribute Value\t\t\tLine Number\n");
@@ -2220,7 +2215,9 @@ int main(int argc,char **argv)
 		fputs(comment,yyout);
    	}
     
-	fclose(yyout);	
+	fclose(yyout);
+	fclose(symbol);
+	fclose(constants);	
 }
 
 void displayComment(char *yytext)
@@ -2311,13 +2308,15 @@ void insertToTable(char *yytext,char type)
     }
 
 	if(type =='i' || type == 'a' || type == 'q' || type=='j'){
-		fprintf(ptr1,"\n%20s%30s%30d%35d",yytext,token,i,lineNumber);
+	
+		fprintf(symbol,"\n%20s%30s%30d%35d",yytext,token,i,lineNumber);
 	}
 	if(type =='c'){
-		fprintf(ptr2,"\n%20s%30s%30d%35d",yytext,token,i,lineNumber);
+		
+		fprintf(constants,"\n%20s%30s%30d%35d",yytext,token,i,lineNumber);
 		
 	}
-   fprintf(yyout,"\n%20s%30s%30d%35d",yytext,token,i,lineNumber);
+   	fprintf(yyout,"\n%20s%30s%30d%35d",yytext,token,i,lineNumber);
 }
                                                                                                     
 int yywrap()

@@ -1,0 +1,1 @@
+"struct"{whitespace}+{identifier} insertToTable(yytext,'m');   for structure
