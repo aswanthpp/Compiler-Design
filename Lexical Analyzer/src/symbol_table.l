@@ -3,79 +3,78 @@
 #include <stdlib.h>
 #include <malloc.h>
 #include <string.h>
-int var=0,i,nc=0,cBrac=0,cLine=0,flag=0;
+int var=0,i,nc=0,cLine=0,flag=0;
 int lineNumber=1;
-char *inputFile;
-char *comment;
-void write_OP(char *yytext, char type);
-void disp_comment(char *yytext);
-struct token
-{
-	int av;
+char *comment,*inputFile;
+void insertToTable(char *yytext,char type);
+void displayComment(char *yytext);
+struct Node {
 	char *tname;
-	struct token *next;
-};
-struct token *head=NULL;
+	int av;
+	struct Node *next;
+}*head=NULL;
+struct Symbol{
+	int av;
+	int lineNumber;
+	char *tname;
+	struct Symbol *next;
+}*symbolHead=NULL;
 %}
-
-dig  [0-9]
+digit  [0-9]
 letter  [a-zA-Z]
-keyword "auto"|"break"|"case"|"char"|"const"|"continue"|"default"|"do"|"double"|"else"|"enum"|"extern"|"float"|"for"|"goto"|"if"|"int"|"long"|"printf"|"register"|"return"|"scanf"|"short"|"signed"|"sizeof"|"static"|"struct"|"switch"|"typedef"|"union"|"unsigned"|"void"|"volatile"|"while"
+keyword	"auto"|"break"|"case"|"char"|"const"|"continue"|"default"|"do"|"double"|"else"|"enum"|"extern"|"float"|"for"|"goto"|"if"|"int"|"long"|"printf"|"register"|"return"|"scanf"|"short"|"signed"|"sizeof"|"static"|"struct"|"switch"|"typedef"|"union"|"unsigned"|"void"|"volatile"|"while"
 datatype "int"|"char"
 sign "signed"|"unsigned"
 modifiers "long"|"short"
-relop >|<|<=|>=|!=|==
-lop \&|\^|\~
-op \+|\-|\*|\/|\%
-punc \(|\)|\[|\]|;|,|\{|\}|\:|\.
-eq =
+relational >|<|<=|>=|!=|==
+logical \&|\^|\~
+arithmatic \+|\-|\*|\/|\%
+puncuator \(|\)|\[|\]|;|,|\{|\}|\:|\.
+assignment =
 quote \'|\"|\\
-ws [ \t]+
+whitespace [ \t]+
 newline "\n"
-comm (\/\/.*)
-comstart (\/\*)
-comend (\*\/)
-ident ({letter}({letter}|{dig})*)|"_"({letter}|{dig})+
+singlelinecomment (\/\/.*)
+multilinecommentstart (\/\*)
+multilinecommentend (\*\/)
+identifier ({letter}({letter}|{digit})*)|"_"({letter}|{digit})+ 
 
 %x DETECT_COMMENT
 
 %%
+^#([-a-zA-Z0-9.]|{relational}|{whitespace})* insertToTable(yytext,'d');
 
-^#([-a-zA-Z0-9.]|{relop}|{ws})* write_OP(yytext,'d');
-{keyword} {
-		        if(nc<=0)
-			write_OP(yytext,'k');
-		}
-{sign}?{ws}{modifiers}?{ws}"int"|"float" write_OP(yytext,'k');
-{ident}\[{dig}*\] write_OP(yytext,'a');
-\*{ident} write_OP(yytext,'q');
-{ident} write_OP(yytext,'i');
-{dig}+({letter}|{dig})+|"_" printf("%s : %d : Invalid Identifier\n",inputFile,lineNumber);
-{relop} write_OP(yytext,'r');
-{punc} write_OP(yytext,'p');
-{op} write_OP(yytext,'o');
-{dig} write_OP(yytext,'c');
-{eq} write_OP(yytext,'e');
-{lop} write_OP(yytext,'l');
-\"(.)*\" write_OP(yytext,'s');
+{keyword} insertToTable(yytext,'k');
+{sign}?{whitespace}{modifiers}?{whitespace}{datatype} insertToTable(yytext,'k');
+
+{identifier}\[{digit}*\] insertToTable(yytext,'a');
+\*{identifier} insertToTable(yytext,'q');
+{identifier} insertToTable(yytext,'i');
+{digit}+({letter}|{digit})+|"_" { printf("%s : %d : Invalid Identifier\n",inputFile,lineNumber); }
+
+{relational} insertToTable(yytext,'r');
+{logical} insertToTable(yytext,'l');
+{arithmatic} insertToTable(yytext,'o');
+{assignment} insertToTable(yytext,'e');
+{puncuator} insertToTable(yytext,'p');
+
+{digit}+ insertToTable(yytext,'c');
+
+\"(.)*\" insertToTable(yytext,'s');
 {quote} ;
-{ws} ;
+{whitespace} ;
 {newline} lineNumber++;
-{comm} {	BEGIN(DETECT_COMMENT);
-		nc++;
-		cLine++;
-		disp_comment("\n\t");
-		disp_comment(yytext);
-	}
 
-{comstart}  {  
+{singlelinecomment} 
+
+{multilinecommentstart}  {  
                 BEGIN(DETECT_COMMENT);
                 nc++;
                 cLine++;
-                disp_comment("\n\t");
+                displayComment("\n\t");
             }
 
-<DETECT_COMMENT>{comstart} { 
+<DETECT_COMMENT>{multilinecommentstart} { 
                             nc++;
                             if(nc>1)
                             {
@@ -84,7 +83,7 @@ ident ({letter}({letter}|{dig})*)|"_"({letter}|{dig})+
                             }
                          }
 
-<DETECT_COMMENT>{comend} {
+<DETECT_COMMENT>{multilinecommentend} {
                             if(nc>0)
                                 nc--;
                             else
@@ -97,10 +96,10 @@ ident ({letter}({letter}|{dig})*)|"_"({letter}|{dig})+
 <DETECT_COMMENT>\n   {  
                  cLine++;
                  lineNumber++;
-                 disp_comment("\n");
+                 displayComment("\n");
                 }
 
-<DETECT_COMMENT>. {disp_comment(yytext);}
+<DETECT_COMMENT>. {displayComment(yytext);}
 
 
 %%
@@ -117,8 +116,6 @@ int main(int argc,char **argv)
     if(nc!=0)
     printf("%s : %d : Comment Does Not End\n",inputFile,lineNumber);
     
-    if(cBrac!=0)
-    printf("%s : %d : Bracket Mismatch\n",inputFile,lineNumber);
     
     fprintf(yyout,"\n");
     if(flag==1)
@@ -132,10 +129,17 @@ int main(int argc,char **argv)
         fprintf(yyout,"\n\nComment (%d lines):",cLine);
         fputs(comment,yyout);
     }
+    
+    
+    printf("\n\t\t\tSymbol Table\n");
+    struct Symbol *current=symbolHead;
+    while(current!=NULL){
+    	printf("\n%s %d %d",current->tname,current->av,current->lineNumber);
+    }
 	fclose(yyout);	
 }
 
-void disp_comment(char *yytext)
+void displayComment(char *yytext)
 {
     int l1, l2;
     char *temp;
@@ -148,11 +152,11 @@ void disp_comment(char *yytext)
     strcat(temp,yytext);
     strcpy(comment,temp);
 }
-void write_OP(char *yytext,char type)
+void insertToTable(char *yytext,char type)
 {
     int l1 = strlen(yytext), i;
     char token[30];
-    struct token *current = NULL, *temp = NULL;
+    struct Node *current = NULL, *temp = NULL;
 
     switch(type)
     {
@@ -209,7 +213,7 @@ void write_OP(char *yytext,char type)
 	    }	
 	    if(i==var)
 	    {    	
-	    	temp = (struct token *)malloc(sizeof(struct token));
+	    	temp = (struct Node *)malloc(sizeof(struct Node));
 	    	temp->av = i;
 	    	temp->tname = (char *)malloc(sizeof(char)*(l1+1));
 	    	strcpy(temp->tname,yytext);
@@ -232,7 +236,30 @@ void write_OP(char *yytext,char type)
     	var++;	
 	    }
     }
-
+	if(type =='i' || type == 'a' || type == 'q'){
+		if(symbolHead==NULL){
+			struct Symbol *temp=(struct Symbol *)malloc(sizeof(struct Symbol));
+			temp->av=i;
+			strcpy(temp->tname,yytext);
+			temp->lineNumber=lineNumber;
+			temp->next=NULL;
+			symbolHead=temp;
+		}	
+		else{
+			struct Symbol *current=symbolHead;
+			while(current->next!=NULL){
+				current=current->next;
+			}
+			struct Symbol *temp=(struct Symbol *)malloc(sizeof(struct Symbol));
+			temp->av=i;
+			strcpy(temp->tname,yytext);
+			temp->lineNumber=lineNumber;
+			temp->next=NULL;
+			current->next=temp;
+			
+		}
+		
+	}
    fprintf(yyout,"\n%20s%30s%30d%35d",yytext,token,i,lineNumber);
 }
                                                                                                     
@@ -240,4 +267,10 @@ int yywrap()
 {
  return(1);
 }
+
+
+ 
+
+
+
 

@@ -1,7 +1,6 @@
 #include <stdio.h>
-
 int main()
-{
+{	
 	/* My name is Arvind.
 	This is
 	a sample
@@ -12,7 +11,6 @@ int main()
 	char name;
 	};
 	int _a=0,b=0,c=5;
-	int _;
 	unsigned int arr[50];
 	char *ptr;
 	scanf("%d %d",&a,&b);
@@ -21,6 +19,11 @@ int main()
 	printf("\n Sum : %d \n",sum);
 	char *name = "Arvind";
 	return 1;
+	/*heelo
+	world*/
+	
+
+
 }
 void abc(){
 	printf("\nTest function ");
