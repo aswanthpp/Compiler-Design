@@ -375,8 +375,8 @@ static void yy_fatal_error (yyconst char msg[]  );
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
 
-#define YY_NUM_RULES 24
-#define YY_END_OF_BUFFER 25
+#define YY_NUM_RULES 25
+#define YY_END_OF_BUFFER 26
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -386,16 +386,16 @@ struct yy_trans_info
 	};
 static yyconst flex_int16_t yy_accept[193] =
     {   0,
-        0,    0,    0,    0,   25,   24,   16,   17,   24,   15,
-       10,    9,   15,   12,   10,   10,   13,    8,   11,    8,
+        0,    0,    0,    0,   26,   25,   17,   18,   25,   15,
+       10,    9,   16,   12,   10,   10,   13,    8,   11,    8,
         6,    7,    6,    6,    6,    6,    6,    6,    6,    6,
-        6,    6,    6,    6,    6,    6,    6,    6,    1,   23,
-       22,   23,   23,   16,    0,    0,    8,    0,   14,    5,
-        0,   19,   18,    7,    7,    6,    0,    6,    6,    6,
+        6,    6,    6,    6,    6,    6,    6,    6,    1,   24,
+       23,   24,   24,   17,    0,    0,    8,   15,   14,    5,
+        0,   20,   19,    7,    7,    6,    0,    6,    6,    6,
         6,    6,    6,    6,    2,    6,    6,    6,    6,    6,
         6,    2,    6,    6,    6,    6,    6,    6,    6,    6,
         6,    6,    6,    6,    6,    1,    0,    1,    1,    0,
-        1,   21,   20,    0,    0,    0,    0,    5,    5,   18,
+        1,   22,   21,    0,    0,    0,    0,    5,    5,   19,
 
         0,    4,    6,    6,    6,    6,    6,    6,    6,    6,
         6,    6,    6,    6,    6,    6,    6,    6,    6,    6,
@@ -877,7 +877,7 @@ YY_DECL
 		}
 
 	{
-#line 38 "symbol_table.l"
+#line 39 "symbol_table.l"
 
 #line 883 "lex.yy.c"
 
@@ -939,98 +939,103 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 39 "symbol_table.l"
+#line 40 "symbol_table.l"
 insertToTable(yytext,'d');
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 41 "symbol_table.l"
+#line 42 "symbol_table.l"
 insertToTable(yytext,'k');
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 42 "symbol_table.l"
+#line 43 "symbol_table.l"
 insertToTable(yytext,'k');
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 44 "symbol_table.l"
+#line 45 "symbol_table.l"
 insertToTable(yytext,'a');
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 45 "symbol_table.l"
+#line 46 "symbol_table.l"
 insertToTable(yytext,'q');
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 46 "symbol_table.l"
+#line 47 "symbol_table.l"
 insertToTable(yytext,'i');
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 47 "symbol_table.l"
+#line 48 "symbol_table.l"
 { printf("%s : %d : Invalid Identifier\n",inputFile,lineNumber); }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 49 "symbol_table.l"
+#line 50 "symbol_table.l"
 insertToTable(yytext,'r');
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 50 "symbol_table.l"
+#line 51 "symbol_table.l"
 insertToTable(yytext,'l');
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 51 "symbol_table.l"
+#line 52 "symbol_table.l"
 insertToTable(yytext,'o');
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 52 "symbol_table.l"
+#line 53 "symbol_table.l"
 insertToTable(yytext,'e');
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 53 "symbol_table.l"
+#line 54 "symbol_table.l"
 insertToTable(yytext,'p');
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 55 "symbol_table.l"
+#line 56 "symbol_table.l"
 insertToTable(yytext,'c');
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 57 "symbol_table.l"
+#line 58 "symbol_table.l"
 insertToTable(yytext,'s');
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 58 "symbol_table.l"
-;
+#line 59 "symbol_table.l"
+{printf("%s : %d : String Does Not End\n",inputFile,lineNumber);}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 59 "symbol_table.l"
+#line 60 "symbol_table.l"
 ;
 	YY_BREAK
 case 17:
-/* rule 17 can match eol */
 YY_RULE_SETUP
-#line 60 "symbol_table.l"
-lineNumber++;
+#line 61 "symbol_table.l"
+;
 	YY_BREAK
 case 18:
+/* rule 18 can match eol */
 YY_RULE_SETUP
 #line 62 "symbol_table.l"
-
+lineNumber++;
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
 #line 64 "symbol_table.l"
+
+	YY_BREAK
+case 20:
+YY_RULE_SETUP
+#line 66 "symbol_table.l"
 {  
                 BEGIN(DETECT_COMMENT);
                 nc++;
@@ -1038,9 +1043,9 @@ YY_RULE_SETUP
                 displayComment("\n\t");
             }
 	YY_BREAK
-case 20:
+case 21:
 YY_RULE_SETUP
-#line 71 "symbol_table.l"
+#line 73 "symbol_table.l"
 { 
                             nc++;
                             if(nc>1)
@@ -1050,9 +1055,9 @@ YY_RULE_SETUP
                             }
                          }
 	YY_BREAK
-case 21:
+case 22:
 YY_RULE_SETUP
-#line 80 "symbol_table.l"
+#line 82 "symbol_table.l"
 {
                             if(nc>0)
                                 nc--;
@@ -1063,27 +1068,27 @@ YY_RULE_SETUP
                             BEGIN(INITIAL);
                     }
 	YY_BREAK
-case 22:
-/* rule 22 can match eol */
+case 23:
+/* rule 23 can match eol */
 YY_RULE_SETUP
-#line 90 "symbol_table.l"
+#line 92 "symbol_table.l"
 {  
                  cLine++;
                  lineNumber++;
                  displayComment("\n");
                 }
 	YY_BREAK
-case 23:
-YY_RULE_SETUP
-#line 96 "symbol_table.l"
-{displayComment(yytext);}
-	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 99 "symbol_table.l"
+#line 98 "symbol_table.l"
+{displayComment(yytext);}
+	YY_BREAK
+case 25:
+YY_RULE_SETUP
+#line 101 "symbol_table.l"
 ECHO;
 	YY_BREAK
-#line 1087 "lex.yy.c"
+#line 1092 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(DETECT_COMMENT):
 	yyterminate();
@@ -2088,7 +2093,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 99 "symbol_table.l"
+#line 101 "symbol_table.l"
 
 
 
@@ -2150,44 +2155,55 @@ void insertToTable(char *yytext,char type)
 
     switch(type)
     {
-	case 'd':
+		case 'd':
             strcpy(token,"Preprocessor Statement");
             break;
+
         case 'k':
             strcpy(token,"Keyword");
             break;
             
-	case 'a':
-		strcpy(token,"Array");
-		break;
-	case 'q' :	
+		case 'a':
+			strcpy(token,"Array");
+			break;
+
+		case 'q' :	
             strcpy(token,"Pointer");
             break;
+        
         case 'i':
-	      strcpy(token,"Identifier");
+	    	strcpy(token,"Identifier");
 	        break;
-	 case 'r':
+	 	
+	 	case 'r':
             strcpy(token,"Relational Op");
             break;
-          case 'p':
+
+        case 'p':
             strcpy(token,"Punctuator");
             break;
-       	  case 'o':
+       	
+       	case 'o':
             strcpy(token,"Arithmetic Op");
             break;   
-           case 'c':
+        
+        case 'c':
             strcpy(token,"Constant");
             break;                                
-      case 'e':
+      	
+      	case 'e':
             strcpy(token,"Assignment Op");
             break;
-      case 'l':
+      	
+      	case 'l':
             strcpy(token,"Logical Op");
             break;	
+    	
     	case 's':
             strcpy(token,"String Literal");
             break;
     }
+
     if(nc<=0)
     {
 	    current = head;
@@ -2198,9 +2214,8 @@ void insertToTable(char *yytext,char type)
 	    			break;
 	    		}
 	    		current = current->next;
-	    		/*if(current==NULL)
-	    		break;*/
-	    }	
+	    }
+
 	    if(i==var)
 	    {    	
 	    	temp = (struct Node *)malloc(sizeof(struct Node));
@@ -2226,6 +2241,7 @@ void insertToTable(char *yytext,char type)
     	var++;	
 	    }
     }
+
 	if(type =='i' || type == 'a' || type == 'q'){
 		fclose(yyout);
 		yyout=fopen("symbol.txt","a");
@@ -2239,6 +2255,7 @@ void insertToTable(char *yytext,char type)
 		fprintf(yyout,"\n%20s%30s%30d%35d",yytext,token,i,lineNumber);
 		fclose(yyout);
 		yyout=fopen("table.txt","a");
+		
 	}
    fprintf(yyout,"\n%20s%30s%30d%35d",yytext,token,i,lineNumber);
 }

@@ -296,3 +296,83 @@ Comment (7 lines):
 	comment
 	heelo
 	world
+ Table:
+ 		Lexeme			Token					Attribute Value			Line Number
+
+  #include <stdio.h>        Preprocessor Statement                             0                                  1
+                 int                       Keyword                             1                                  2
+                main                    Identifier                             2                                  2
+                   (                    Punctuator                             3                                  2
+                   )                    Punctuator                             4                                  2
+                   {                    Punctuator                             5                                  3
+              struct                       Keyword                             6                                  9
+                node                    Identifier                             7                                  9
+                   {                    Punctuator                             5                                  9
+                 int                       Keyword                             1                                 10
+                   a                    Identifier                             8                                 10
+                   ;                    Punctuator                             9                                 10
+                char                       Keyword                            10                                 11
+                name                    Identifier                            11                                 11
+                   ;                    Punctuator                             9                                 11
+                   }                    Punctuator                            12                                 12
+                   ;                    Punctuator                             9                                 12
+                 int                       Keyword                             1                                 13
+                  _a                    Identifier                            13                                 13
+                   =                 Assignment Op                            14                                 13
+                   0                      Constant                            15                                 13
+                   ,                    Punctuator                            16                                 13
+                   b                    Identifier                            17                                 13
+                   =                 Assignment Op                            14                                 13
+                   0                      Constant                            15                                 13
+                   ,                    Punctuator                            16                                 13
+                   c                    Identifier                            18                                 13
+                   =                 Assignment Op                            14                                 13
+                   5                      Constant                            19                                 13
+                   ;                    Punctuator                             9                                 13
+            unsigned                       Keyword                            20                                 14
+                 int                       Keyword                             1                                 14
+             arr[50]                         Array                            21                                 14
+                   ;                    Punctuator                             9                                 14
+                char                       Keyword                            10                                 15
+                *ptr                       Pointer                            22                                 15
+                   ;                    Punctuator                             9                                 15
+               scanf                       Keyword                            23                                 16
+                   (                    Punctuator                             3                                 16
+                 int                       Keyword                             1                                 17
+                 sum                    Identifier                            24                                 17
+                   =                 Assignment Op                            14                                 17
+                   0                      Constant                            15                                 17
+                   ;                    Punctuator                             9                                 17
+                 sum                    Identifier                            24                                 18
+                   =                 Assignment Op                            14                                 18
+                   a                    Identifier                             8                                 18
+                   +                 Arithmetic Op                            25                                 18
+                   b                    Identifier                            17                                 18
+                   ;                    Punctuator                             9                                 18
+              printf                       Keyword                            26                                 19
+                   (                    Punctuator                             3                                 19
+                char                       Keyword                            10                                 20
+               *name                       Pointer                            27                                 20
+                   =                 Assignment Op                            14                                 20
+              return                       Keyword                            28                                 21
+                   1                      Constant                            29                                 21
+                   ;                    Punctuator                             9                                 21
+                   }                    Punctuator                            12                                 27
+                void                       Keyword                            30                                 28
+                 abc                    Identifier                            31                                 28
+                   (                    Punctuator                             3                                 28
+                   )                    Punctuator                             4                                 28
+                   {                    Punctuator                             5                                 28
+              printf                       Keyword                            26                                 29
+                   (                    Punctuator                             3                                 29
+                   }                    Punctuator                            12                                 30
+
+
+Comment (7 lines):
+	 My name is Arvind.
+	This is
+	a sample
+	multi-line 
+	comment
+	heelo
+	world
