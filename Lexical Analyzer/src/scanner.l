@@ -44,23 +44,27 @@ identifier ({letter}({letter}|{digit})*)|"_"({letter}|{digit})+
 %x DETECT_COMMENT
 
 %%
-^#([-a-zA-Z0-9.]|{relational}|{whitespace})* insertToTable(yytext,'d');
-^{sign}?{whitespace}*{modifiers}?{whitespace}*{datatype}{whitespace}*{identifier}\(\)  insertToTable(yytext,'j');
+^#([-a-zA-Z0-9.]|{relational}|{whitespace})* insertToTable(yytext,'d'); //preprocessor directive rule
+
 {keyword} insertToTable(yytext,'k');
-{sign}?{whitespace}{modifiers}?{whitespace}{datatype} insertToTable(yytext,'k');
-{identifier}\[{digit}*\] insertToTable(yytext,'a');
-\*{identifier} insertToTable(yytext,'q');
-{identifier} insertToTable(yytext,'i');
-{digit}+({letter}|{digit})+|"_" { printf("%s : %d : Invalid Identifier\n",inputFile,lineNumber); }
-{relational} insertToTable(yytext,'r');
+{sign}?{whitespace}{modifiers}?{whitespace}{datatype} insertToTable(yytext,'k'); //keyword rule
+
+^{sign}?{whitespace}*{modifiers}?{whitespace}*{datatype}{whitespace}*{identifier}\(\)  insertToTable(yytext,'j');  //procesdure rule
+{identifier}\[{digit}*\] insertToTable(yytext,'a'); // array rule
+\*{identifier} insertToTable(yytext,'q'); // pointer rule
+{identifier} insertToTable(yytext,'i'); // variable rule
+{digit}+({letter}|{digit})+|"_" { printf("%s : %d : Invalid Identifier\n",inputFile,lineNumber); } // invalid identifier
+
+                                        
+{relational} insertToTable(yytext,'r'); //operator rules
 {logical} insertToTable(yytext,'l');
 {arithmatic} insertToTable(yytext,'o');
 {assignment} insertToTable(yytext,'e');
 {puncuator} insertToTable(yytext,'p');
 
-{digit}+ insertToTable(yytext,'c');
+{digit}+ insertToTable(yytext,'c'); //integer and string constants rules
+\"(.)*\" insertToTable(yytext,'s'); 
 
-\"(.)*\" insertToTable(yytext,'s');
 {quote} ;
 {whitespace} ;
 {newline} lineNumber++;
@@ -110,13 +114,13 @@ int main(int argc,char **argv)
 	yyin=fopen(argv[1],"r");
 	inputFile=argv[1];
 
-	symbol=fopen("symbolTable.txt","w");
+	symbol=fopen("symbolTable.txt","w"); //File to write symbol table
 	fprintf(symbol,"\n Symbol Table:\n \t\tLexeme\t\t\tType\t\t\t\t\tAttribute Value\t\t\tLine Number\n");
 
-	constants=fopen("constantTable.txt","w");
-	fprintf(constants,"\n Constats Table:\n \t\tLexeme\t\t\tType\t\t\t\t\tAttribute Value\t\t\tLine Number\n");
+	constants=fopen("constantTable.txt","w"); // File to write constant table
+	fprintf(constants,"\n Constats Table:\n \t\tLexeme\t\t\tAttribute Value\t\t\tLine Number\n");
 
-	yyout=fopen("parsedTable.txt","w");
+	yyout=fopen("parsedTable.txt","w"); // File to write all token in source program
 	fprintf(yyout,"\n Table:\n \t\tLexeme\t\t\tToken\t\t\t\t\tAttribute Value\t\t\tLine Number\n");
 
 	yylex();
@@ -236,7 +240,7 @@ void insertToTable(char *yytext,char type)
 	}
 	if(type =='c'){
 		
-		fprintf(constants,"\n%20s%30s%30d%35d",yytext,token,i,lineNumber);
+		fprintf(constants,"\n%20s%30d%35d",yytext,i,lineNumber);
 		
 	}
    	fprintf(yyout,"\n%20s%30s%30d%35d",yytext,token,i,lineNumber);

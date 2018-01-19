@@ -393,7 +393,7 @@ static yyconst flex_int16_t yy_accept[283] =
         7,    7,    7,    7,    7,    7,   24,   23,   24,   24,
        17,    0,    0,    9,    0,   15,    6,    0,   20,   19,
         8,    8,    7,    0,    7,    7,    7,    7,    7,    7,
-        7,    3,    7,    7,    7,    7,    7,    7,    3,    7,
+        7,    2,    7,    7,    7,    7,    7,    7,    2,    7,
         7,    7,    7,    7,    7,    7,    7,    7,    7,    7,
         7,    7,   17,    0,    0,    0,    0,    0,    1,    0,
 
@@ -403,17 +403,17 @@ static yyconst flex_int16_t yy_accept[283] =
         7,    7,    7,    7,    7,    7,    7,    7,    7,    7,
         7,    7,    7,    7,    7,    7,    7,    7,    7,    7,
         7,    7,    0,    0,    0,    0,    0,    0,    0,    0,
-        1,    7,    3,    7,    7,    7,    7,    7,    0,    0,
+        1,    7,    2,    7,    7,    7,    7,    7,    0,    0,
         0,    0,    0,    7,    7,    7,    7,    7,    7,    7,
         7,    7,    7,    7,    7,    7,    7,    7,    7,    7,
         7,    7,    7,    7,    7,    0,    0,    0,    0,    0,
 
-        0,    0,    0,    0,    7,    0,    3,    7,    7,    7,
-        0,    4,    0,    0,    0,    7,    7,    7,    7,    7,
+        0,    0,    0,    0,    7,    0,    2,    7,    7,    7,
+        0,    3,    0,    0,    0,    7,    7,    7,    7,    7,
         7,    7,    7,    7,    7,    7,    7,    7,    7,    7,
-        0,    4,    0,    0,    0,    0,    0,    7,    0,    0,
-        7,    7,    7,    7,    7,    0,    7,    7,    7,    3,
-        7,    7,    7,    0,    0,    2,    7,    7,    7,    3,
+        0,    3,    0,    0,    0,    0,    0,    7,    0,    0,
+        7,    7,    7,    7,    7,    0,    7,    7,    7,    2,
+        7,    7,    7,    0,    0,    4,    7,    7,    7,    2,
         7,    7,    7,    0,    7,    7,    7,    7,    7,    0,
         7,    7,    7,    0,    0,    7,    7,    7,    7,    7,
         7,    0
@@ -1024,102 +1024,102 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 YY_RULE_SETUP
 #line 47 "scanner.l"
-insertToTable(yytext,'d');
+insertToTable(yytext,'d'); //preprocessor directive rule
 	YY_BREAK
 case 2:
-YY_RULE_SETUP
-#line 48 "scanner.l"
-insertToTable(yytext,'j');
-	YY_BREAK
-case 3:
 YY_RULE_SETUP
 #line 49 "scanner.l"
 insertToTable(yytext,'k');
 	YY_BREAK
-case 4:
+case 3:
 YY_RULE_SETUP
 #line 50 "scanner.l"
-insertToTable(yytext,'k');
+insertToTable(yytext,'k'); //keyword rule
+	YY_BREAK
+case 4:
+YY_RULE_SETUP
+#line 52 "scanner.l"
+insertToTable(yytext,'j');  //procesdure rule
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 51 "scanner.l"
-insertToTable(yytext,'a');
+#line 53 "scanner.l"
+insertToTable(yytext,'a'); // array rule
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 52 "scanner.l"
-insertToTable(yytext,'q');
+#line 54 "scanner.l"
+insertToTable(yytext,'q'); // pointer rule
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 53 "scanner.l"
-insertToTable(yytext,'i');
+#line 55 "scanner.l"
+insertToTable(yytext,'i'); // variable rule
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 54 "scanner.l"
-{ printf("%s : %d : Invalid Identifier\n",inputFile,lineNumber); }
+#line 56 "scanner.l"
+{ printf("%s : %d : Invalid Identifier\n",inputFile,lineNumber); } // invalid identifier
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 55 "scanner.l"
-insertToTable(yytext,'r');
+#line 59 "scanner.l"
+insertToTable(yytext,'r'); //operator rules
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 56 "scanner.l"
+#line 60 "scanner.l"
 insertToTable(yytext,'l');
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 57 "scanner.l"
+#line 61 "scanner.l"
 insertToTable(yytext,'o');
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 58 "scanner.l"
+#line 62 "scanner.l"
 insertToTable(yytext,'e');
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 59 "scanner.l"
+#line 63 "scanner.l"
 insertToTable(yytext,'p');
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 61 "scanner.l"
-insertToTable(yytext,'c');
+#line 65 "scanner.l"
+insertToTable(yytext,'c'); //integer and string constants rules
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 63 "scanner.l"
-insertToTable(yytext,'s');
+#line 66 "scanner.l"
+insertToTable(yytext,'s'); 
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 64 "scanner.l"
+#line 68 "scanner.l"
 ;
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 65 "scanner.l"
+#line 69 "scanner.l"
 ;
 	YY_BREAK
 case 18:
 /* rule 18 can match eol */
 YY_RULE_SETUP
-#line 66 "scanner.l"
+#line 70 "scanner.l"
 lineNumber++;
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 68 "scanner.l"
+#line 72 "scanner.l"
 
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 70 "scanner.l"
+#line 74 "scanner.l"
 {  
                 BEGIN(DETECT_COMMENT);
                 nc++;
@@ -1129,7 +1129,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 77 "scanner.l"
+#line 81 "scanner.l"
 { 
                             nc++;
                             if(nc>1)
@@ -1141,7 +1141,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 86 "scanner.l"
+#line 90 "scanner.l"
 {
                             if(nc>0)
                                 nc--;
@@ -1155,7 +1155,7 @@ YY_RULE_SETUP
 case 23:
 /* rule 23 can match eol */
 YY_RULE_SETUP
-#line 96 "scanner.l"
+#line 100 "scanner.l"
 {  
                  cLine++;
                  lineNumber++;
@@ -1164,12 +1164,12 @@ YY_RULE_SETUP
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 102 "scanner.l"
+#line 106 "scanner.l"
 {displayComment(yytext);}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 105 "scanner.l"
+#line 109 "scanner.l"
 ECHO;
 	YY_BREAK
 #line 1176 "lex.yy.c"
@@ -2177,7 +2177,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 105 "scanner.l"
+#line 109 "scanner.l"
 
 
 
@@ -2187,13 +2187,13 @@ int main(int argc,char **argv)
 	yyin=fopen(argv[1],"r");
 	inputFile=argv[1];
 
-	symbol=fopen("symbolTable.txt","w");
+	symbol=fopen("symbolTable.txt","w"); //File to write symbol table
 	fprintf(symbol,"\n Symbol Table:\n \t\tLexeme\t\t\tType\t\t\t\t\tAttribute Value\t\t\tLine Number\n");
 
-	constants=fopen("constantTable.txt","w");
-	fprintf(constants,"\n Constats Table:\n \t\tLexeme\t\t\tType\t\t\t\t\tAttribute Value\t\t\tLine Number\n");
+	constants=fopen("constantTable.txt","w"); // File to write constant table
+	fprintf(constants,"\n Constats Table:\n \t\tLexeme\t\t\tAttribute Value\t\t\tLine Number\n");
 
-	yyout=fopen("parsedTable.txt","w");
+	yyout=fopen("parsedTable.txt","w"); // File to write all token in source program
 	fprintf(yyout,"\n Table:\n \t\tLexeme\t\t\tToken\t\t\t\t\tAttribute Value\t\t\tLine Number\n");
 
 	yylex();
@@ -2313,7 +2313,7 @@ void insertToTable(char *yytext,char type)
 	}
 	if(type =='c'){
 		
-		fprintf(constants,"\n%20s%30s%30d%35d",yytext,token,i,lineNumber);
+		fprintf(constants,"\n%20s%30d%35d",yytext,i,lineNumber);
 		
 	}
    	fprintf(yyout,"\n%20s%30s%30d%35d",yytext,token,i,lineNumber);

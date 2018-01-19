@@ -1,9 +1,9 @@
 
  Constats Table:
- 		Lexeme			Type					Attribute Value			Line Number
+ 		Lexeme			Attribute Value			Line Number
 
-                   0                      Constant                            13                                 13
-                   0                      Constant                            13                                 13
-                   5                      Constant                            17                                 13
-                   0                      Constant                            13                                 17
-                   1                      Constant                            33                                 21
+                   0                            13                                 13
+                   0                            13                                 13
+                   5                            17                                 13
+                   0                            13                                 17
+                   1                            33                                 21
