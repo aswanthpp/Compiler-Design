@@ -2,8 +2,8 @@
  Constats Table:
  		Lexeme			Attribute Value			Line Number
 
-                   0                            13                                 13
-                   0                            13                                 13
-                   5                            17                                 13
-                   0                            13                                 17
-                   1                            33                                 21
+                   0                            13                                 14
+                   0                            13                                 14
+                   5                            17                                 14
+                   0                            13                                 18
+                   1                            33                                 22

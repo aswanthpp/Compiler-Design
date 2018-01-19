@@ -6,17 +6,17 @@
                 node                      Variable                             4                                  9
                    a                      Variable                             6                                 10
                 name                      Variable                             9                                 11
-                  _a                      Variable                            11                                 13
-                   b                      Variable                            15                                 13
-                   c                      Variable                            16                                 13
-             arr[50]                         Array                            19                                 14
-                *ptr                       Pointer                            20                                 15
-                   a                      Variable                             6                                 16
-                   b                      Variable                            15                                 16
-                 sum                      Variable                            26                                 17
+                  _a                      Variable                            11                                 14
+                   b                      Variable                            15                                 14
+                   c                      Variable                            16                                 14
+             arr[50]                         Array                            19                                 15
+                *ptr                       Pointer                            20                                 16
+                   a                      Variable                             6                                 17
+                   b                      Variable                            15                                 17
                  sum                      Variable                            26                                 18
-                   a                      Variable                             6                                 18
-                   b                      Variable                            15                                 18
                  sum                      Variable                            26                                 19
-               *name                       Pointer                            30                                 20
-          void abc()                     Procedure                            34                                 23
+                   a                      Variable                             6                                 19
+                   b                      Variable                            15                                 19
+                 sum                      Variable                            26                                 20
+               *name                       Pointer                            30                                 21
+          void abc()                     Procedure                            34                                 24

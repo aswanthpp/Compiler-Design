@@ -5,6 +5,7 @@
 #include <string.h>
 int var=0,i,nc=0,cLine=0,flag=0;
 int lineNumber=1;
+int cBrac=0;
 
 FILE *symbol,*constants;
 
@@ -31,7 +32,7 @@ modifiers "long"|"short"
 relational >|<|<=|>=|!=|==
 logical \&|\^|\~
 arithmatic \+|\-|\*|\/|\%
-puncuator \(|\)|\[|\]|;|,|\{|\}|\:|\.
+puncuator \(|\)|\[|\]|\;|\,|\:|\.
 assignment =
 quote \'|\"|\\
 whitespace [ \t]+
@@ -68,6 +69,13 @@ identifier ({letter}({letter}|{digit})*)|"_"({letter}|{digit})+
 {quote} ;
 {whitespace} ;
 {newline} lineNumber++;
+
+"{"  { 	cBrac++;
+	insertToTable(yytext,'p');
+	}
+"}"  {	cBrac--;
+	insertToTable(yytext,'p');
+	}
 
 {singlelinecomment} 
 
@@ -127,7 +135,9 @@ int main(int argc,char **argv)
 	
     	if(nc!=0)
     		printf("%s : %d : Comment Does Not End\n",inputFile,lineNumber);
-    
+    		
+    	if(cBrac!=0)
+    		printf("%s : %d : Unbalanced Paranthesis\n",inputFile,lineNumber);
     
     	fprintf(yyout,"\n");
     	if(flag==1)

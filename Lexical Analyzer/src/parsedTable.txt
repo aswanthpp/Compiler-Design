@@ -16,72 +16,73 @@
                    ;                    Punctuator                             7                                 11
                    }                    Punctuator                            10                                 12
                    ;                    Punctuator                             7                                 12
-                 int                       Keyword                             5                                 13
-                  _a                      Variable                            11                                 13
-                   =                 Assignment Op                            12                                 13
-                   0                      Constant                            13                                 13
-                   ,                    Punctuator                            14                                 13
-                   b                      Variable                            15                                 13
-                   =                 Assignment Op                            12                                 13
-                   0                      Constant                            13                                 13
-                   ,                    Punctuator                            14                                 13
-                   c                      Variable                            16                                 13
-                   =                 Assignment Op                            12                                 13
-                   5                      Constant                            17                                 13
-                   ;                    Punctuator                             7                                 13
-            unsigned                       Keyword                            18                                 14
+                   {                    Punctuator                             2                                 13
                  int                       Keyword                             5                                 14
-             arr[50]                         Array                            19                                 14
+                  _a                      Variable                            11                                 14
+                   =                 Assignment Op                            12                                 14
+                   0                      Constant                            13                                 14
+                   ,                    Punctuator                            14                                 14
+                   b                      Variable                            15                                 14
+                   =                 Assignment Op                            12                                 14
+                   0                      Constant                            13                                 14
+                   ,                    Punctuator                            14                                 14
+                   c                      Variable                            16                                 14
+                   =                 Assignment Op                            12                                 14
+                   5                      Constant                            17                                 14
                    ;                    Punctuator                             7                                 14
-                char                       Keyword                             8                                 15
-                *ptr                       Pointer                            20                                 15
+            unsigned                       Keyword                            18                                 15
+                 int                       Keyword                             5                                 15
+             arr[50]                         Array                            19                                 15
                    ;                    Punctuator                             7                                 15
-               scanf                       Keyword                            21                                 16
-                   (                    Punctuator                            22                                 16
-             "%d %d"                String Literal                            23                                 16
-                   ,                    Punctuator                            14                                 16
-                   &                    Logical Op                            24                                 16
-                   a                      Variable                             6                                 16
-                   ,                    Punctuator                            14                                 16
-                   &                    Logical Op                            24                                 16
-                   b                      Variable                            15                                 16
-                   )                    Punctuator                            25                                 16
+                char                       Keyword                             8                                 16
+                *ptr                       Pointer                            20                                 16
                    ;                    Punctuator                             7                                 16
-                 int                       Keyword                             5                                 17
-                 sum                      Variable                            26                                 17
-                   =                 Assignment Op                            12                                 17
-                   0                      Constant                            13                                 17
+               scanf                       Keyword                            21                                 17
+                   (                    Punctuator                            22                                 17
+             "%d %d"                String Literal                            23                                 17
+                   ,                    Punctuator                            14                                 17
+                   &                    Logical Op                            24                                 17
+                   a                      Variable                             6                                 17
+                   ,                    Punctuator                            14                                 17
+                   &                    Logical Op                            24                                 17
+                   b                      Variable                            15                                 17
+                   )                    Punctuator                            25                                 17
                    ;                    Punctuator                             7                                 17
+                 int                       Keyword                             5                                 18
                  sum                      Variable                            26                                 18
                    =                 Assignment Op                            12                                 18
-                   a                      Variable                             6                                 18
-                   +                 Arithmetic Op                            27                                 18
-                   b                      Variable                            15                                 18
+                   0                      Constant                            13                                 18
                    ;                    Punctuator                             7                                 18
-              printf                       Keyword                            28                                 19
-                   (                    Punctuator                            22                                 19
-    "\n Sum : %d \n"                String Literal                            29                                 19
-                   ,                    Punctuator                            14                                 19
                  sum                      Variable                            26                                 19
-                   )                    Punctuator                            25                                 19
+                   =                 Assignment Op                            12                                 19
+                   a                      Variable                             6                                 19
+                   +                 Arithmetic Op                            27                                 19
+                   b                      Variable                            15                                 19
                    ;                    Punctuator                             7                                 19
-                char                       Keyword                             8                                 20
-               *name                       Pointer                            30                                 20
-                   =                 Assignment Op                            12                                 20
-            "Arvind"                String Literal                            31                                 20
+              printf                       Keyword                            28                                 20
+                   (                    Punctuator                            22                                 20
+    "\n Sum : %d \n"                String Literal                            29                                 20
+                   ,                    Punctuator                            14                                 20
+                 sum                      Variable                            26                                 20
+                   )                    Punctuator                            25                                 20
                    ;                    Punctuator                             7                                 20
-              return                       Keyword                            32                                 21
-                   1                      Constant                            33                                 21
+                char                       Keyword                             8                                 21
+               *name                       Pointer                            30                                 21
+                   =                 Assignment Op                            12                                 21
+            "Arvind"                String Literal                            31                                 21
                    ;                    Punctuator                             7                                 21
-                   }                    Punctuator                            10                                 22
-          void abc()                     Procedure                            34                                 23
-                   {                    Punctuator                             2                                 24
-              printf                       Keyword                            28                                 25
-                   (                    Punctuator                            22                                 25
-  "\nTest function "                String Literal                            35                                 25
-                   )                    Punctuator                            25                                 25
-                   ;                    Punctuator                             7                                 25
-                   }                    Punctuator                            10                                 26
+              return                       Keyword                            32                                 22
+                   1                      Constant                            33                                 22
+                   ;                    Punctuator                             7                                 22
+                   }                    Punctuator                            10                                 23
+          void abc()                     Procedure                            34                                 24
+                   {                    Punctuator                             2                                 25
+              printf                       Keyword                            28                                 26
+                   (                    Punctuator                            22                                 26
+  "\nTest function "                String Literal                            35                                 26
+                   )                    Punctuator                            25                                 26
+                   ;                    Punctuator                             7                                 26
+                   }                    Punctuator                            10                                 27
 
 
 Comment (5 lines):
