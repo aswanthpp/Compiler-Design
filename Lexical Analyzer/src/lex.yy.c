@@ -714,10 +714,11 @@ int lineNumber=1;
 int cBrac=0;
 
 FILE *symbol,*constants;
-char *comment,*inputFile;
+char *comment,*inputFile, s_comment[1000];
 
 void insertToTable(char *yytext,char type);
 void displayComment(char *yytext);
+void storeSingleLineComment(char *yytext);
 
 struct Node {
 	char *tname;
@@ -725,9 +726,9 @@ struct Node {
 	struct Node *next;
 }*head=NULL;
 
-#line 728 "lex.yy.c"
+#line 729 "lex.yy.c"
 
-#line 730 "lex.yy.c"
+#line 731 "lex.yy.c"
 
 #define INITIAL 0
 #define DETECT_COMMENT 1
@@ -948,10 +949,10 @@ YY_DECL
 		}
 
 	{
-#line 45 "scanner.l"
+#line 46 "scanner.l"
 
 
-#line 954 "lex.yy.c"
+#line 955 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -1011,83 +1012,83 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 47 "scanner.l"
+#line 48 "scanner.l"
 insertToTable(yytext,'d'); //preprocessor directive rule
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 49 "scanner.l"
+#line 50 "scanner.l"
 insertToTable(yytext,'k');
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 50 "scanner.l"
+#line 51 "scanner.l"
 insertToTable(yytext,'k'); //keyword rule
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 52 "scanner.l"
+#line 53 "scanner.l"
 insertToTable(yytext,'j');  //procesdure rule
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 53 "scanner.l"
+#line 54 "scanner.l"
 insertToTable(yytext,'a'); // array rule
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 54 "scanner.l"
+#line 55 "scanner.l"
 insertToTable(yytext,'q'); // pointer rule
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 55 "scanner.l"
+#line 56 "scanner.l"
 insertToTable(yytext,'i'); // variable rule
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 56 "scanner.l"
+#line 57 "scanner.l"
 { printf("%s : %d : Invalid Identifier\n",inputFile,lineNumber); } // invalid identifier
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 59 "scanner.l"
+#line 60 "scanner.l"
 insertToTable(yytext,'r'); //operator rules
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 60 "scanner.l"
+#line 61 "scanner.l"
 insertToTable(yytext,'l');
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 61 "scanner.l"
+#line 62 "scanner.l"
 insertToTable(yytext,'o');
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 62 "scanner.l"
+#line 63 "scanner.l"
 insertToTable(yytext,'e');
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 63 "scanner.l"
+#line 64 "scanner.l"
 insertToTable(yytext,'p');
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 65 "scanner.l"
+#line 66 "scanner.l"
 insertToTable(yytext,'c'); //integer and 
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 66 "scanner.l"
+#line 67 "scanner.l"
 insertToTable(yytext,'s'); //string constants rules
 	YY_BREAK
 case 16:
 /* rule 16 can match eol */
 YY_RULE_SETUP
-#line 67 "scanner.l"
+#line 68 "scanner.l"
 {
 						if(nc<=0) 
 						printf("%s : %d : String does not End\n",inputFile,lineNumber);			//invalid String
@@ -1095,42 +1096,42 @@ YY_RULE_SETUP
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 72 "scanner.l"
+#line 73 "scanner.l"
 ;
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 73 "scanner.l"
+#line 74 "scanner.l"
 ;
 	YY_BREAK
 case 19:
 /* rule 19 can match eol */
 YY_RULE_SETUP
-#line 74 "scanner.l"
+#line 75 "scanner.l"
 lineNumber++;
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 76 "scanner.l"
+#line 77 "scanner.l"
 { 	cBrac++;
 	insertToTable(yytext,'p');
 	 }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 80 "scanner.l"
+#line 81 "scanner.l"
 {	cBrac--;
 	insertToTable(yytext,'p');
 	 }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 84 "scanner.l"
-
+#line 85 "scanner.l"
+{storeSingleLineComment(yytext);}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 86 "scanner.l"
+#line 87 "scanner.l"
 {  
                 BEGIN(DETECT_COMMENT);
                 nc++;
@@ -1140,7 +1141,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 93 "scanner.l"
+#line 94 "scanner.l"
 { 
                             nc++;
                             if(nc>1)
@@ -1152,7 +1153,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 102 "scanner.l"
+#line 103 "scanner.l"
 {
                             if(nc>0)
                                 nc--;
@@ -1166,7 +1167,7 @@ YY_RULE_SETUP
 case 26:
 /* rule 26 can match eol */
 YY_RULE_SETUP
-#line 112 "scanner.l"
+#line 113 "scanner.l"
 {  
                  cLine++;
                  lineNumber++;
@@ -1175,15 +1176,15 @@ YY_RULE_SETUP
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 118 "scanner.l"
+#line 119 "scanner.l"
 {displayComment(yytext);}
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 121 "scanner.l"
+#line 122 "scanner.l"
 ECHO;
 	YY_BREAK
-#line 1186 "lex.yy.c"
+#line 1187 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(DETECT_COMMENT):
 	yyterminate();
@@ -2192,7 +2193,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 121 "scanner.l"
+#line 122 "scanner.l"
 
 
 int main(int argc,char **argv)
@@ -2216,7 +2217,7 @@ int main(int argc,char **argv)
     		printf("%s : %d : Comment Does Not End\n",inputFile,lineNumber);
     		
     	if(cBrac!=0)
-    		printf("%s : %d : Unbalanced Paranthesis\n",inputFile,lineNumber);
+    		printf("%s : %d : Unbalanced Parenthesis\n",inputFile,lineNumber);
     
     	fprintf(yyout,"\n");
     	if(flag==1)
@@ -2227,8 +2228,11 @@ int main(int argc,char **argv)
     	}
     	else
     	{
-			fprintf(yyout,"\n\nComment (%d lines):",cLine);
+    		int i;
+			fprintf(yyout,"\n\nMultiLineComment (%d lines):",cLine);
 			fputs(comment,yyout);
+			fprintf(yyout,"\n\nSingleLineComment :\n");
+			fputs(s_comment,yyout);
    		}
     
 	fclose(yyout);
@@ -2236,6 +2240,19 @@ int main(int argc,char **argv)
 	fclose(constants);	
 }
 
+void storeSingleLineComment(char *yytext)
+{
+	int len = strlen(yytext);
+	int i, j=0;
+	char *temp;
+	temp = (char*)malloc((len+1)*sizeof(char));
+	for(i=2;yytext[i]!='\0';i++)
+	{
+		temp[j++] = yytext[i];
+	}
+	strcat(temp,"\n");
+	strcat(s_comment,temp);
+}
 void displayComment(char *yytext)
 {
     int l1, l2;

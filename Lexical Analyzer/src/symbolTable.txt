@@ -18,4 +18,5 @@
                    a                      Variable                             6                                 19
                    b                      Variable                            15                                 19
                  sum                      Variable                            26                                 20
-               *name                       Pointer                            30                                 21
+               *name                       Pointer                            30                                 23
+          void abc()                     Procedure                            34                                 28

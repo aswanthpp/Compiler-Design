@@ -16,7 +16,6 @@
                    ;                    Punctuator                             7                                 11
                    }                    Punctuator                            10                                 12
                    ;                    Punctuator                             7                                 12
-                   {                    Punctuator                             2                                 13
                  int                       Keyword                             5                                 14
                   _a                      Variable                            11                                 14
                    =                 Assignment Op                            12                                 14
@@ -66,18 +65,32 @@
                  sum                      Variable                            26                                 20
                    )                    Punctuator                            25                                 20
                    ;                    Punctuator                             7                                 20
-                char                       Keyword                             8                                 21
-               *name                       Pointer                            30                                 21
-                   =                 Assignment Op                            12                                 21
-  "\nTest function "                String Literal                            31                                 21
-                   )                    Punctuator                            25                                 21
-                   ;                    Punctuator                             7                                 21
-                   }                    Punctuator                            10                                 22
+                char                       Keyword                             8                                 23
+               *name                       Pointer                            30                                 23
+                   =                 Assignment Op                            12                                 23
+            "Arvind"                String Literal                            31                                 23
+                   ;                    Punctuator                             7                                 23
+              return                       Keyword                            32                                 26
+                   1                      Constant                            33                                 26
+                   ;                    Punctuator                             7                                 26
+                   }                    Punctuator                            10                                 27
+          void abc()                     Procedure                            34                                 28
+                   {                    Punctuator                             2                                 29
+              printf                       Keyword                            28                                 30
+                   (                    Punctuator                            22                                 30
+  "\nTest function "                String Literal                            35                                 30
+                   )                    Punctuator                            25                                 30
+                   ;                    Punctuator                             7                                 30
+                   }                    Punctuator                            10                                 31
 
 
-Comment (5 lines):
+MultiLineComment (5 lines):
 	 My name is Arvind.
 	This is
 	a sample
 	multi-line 
 	comment
+
+SingleLineComment :
+Enter Name
+End the main function

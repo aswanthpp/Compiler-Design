@@ -10,7 +10,7 @@ int main()
 	int a;
 	char name;
 	};
-	{
+
 	int _a=0,b=0,c=5;
 	unsigned int arr[50];
 	char *ptr;
@@ -18,7 +18,11 @@ int main()
 	int sum=0;
 	sum=a+b;
 	printf("\n Sum : %d \n",sum);
-	char *name = "Arvind;
+	
+	//Enter Name
+	char *name = "Arvind";
+
+	//End the main function
 	return 1;
 }
 void abc()

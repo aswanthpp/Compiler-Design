@@ -8,10 +8,11 @@ int lineNumber=1;
 int cBrac=0;
 
 FILE *symbol,*constants;
-char *comment,*inputFile;
+char *comment,*inputFile, s_comment[1000];
 
 void insertToTable(char *yytext,char type);
 void displayComment(char *yytext);
+void storeSingleLineComment(char *yytext);
 
 struct Node {
 	char *tname;
@@ -81,7 +82,7 @@ L?\"(\\.|[^\\"])*	{
 	insertToTable(yytext,'p');
 	 }
 
-{singlelinecomment} 
+{singlelinecomment} {storeSingleLineComment(yytext);}
 
 {multilinecommentstart}  {  
                 BEGIN(DETECT_COMMENT);
@@ -141,7 +142,7 @@ int main(int argc,char **argv)
     		printf("%s : %d : Comment Does Not End\n",inputFile,lineNumber);
     		
     	if(cBrac!=0)
-    		printf("%s : %d : Unbalanced Paranthesis\n",inputFile,lineNumber);
+    		printf("%s : %d : Unbalanced Parenthesis\n",inputFile,lineNumber);
     
     	fprintf(yyout,"\n");
     	if(flag==1)
@@ -152,8 +153,11 @@ int main(int argc,char **argv)
     	}
     	else
     	{
-			fprintf(yyout,"\n\nComment (%d lines):",cLine);
+    		int i;
+			fprintf(yyout,"\n\nMultiLineComment (%d lines):",cLine);
 			fputs(comment,yyout);
+			fprintf(yyout,"\n\nSingleLineComment :\n");
+			fputs(s_comment,yyout);
    		}
     
 	fclose(yyout);
@@ -161,6 +165,19 @@ int main(int argc,char **argv)
 	fclose(constants);	
 }
 
+void storeSingleLineComment(char *yytext)
+{
+	int len = strlen(yytext);
+	int i, j=0;
+	char *temp;
+	temp = (char*)malloc((len+1)*sizeof(char));
+	for(i=2;yytext[i]!='\0';i++)
+	{
+		temp[j++] = yytext[i];
+	}
+	strcat(temp,"\n");
+	strcat(s_comment,temp);
+}
 void displayComment(char *yytext)
 {
     int l1, l2;
