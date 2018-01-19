@@ -50,7 +50,7 @@ identifier ({letter}({letter}|{digit})*)|"_"({letter}|{digit})+
 {keyword} insertToTable(yytext,'k');
 {sign}?{whitespace}{modifiers}?{whitespace}{datatype} insertToTable(yytext,'k'); //keyword rule
 
-^{sign}?{whitespace}*{modifiers}?{whitespace}*{datatype}{whitespace}*{identifier}\(\)  insertToTable(yytext,'j');  //procesdure rule
+^{sign}?{whitespace}*{modifiers}?{whitespace}*{datatype}{whitespace}*{identifier}\(\)  insertToTable(yytext,'j');  //procedure rule
 {identifier}\[{digit}*\] insertToTable(yytext,'a'); // array rule
 \*{identifier} insertToTable(yytext,'q'); // pointer rule
 {identifier} insertToTable(yytext,'i'); // variable rule
@@ -66,9 +66,9 @@ identifier ({letter}({letter}|{digit})*)|"_"({letter}|{digit})+
 {digit}+ insertToTable(yytext,'c'); //integer and 
 \"(.)*\" insertToTable(yytext,'s'); //string constants rules
 L?\"(\\.|[^\\"])*	{
-						if(nc<=0) 
-						printf("%s : %d : String does not End\n",inputFile,lineNumber);			//invalid String
-					}	
+				if(nc<=0) //invalid String
+				printf("%s : %d : String does not End\n",inputFile,lineNumber);	
+			}	
 
 {quote} ;
 {whitespace} ;
@@ -95,7 +95,7 @@ L?\"(\\.|[^\\"])*	{
                             nc++;
                             if(nc>1)
                             {
-								printf("%s : %d : Nested Comment\n",inputFile,lineNumber);
+				printf("%s : %d : Nested Comment\n",inputFile,lineNumber);
                                 flag = 1;
                             }
                          }
@@ -104,7 +104,7 @@ L?\"(\\.|[^\\"])*	{
                             if(nc>0)
                                 nc--;
                             else
-			    				printf("%s : %d : */ found before /*\n",inputFile,lineNumber);
+			    	printf("%s : %d : */ found before /*\n",inputFile,lineNumber);
                             
                             if(nc==0)
                             	BEGIN(INITIAL);
@@ -147,18 +147,18 @@ int main(int argc,char **argv)
     	fprintf(yyout,"\n");
     	if(flag==1)
     	{
-			cLine = 0;
-			fprintf(yyout,"\n\nComment (%d lines):\n",cLine);
-			printf("%s : %d : Nested Comment\n",inputFile,lineNumber);
+		cLine = 0;
+		fprintf(yyout,"\n\nComment (%d lines):\n",cLine);
+		printf("%s : %d : Nested Comment\n",inputFile,lineNumber);
     	}
     	else
     	{
     		int i;
-			fprintf(yyout,"\n\nMultiLineComment (%d lines):",cLine);
-			fputs(comment,yyout);
-			fprintf(yyout,"\n\nSingleLineComment :\n");
-			fputs(s_comment,yyout);
-   		}
+		fprintf(yyout,"\n\nMultiLineComment (%d lines):",cLine);
+		fputs(comment,yyout);
+		fprintf(yyout,"\n\nSingleLineComment :\n");
+		fputs(s_comment,yyout);
+   	}
     
 	fclose(yyout);
 	fclose(symbol);
@@ -200,7 +200,7 @@ void insertToTable(char *yytext,char type)
 
     switch(type)
     {
-		case 'd': strcpy(token,"Preprocessor Statement");break;
+	case 'd': strcpy(token,"Preprocessor Statement");break;
 
         case 'k': strcpy(token,"Keyword");break;
          
@@ -208,11 +208,11 @@ void insertToTable(char *yytext,char type)
        
         case 'a': strcpy(token,"Array");break;
 
-		case 'q' : strcpy(token,"Pointer");break;
+	case 'q' : strcpy(token,"Pointer");break;
         
         case 'i': strcpy(token,"Variable");break;
 	 	
-		case 'r': strcpy(token,"Relational Op");break;
+	case 'r': strcpy(token,"Relational Op");break;
 
         case 'p': strcpy(token,"Punctuator");break;
        	
