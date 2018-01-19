@@ -1,4 +1,4 @@
-// Test case to check Pre Processor Directives declerations
+// Test case to check Pre Processor Directives declarations
 
 #include <stdio.h>
 #include "userHeader.h"

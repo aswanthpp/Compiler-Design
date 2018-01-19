@@ -8,7 +8,6 @@ int lineNumber=1;
 int cBrac=0;
 
 FILE *symbol,*constants;
-
 char *comment,*inputFile;
 
 void insertToTable(char *yytext,char type);
@@ -19,7 +18,6 @@ struct Node {
 	int av;
 	struct Node *next;
 }*head=NULL;
-
 
 %}
 
@@ -45,6 +43,7 @@ identifier ({letter}({letter}|{digit})*)|"_"({letter}|{digit})+
 %x DETECT_COMMENT
 
 %%
+
 ^#([-a-zA-Z0-9.]|{relational}|{whitespace})* insertToTable(yytext,'d'); //preprocessor directive rule
 
 {keyword} insertToTable(yytext,'k');
@@ -63,8 +62,12 @@ identifier ({letter}({letter}|{digit})*)|"_"({letter}|{digit})+
 {assignment} insertToTable(yytext,'e');
 {puncuator} insertToTable(yytext,'p');
 
-{digit}+ insertToTable(yytext,'c'); //integer and string constants rules
-\"(.)*\" insertToTable(yytext,'s'); 
+{digit}+ insertToTable(yytext,'c'); //integer and 
+\"(.)*\" insertToTable(yytext,'s'); //string constants rules
+L?\"(\\.|[^\\"])*	{
+						if(nc<=0) 
+						printf("%s : %d : String does not End\n",inputFile,lineNumber);			//invalid String
+					}	
 
 {quote} ;
 {whitespace} ;
@@ -72,10 +75,11 @@ identifier ({letter}({letter}|{digit})*)|"_"({letter}|{digit})+
 
 "{"  { 	cBrac++;
 	insertToTable(yytext,'p');
-	}
+	 }
+
 "}"  {	cBrac--;
 	insertToTable(yytext,'p');
-	}
+	 }
 
 {singlelinecomment} 
 
@@ -90,7 +94,7 @@ identifier ({letter}({letter}|{digit})*)|"_"({letter}|{digit})+
                             nc++;
                             if(nc>1)
                             {
-				printf("%s : %d : Nested Comment\n",inputFile,lineNumber);
+								printf("%s : %d : Nested Comment\n",inputFile,lineNumber);
                                 flag = 1;
                             }
                          }
@@ -99,10 +103,10 @@ identifier ({letter}({letter}|{digit})*)|"_"({letter}|{digit})+
                             if(nc>0)
                                 nc--;
                             else
-			    printf("%s : %d : */ found before /*\n",inputFile,lineNumber);
+			    				printf("%s : %d : */ found before /*\n",inputFile,lineNumber);
                             
                             if(nc==0)
-                            BEGIN(INITIAL);
+                            	BEGIN(INITIAL);
                     }
 
 <DETECT_COMMENT>\n   {  
@@ -142,15 +146,15 @@ int main(int argc,char **argv)
     	fprintf(yyout,"\n");
     	if(flag==1)
     	{
-		cLine = 0;
-		fprintf(yyout,"\n\nComment (%d lines):\n",cLine);
-		printf("%s : %d : Nested Comment\n",inputFile,lineNumber);
+			cLine = 0;
+			fprintf(yyout,"\n\nComment (%d lines):\n",cLine);
+			printf("%s : %d : Nested Comment\n",inputFile,lineNumber);
     	}
     	else
     	{
-		fprintf(yyout,"\n\nComment (%d lines):",cLine);
-		fputs(comment,yyout);
-   	}
+			fprintf(yyout,"\n\nComment (%d lines):",cLine);
+			fputs(comment,yyout);
+   		}
     
 	fclose(yyout);
 	fclose(symbol);
@@ -179,31 +183,31 @@ void insertToTable(char *yytext,char type)
 
     switch(type)
     {
-	case 'd': strcpy(token,"Preprocessor Statement");break;
+		case 'd': strcpy(token,"Preprocessor Statement");break;
 
-        case 'k':strcpy(token,"Keyword");break;
+        case 'k': strcpy(token,"Keyword");break;
          
-        case 'j':strcpy(token,"Procedure");break;              
+        case 'j': strcpy(token,"Procedure");break;              
        
-        case 'a':strcpy(token,"Array");break;
+        case 'a': strcpy(token,"Array");break;
 
-	case 'q' :strcpy(token,"Pointer");break;
+		case 'q' : strcpy(token,"Pointer");break;
         
-        case 'i':strcpy(token,"Variable");break;
+        case 'i': strcpy(token,"Variable");break;
 	 	
-	case 'r':strcpy(token,"Relational Op");break;
+		case 'r': strcpy(token,"Relational Op");break;
 
-        case 'p':strcpy(token,"Punctuator");break;
+        case 'p': strcpy(token,"Punctuator");break;
        	
-       	case 'o':strcpy(token,"Arithmetic Op");break;   
+       	case 'o': strcpy(token,"Arithmetic Op");break;   
         
-        case 'c':strcpy(token,"Constant");break;                                
+        case 'c': strcpy(token,"Constant");break;                                
       	
-      	case 'e':strcpy(token,"Assignment Op");break;
+      	case 'e': strcpy(token,"Assignment Op");break;
       	
-      	case 'l':strcpy(token,"Logical Op");break;	
+      	case 'l': strcpy(token,"Logical Op");break;	
     	
-    	case 's':strcpy(token,"String Literal");break;
+    	case 's': strcpy(token,"String Literal");break;
     }
 
     if(nc<=0)

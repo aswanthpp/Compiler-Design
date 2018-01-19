@@ -69,20 +69,10 @@
                 char                       Keyword                             8                                 21
                *name                       Pointer                            30                                 21
                    =                 Assignment Op                            12                                 21
-            "Arvind"                String Literal                            31                                 21
+  "\nTest function "                String Literal                            31                                 21
+                   )                    Punctuator                            25                                 21
                    ;                    Punctuator                             7                                 21
-              return                       Keyword                            32                                 22
-                   1                      Constant                            33                                 22
-                   ;                    Punctuator                             7                                 22
-                   }                    Punctuator                            10                                 23
-          void abc()                     Procedure                            34                                 24
-                   {                    Punctuator                             2                                 25
-              printf                       Keyword                            28                                 26
-                   (                    Punctuator                            22                                 26
-  "\nTest function "                String Literal                            35                                 26
-                   )                    Punctuator                            25                                 26
-                   ;                    Punctuator                             7                                 26
-                   }                    Punctuator                            10                                 27
+                   }                    Punctuator                            10                                 22
 
 
 Comment (5 lines):
