@@ -1,16 +1,19 @@
-// test case to check scanf and printf errors
+// test case to check function decleration ,struct and union decleration
 
 #include<stdio.h>
-void main()
-{
-		int a=10;
-		printf("\nHello World");
-		printf(");
-		printf(" value %d",a);
-		printf(" value ",);
-		
-		scanf(" enter value %d",&a);
-		scanf(" enter value %d",a);
-		scanf(" enter value",);
-		scabf(" enter );
+struct student{
+	int a;
+	char c;
+};
+union teacher{
+	int q;
+	int p;
+}
+void abc(){
+	printf("\nHello World");
+}
+void main(){
+	student *S;
+	teacher *T;	
+	abc();
 }

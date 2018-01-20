@@ -24,7 +24,7 @@ struct Node {
 
 digit  [0-9]
 letter  [a-zA-Z]
-keyword	"auto"|"break"|"case"|"char"|"const"|"continue"|"default"|"do"|"double"|"else"|"enum"|"extern"|"float"|"for"|"goto"|"if"|"int"|"long"|"printf"|"register"|"return"|"scanf"|"short"|"signed"|"sizeof"|"static"|"struct"|"switch"|"typedef"|"union"|"unsigned"|"void"|"volatile"|"while"
+keyword	"auto"|"break"|"case"|"char"|"const"|"continue"|"default"|"do"|"double"|"else"|"enum"|"extern"|"float"|"for"|"goto"|"if"|"int"|"long"|"register"|"return"|"short"|"signed"|"sizeof"|"static"|"struct"|"switch"|"typedef"|"union"|"unsigned"|"void"|"volatile"|"while"
 datatype "int"|"char"|"void"
 sign "signed"|"unsigned"
 modifiers "long"|"short"
@@ -50,7 +50,7 @@ identifier ({letter}({letter}|{digit})*)|"_"({letter}|{digit})+
 {keyword} insertToTable(yytext,'k');
 {sign}?{whitespace}{modifiers}?{whitespace}{datatype} insertToTable(yytext,'k'); //keyword rule
 
-^{sign}?{whitespace}*{modifiers}?{whitespace}*{datatype}{whitespace}*{identifier}\(\)  insertToTable(yytext,'j');  //procedure rule
+^{sign}?{whitespace}*{modifiers}?{whitespace}*{datatype}{whitespace}*{identifier}\(.*\)  insertToTable(yytext,'j');  //procedure rule
 {identifier}\[{digit}*\] insertToTable(yytext,'a'); // array rule
 \*{identifier} insertToTable(yytext,'q'); // pointer rule
 {identifier} insertToTable(yytext,'i'); // variable rule
@@ -63,12 +63,14 @@ identifier ({letter}({letter}|{digit})*)|"_"({letter}|{digit})+
 {assignment} insertToTable(yytext,'e');
 {puncuator} insertToTable(yytext,'p');
 
-{digit}+ insertToTable(yytext,'c'); //integer and 
-\"(.)*\" insertToTable(yytext,'s'); //string constants rules
+{digit}+ insertToTable(yytext,'c'); //integer constants rule 
+\"(.)*\" insertToTable(yytext,'s'); //string constants rule
 L?\"(\\.|[^\\"])*	{
 				if(nc<=0) //invalid String
 				printf("%s : %d : String does not End\n",inputFile,lineNumber);	
-			}	
+			}
+[-+]?{digit}*\.?{digit}+([eE][-+]?{digit}+)? insertToTable(yytext,'f');  // float constant rule
+\'{letter}\' insertToTable(yytext,'z');  // character constant rule
 
 {quote} ;
 {whitespace} ;
@@ -128,13 +130,13 @@ int main(int argc,char **argv)
 	inputFile=argv[1];
 
 	symbol=fopen("symbolTable.txt","w"); //File to write symbol table
-	fprintf(symbol,"\n Symbol Table:\n \t\tLexeme\t\t\tType\t\t\t\t\tAttribute Value\t\t\tLine Number\n");
+	fprintf(symbol,"\n Symbol Table:\n \t\tLexeme\t\t\t\tType\t\t\tAttribute Value\t\t\tLine Number\n");
 
 	constants=fopen("constantTable.txt","w"); // File to write constant table
-	fprintf(constants,"\n Constats Table:\n \t\tLexeme\t\t\tAttribute Value\t\t\tLine Number\n");
+	fprintf(constants,"\n Constants Table:\n \t\tLexeme\t\t\tType\t\t\tAttribute Value\t\t\tLine Number\n");
 
 	yyout=fopen("parsedTable.txt","w"); // File to write all token in source program
-	fprintf(yyout,"\n Table:\n \t\tLexeme\t\t\tToken\t\t\t\t\tAttribute Value\t\t\tLine Number\n");
+	fprintf(yyout,"\n Table:\n \t\tLexeme\t\t\tToken\t\t\t\tAttribute Value\t\t\tLine Number\n");
 
 	yylex();
 	
@@ -147,18 +149,18 @@ int main(int argc,char **argv)
     	fprintf(yyout,"\n");
     	if(flag==1)
     	{
-		cLine = 0;
-		fprintf(yyout,"\n\nComment (%d lines):\n",cLine);
-		printf("%s : %d : Nested Comment\n",inputFile,lineNumber);
+			cLine = 0;
+			fprintf(yyout,"\n\nComment (%d lines):\n",cLine);
+			printf("%s : %d : Nested Comment\n",inputFile,lineNumber);
     	}
     	else
     	{
-    		int i;
-		fprintf(yyout,"\n\nMultiLineComment (%d lines):",cLine);
-		fputs(comment,yyout);
-		fprintf(yyout,"\n\nSingleLineComment :\n");
-		fputs(s_comment,yyout);
-   	}
+	    	int i;
+			fprintf(yyout,"\n\nMultiLineComment (%d lines):",cLine);
+			fputs(comment,yyout);
+			fprintf(yyout,"\n\nSingleLineComment :\n");
+			fputs(s_comment,yyout);
+	   	}
     
 	fclose(yyout);
 	fclose(symbol);
@@ -210,7 +212,7 @@ void insertToTable(char *yytext,char type)
 
 		case 'q' : strcpy(token,"Pointer");break;
         
-        case 'i': strcpy(token,"Variable");break;
+        case 'i': strcpy(token,"Identifier");break;
 	 	
 		case 'r': strcpy(token,"Relational Op");break;
 
@@ -218,7 +220,11 @@ void insertToTable(char *yytext,char type)
        	
        	case 'o': strcpy(token,"Arithmetic Op");break;   
         
-        case 'c': strcpy(token,"Constant");break;                                
+        case 'c': strcpy(token,"Integer Constant");break;
+
+        case 'f': strcpy(token,"Float Constant");break;
+
+        case 'z': strcpy(token,"Character Constant");break;                                
       	
       	case 'e': strcpy(token,"Assignment Op");break;
       	
@@ -265,15 +271,22 @@ void insertToTable(char *yytext,char type)
 	    }
     }
 
-	if(type =='i' || type == 'a' || type == 'q' || type=='j'){
-	
+	if(type =='i' || type == 'a' || type == 'q' || type=='j')
+	{	
 		fprintf(symbol,"\n%20s%30s%30d%35d",yytext,token,i,lineNumber);
 	}
-	if(type =='c'){
-		
-		fprintf(constants,"\n%20s%30d%35d",yytext,i,lineNumber);
-		
+	switch(type)
+	{		
+		case 'c' : fprintf(constants,"\n%20s%20s%30d%35d",yytext,"int",i,lineNumber);
+				    break;
+
+		case 'f' : fprintf(constants,"\n%20s%20s%30d%35d",yytext,"float",i,lineNumber);
+				    break;
+
+		case 'z' : fprintf(constants,"\n%20s%20s%30d%35d",yytext,"char",i,lineNumber);
+				    break;
 	}
+
    	fprintf(yyout,"\n%20s%30s%30d%35d",yytext,token,i,lineNumber);
 }
                                                                                                     

@@ -1,22 +1,27 @@
 
  Symbol Table:
- 		Lexeme			Type					Attribute Value			Line Number
+ 		Lexeme				Type			Attribute Value			Line Number
 
           int main()                     Procedure                             1                                  2
-                node                      Variable                             4                                  9
-                   a                      Variable                             6                                 10
-                name                      Variable                             9                                 11
-                  _a                      Variable                            11                                 14
-                   b                      Variable                            15                                 14
-                   c                      Variable                            16                                 14
-             arr[50]                         Array                            19                                 15
-                *ptr                       Pointer                            20                                 16
-                   a                      Variable                             6                                 17
-                   b                      Variable                            15                                 17
-                 sum                      Variable                            26                                 18
-                 sum                      Variable                            26                                 19
-                   a                      Variable                             6                                 19
-                   b                      Variable                            15                                 19
-                 sum                      Variable                            26                                 20
-               *name                       Pointer                            30                                 23
-          void abc()                     Procedure                            34                                 28
+                node                    Identifier                             4                                  9
+                   a                    Identifier                             6                                 10
+                name                    Identifier                             9                                 11
+                  fl                    Identifier                            12                                 14
+              letter                    Identifier                            15                                 15
+                  _a                    Identifier                            17                                 16
+                   b                    Identifier                            20                                 16
+                   c                    Identifier                            21                                 16
+             arr[50]                         Array                            24                                 17
+                *ptr                       Pointer                            25                                 18
+               scanf                    Identifier                            26                                 19
+                   a                    Identifier                             6                                 19
+                   b                    Identifier                            20                                 19
+                 sum                    Identifier                            31                                 20
+                 sum                    Identifier                            31                                 21
+                   a                    Identifier                             6                                 21
+                   b                    Identifier                            20                                 21
+              printf                    Identifier                            33                                 22
+                 sum                    Identifier                            31                                 22
+               *name                       Pointer                            35                                 25
+          void abc()                     Procedure                            39                                 30
+              printf                    Identifier                            33                                 32
