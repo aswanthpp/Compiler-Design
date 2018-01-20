@@ -95,7 +95,7 @@ L?\"(\\.|[^\\"])*	{
                             nc++;
                             if(nc>1)
                             {
-				printf("%s : %d : Nested Comment\n",inputFile,lineNumber);
+								printf("%s : %d : Nested Comment\n",inputFile,lineNumber);
                                 flag = 1;
                             }
                          }
@@ -104,7 +104,7 @@ L?\"(\\.|[^\\"])*	{
                             if(nc>0)
                                 nc--;
                             else
-			    	printf("%s : %d : */ found before /*\n",inputFile,lineNumber);
+			    				printf("%s : %d : */ found before /*\n",inputFile,lineNumber);
                             
                             if(nc==0)
                             	BEGIN(INITIAL);
@@ -200,7 +200,7 @@ void insertToTable(char *yytext,char type)
 
     switch(type)
     {
-	case 'd': strcpy(token,"Preprocessor Statement");break;
+		case 'd': strcpy(token,"Preprocessor Statement");break;
 
         case 'k': strcpy(token,"Keyword");break;
          
@@ -208,11 +208,11 @@ void insertToTable(char *yytext,char type)
        
         case 'a': strcpy(token,"Array");break;
 
-	case 'q' : strcpy(token,"Pointer");break;
+		case 'q' : strcpy(token,"Pointer");break;
         
         case 'i': strcpy(token,"Variable");break;
 	 	
-	case 'r': strcpy(token,"Relational Op");break;
+		case 'r': strcpy(token,"Relational Op");break;
 
         case 'p': strcpy(token,"Punctuator");break;
        	
