@@ -2,26 +2,27 @@
  Symbol Table:
  		Lexeme				Type			Attribute Value			Line Number
 
-          int main()                     Procedure                             1                                  2
-                node                    Identifier                             4                                  9
+                main                     Procedure                             2                                  2
+                node                    Identifier                             5                                  9
                    a                    Identifier                             6                                 10
                 name                    Identifier                             9                                 11
                   fl                    Identifier                            12                                 14
-              letter                    Identifier                            15                                 15
-                  _a                    Identifier                            17                                 16
-                   b                    Identifier                            20                                 16
-                   c                    Identifier                            21                                 16
-             arr[50]                         Array                            24                                 17
-                *ptr                       Pointer                            25                                 18
+                  l1                    Identifier                            15                                 15
+                  l2                    Identifier                            17                                 15
+                  _a                    Identifier                            19                                 16
+                   b                    Identifier                            21                                 16
+                   c                    Identifier                            22                                 16
+                 arr                         Array                            24                                 17
+                 ptr                       Pointer                            25                                 18
                scanf                    Identifier                            26                                 19
                    a                    Identifier                             6                                 19
-                   b                    Identifier                            20                                 19
+                   b                    Identifier                            21                                 19
                  sum                    Identifier                            31                                 20
                  sum                    Identifier                            31                                 21
                    a                    Identifier                             6                                 21
-                   b                    Identifier                            20                                 21
+                   b                    Identifier                            21                                 21
               printf                    Identifier                            33                                 22
                  sum                    Identifier                            31                                 22
-               *name                       Pointer                            35                                 25
-          void abc()                     Procedure                            39                                 30
+                name                       Pointer                             9                                 25
+                 abc                     Procedure                            38                                 30
               printf                    Identifier                            33                                 32

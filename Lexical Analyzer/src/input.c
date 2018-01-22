@@ -12,9 +12,9 @@ int main()
 	};
 
 	float fl = 5.01;
-	char letter = 'a';
+	char l1 = 'a', l2 ='1';
 	int _a=0,b=0,c=5;
-	unsigned int arr[50];
+	int arr[50];
 	char *ptr;
 	scanf("%d %d",&a,&b);
 	int sum=0;

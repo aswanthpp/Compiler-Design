@@ -3,12 +3,13 @@
  		Lexeme			Token				Attribute Value			Line Number
 
   #include <stdio.h>        Preprocessor Statement                             0                                  1
-          int main()                     Procedure                             1                                  2
-                   {                    Punctuator                             2                                  3
-              struct                       Keyword                             3                                  9
-                node                    Identifier                             4                                  9
-                   {                    Punctuator                             2                                  9
-                 int                       Keyword                             5                                 10
+                 int                       Keyword                             1                                  2
+                main                     Procedure                             2                                  2
+                   {                    Punctuator                             3                                  3
+              struct                       Keyword                             4                                  9
+                node                    Identifier                             5                                  9
+                   {                    Punctuator                             3                                  9
+                 int                       Keyword                             1                                 10
                    a                    Identifier                             6                                 10
                    ;                    Punctuator                             7                                 10
                 char                       Keyword                             8                                 11
@@ -22,73 +23,77 @@
                 5.01                Float Constant                            14                                 14
                    ;                    Punctuator                             7                                 14
                 char                       Keyword                             8                                 15
-              letter                    Identifier                            15                                 15
+                  l1                    Identifier                            15                                 15
                    =                 Assignment Op                            13                                 15
-                 'a'            Character Constant                            16                                 15
+                   a            Character Constant                             6                                 15
+                   ,                    Punctuator                            16                                 15
+                  l2                    Identifier                            17                                 15
+                   =                 Assignment Op                            13                                 15
+                   1            Character Constant                            18                                 15
                    ;                    Punctuator                             7                                 15
-                 int                       Keyword                             5                                 16
-                  _a                    Identifier                            17                                 16
+                 int                       Keyword                             1                                 16
+                  _a                    Identifier                            19                                 16
                    =                 Assignment Op                            13                                 16
-                   0              Integer Constant                            18                                 16
-                   ,                    Punctuator                            19                                 16
-                   b                    Identifier                            20                                 16
+                   0              Integer Constant                            20                                 16
+                   ,                    Punctuator                            16                                 16
+                   b                    Identifier                            21                                 16
                    =                 Assignment Op                            13                                 16
-                   0              Integer Constant                            18                                 16
-                   ,                    Punctuator                            19                                 16
-                   c                    Identifier                            21                                 16
+                   0              Integer Constant                            20                                 16
+                   ,                    Punctuator                            16                                 16
+                   c                    Identifier                            22                                 16
                    =                 Assignment Op                            13                                 16
-                   5              Integer Constant                            22                                 16
+                   5              Integer Constant                            23                                 16
                    ;                    Punctuator                             7                                 16
-            unsigned                       Keyword                            23                                 17
-                 int                       Keyword                             5                                 17
-             arr[50]                         Array                            24                                 17
+                 int                       Keyword                             1                                 17
+                 arr                         Array                            24                                 17
                    ;                    Punctuator                             7                                 17
                 char                       Keyword                             8                                 18
-                *ptr                       Pointer                            25                                 18
+                 ptr                       Pointer                            25                                 18
                    ;                    Punctuator                             7                                 18
                scanf                    Identifier                            26                                 19
                    (                    Punctuator                            27                                 19
              "%d %d"                String Literal                            28                                 19
-                   ,                    Punctuator                            19                                 19
+                   ,                    Punctuator                            16                                 19
                    &                    Logical Op                            29                                 19
                    a                    Identifier                             6                                 19
-                   ,                    Punctuator                            19                                 19
+                   ,                    Punctuator                            16                                 19
                    &                    Logical Op                            29                                 19
-                   b                    Identifier                            20                                 19
+                   b                    Identifier                            21                                 19
                    )                    Punctuator                            30                                 19
                    ;                    Punctuator                             7                                 19
-                 int                       Keyword                             5                                 20
+                 int                       Keyword                             1                                 20
                  sum                    Identifier                            31                                 20
                    =                 Assignment Op                            13                                 20
-                   0              Integer Constant                            18                                 20
+                   0              Integer Constant                            20                                 20
                    ;                    Punctuator                             7                                 20
                  sum                    Identifier                            31                                 21
                    =                 Assignment Op                            13                                 21
                    a                    Identifier                             6                                 21
                    +                 Arithmetic Op                            32                                 21
-                   b                    Identifier                            20                                 21
+                   b                    Identifier                            21                                 21
                    ;                    Punctuator                             7                                 21
               printf                    Identifier                            33                                 22
                    (                    Punctuator                            27                                 22
     "\n Sum : %d \n"                String Literal                            34                                 22
-                   ,                    Punctuator                            19                                 22
+                   ,                    Punctuator                            16                                 22
                  sum                    Identifier                            31                                 22
                    )                    Punctuator                            30                                 22
                    ;                    Punctuator                             7                                 22
                 char                       Keyword                             8                                 25
-               *name                       Pointer                            35                                 25
+                name                       Pointer                             9                                 25
                    =                 Assignment Op                            13                                 25
-            "Arvind"                String Literal                            36                                 25
+            "Arvind"                String Literal                            35                                 25
                    ;                    Punctuator                             7                                 25
-              return                       Keyword                            37                                 28
-                   1              Integer Constant                            38                                 28
+              return                       Keyword                            36                                 28
+                   1              Integer Constant                            18                                 28
                    ;                    Punctuator                             7                                 28
                    }                    Punctuator                            10                                 29
-          void abc()                     Procedure                            39                                 30
-                   {                    Punctuator                             2                                 31
+                void                       Keyword                            37                                 30
+                 abc                     Procedure                            38                                 30
+                   {                    Punctuator                             3                                 31
               printf                    Identifier                            33                                 32
                    (                    Punctuator                            27                                 32
-  "\nTest function "                String Literal                            40                                 32
+  "\nTest function "                String Literal                            39                                 32
                    )                    Punctuator                            30                                 32
                    ;                    Punctuator                             7                                 32
                    }                    Punctuator                            10                                 33

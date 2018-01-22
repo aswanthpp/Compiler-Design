@@ -50,9 +50,40 @@ identifier ({letter}({letter}|{digit})*)|"_"({letter}|{digit})+
 {keyword} insertToTable(yytext,'k');
 {sign}?{whitespace}{modifiers}?{whitespace}{datatype} insertToTable(yytext,'k'); //keyword rule
 
-^{sign}?{whitespace}*{modifiers}?{whitespace}*{datatype}{whitespace}*{identifier}\(.*\)  insertToTable(yytext,'j');  //procedure rule
-{identifier}\[{digit}*\] insertToTable(yytext,'a'); // array rule
-\*{identifier} insertToTable(yytext,'q'); // pointer rule
+^{datatype}{whitespace}*{identifier}\(.*\)  {	int i,j=0;char temp1[50]={'\0'}, temp2[50]={'\0'};
+												for(i=0;yytext[i]!=' ';i++)
+												{
+													temp1[i] = yytext[i];
+												}
+												
+												insertToTable(temp1,'k');
+												for(;yytext[i]!='(';i++){
+													temp2[j]=yytext[i];
+													j++;
+												}
+
+												insertToTable(temp2,'j');  //procedure rule
+											}
+											
+{identifier}\[{digit}*\] {	int i,j=0;char temp[50]={'\0'};
+							
+							for(i=0;yytext[i]!='[';i++)
+							{
+								temp[j] = yytext[i];
+								j++;
+							}
+
+								insertToTable(temp,'a'); // array rule
+						}
+						
+\*{identifier} {	int i,j=0;char temp[50]={'\0'};
+					for(i=1;yytext[i]!='\0';i++)
+					{
+						temp[j++] = yytext[i];
+					}
+						insertToTable(temp,'q'); // pointer rule
+				}
+				
 {identifier} insertToTable(yytext,'i'); // variable rule
 {digit}+({letter}|{digit})+|"_" { printf("%s : %d : Invalid Identifier\n",inputFile,lineNumber); } // invalid identifier
 
@@ -70,7 +101,10 @@ L?\"(\\.|[^\\"])*	{
 				printf("%s : %d : String does not End\n",inputFile,lineNumber);	
 			}
 [-+]?{digit}*\.?{digit}+([eE][-+]?{digit}+)? insertToTable(yytext,'f');  // float constant rule
-\'{letter}\' insertToTable(yytext,'z');  // character constant rule
+\'({letter}|{digit})\' {	char temp[50]={'\0'};
+							temp[0] = yytext[1];
+							insertToTable(temp,'z');  // character constant rule
+						}
 
 {quote} ;
 {whitespace} ;
@@ -196,6 +230,7 @@ void displayComment(char *yytext)
 void insertToTable(char *yytext,char type)
 {
     int l1 = strlen(yytext), i;
+	
     
     char token[30];
     struct Node *current = NULL, *temp = NULL;

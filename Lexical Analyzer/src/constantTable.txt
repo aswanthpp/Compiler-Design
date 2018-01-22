@@ -3,9 +3,10 @@
  		Lexeme			Type			Attribute Value			Line Number
 
                 5.01               float                            14                                 14
-                 'a'                char                            16                                 15
-                   0                 int                            18                                 16
-                   0                 int                            18                                 16
-                   5                 int                            22                                 16
-                   0                 int                            18                                 20
-                   1                 int                            38                                 28
+                   a                char                             6                                 15
+                   1                char                            18                                 15
+                   0                 int                            20                                 16
+                   0                 int                            20                                 16
+                   5                 int                            23                                 16
+                   0                 int                            20                                 20
+                   1                 int                            18                                 28
