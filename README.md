@@ -5,6 +5,7 @@
 <h2> Course : Compiler Design Lab (CO351)</h2>
 <h4>Module</h4>
 1. Lexical Analyzer<br>
+2. Syntax Analyzer<br>
 
 <h4>Team : <br>
 1. Arvind Ramachandran - 15CO111<br>
