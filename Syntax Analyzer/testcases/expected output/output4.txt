@@ -1,0 +1,12 @@
+Explanation : 
+
+function1 definition and invoking is also correct
+function2 definition and invoking with the argument are matching hence no error
+function3  definition and first invoking is correct
+
+function3 second invoking is incorrect because few less function parameters
+
+
+Output: 
+
+No matching function in line number 10 

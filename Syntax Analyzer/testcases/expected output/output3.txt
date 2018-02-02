@@ -1,0 +1,12 @@
+Explanation : 
+
+Third for loop is an invalid syntax because cannot create loop without the semicolon seperated expression
+
+Fourth for loop is also invalid syntax because cannot create loop without comparison segments
+
+Fifth for loop is valid because looping can be done without updation segment also 
+
+Output :
+
+Invalid syntax at line 12
+Invalid syntax at line 16

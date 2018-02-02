@@ -1,0 +1,8 @@
+Explanation:
+Cannont use two arithmetic operator consecutivley hence error at line 13
+Unary plus should not have more than one operand
+
+Output:
+
+Arithmetic exression error at line 13
+Invalid syntax for unary plus at line 14

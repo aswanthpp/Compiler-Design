@@ -1,0 +1,14 @@
+Explanation :
+
+Third printf statements invalid because no argument given after comma
+Fourth printf statents is invalid because expected an integer argument but not given
+
+Second scanf is valid because this phase do not compare type mismatch
+Third scanf is invalid because too few arguments
+
+Output :
+
+Invalid Syntax at line number at 8
+Too few arguments at line number at 9
+Too few arguments at line number at 13
+

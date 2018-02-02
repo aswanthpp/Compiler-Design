@@ -1,0 +1,7 @@
+Eplanation :
+
+There is an unbalanced else in line number 12 ,ie there should be else for each if statements
+
+Output: 
+
+Misplaced else in line number 12
