@@ -1,33 +1,48 @@
-
-D			[0-9]
-L			[a-zA-Z_]
-H			[a-fA-F0-9]
-E			[Ee][+-]?{D}+
-FS			(f|F|l|L)
-IS			(u|U|l|L)*
-
-
 %{
-
 #include <stdio.h>
 #include "y.tab.h"
-int line=1;
-char *tempid;
+int lineCount=1;
+int nestedCommentCount=0;
+int commentFlag=0;
+char *tablePtr;
 void addToken(char*);
 %}
-comment (\/\/.*)
-comstr (\/\*)
-comend (\*\/)
-%x C_COMMENT
+
+digit			[0-9]
+letter			[a-zA-Z_]
+hex			[a-fA-F0-9]
+E			[Ee][+-]?{digit}+
+FS			(f|F|l|letter)
+IS			(u|U|l|letter)*
+
+singlelineComment (\/\/.*)
+multilineCommentStart (\/\*)
+multilineCommentEnd (\*\/)
+%x DETECT_COMMENT
 
 %%
 
 
-{comment}      		{ line++;}
-{comstr}            	{ BEGIN(C_COMMENT); }
-<C_COMMENT>{comend} 	{ BEGIN(INITIAL); line++; }
-<C_COMMENT>\n 		{line++;}
-<C_COMMENT>. 		{}
+{singlelineComment}      		{ lineCount++; }
+
+{multilineCommentStart}            	{ BEGIN(DETECT_COMMENT);
+					  nestedCommentCount++; 
+					}
+					
+<DETECT_COMMENT>{multilineCommentStart} { nestedCommentCount++;
+					  if(nestedCommentCount>1)
+					  	commentFlag = 1;
+					}
+					
+<DETECT_COMMENT>{multilineCommentEnd} 	{ BEGIN(INITIAL); lineCount++;
+						 if(nestedCommentCount>0)
+                                			nestedCommentCount--;
+                            			if(nestedCommentCount==0)
+                            				BEGIN(INITIAL);
+                    			}
+                    			
+<DETECT_COMMENT>\n 		{lineCount++;}
+<DETECT_COMMENT>. 		{}
 
 
 
@@ -65,18 +80,17 @@ comend (\*\/)
 "volatile"		{   return(VOLATILE); }
 "while"			{   return(WHILE); }
 
-{L}({L}|{D})*		{  addToken(yytext); return(IDENTIFIER); }
+{letter}({letter}|{digit})*		{  addToken(yytext); return(IDENTIFIER); }
 
-0[xX]{H}+{IS}?		{  addToken(yytext); return(CONSTANT); }
-0{D}+{IS}?		{  addToken(yytext); return(CONSTANT); }
-{H}+{IS}?		{  addToken(yytext); return(CONSTANT); }
-L?'(\\.|[^\\'])+'	{  addToken(yytext); return(CONSTANT); }
+0[xX]{hex}+{IS}?		{  addToken(yytext); return(CONSTANT); }
+0{digit}+{IS}?			{  addToken(yytext); return(CONSTANT); }
+{hex}+{IS}?			{  addToken(yytext); return(CONSTANT); }
+{letter}?'(\\.|[^\\'])+'	{  addToken(yytext); return(CONSTANT); }
+{digit}+{E}{FS}?		{  addToken(yytext); return(CONSTANT); }
+{digit}*"."{digit}+({E})?{FS}?	{  addToken(yytext); return(CONSTANT); }
+{digit}+"."{digit}*({E})?{FS}?	{  addToken(yytext); return(CONSTANT); }
 
-{D}+{E}{FS}?		{  addToken(yytext); return(CONSTANT); }
-{D}*"."{D}+({E})?{FS}?	{  addToken(yytext); return(CONSTANT); }
-{D}+"."{D}*({E})?{FS}?	{  addToken(yytext); return(CONSTANT); }
-
-L?\"(\\.|[^\\"])*\"	{  addToken(yytext); return(STRING_LITERAL); }
+{letter}?\"(\\.|[^\\"])*\"	{  addToken(yytext); return(STRING_LITERAL); }
 
 "..."			{  return(ELLIPSIS); }
 ">>="			{  return(RIGHT_ASSIGN); }
@@ -101,8 +115,8 @@ L?\"(\\.|[^\\"])*\"	{  addToken(yytext); return(STRING_LITERAL); }
 "=="			{  return(EQ_OP); }
 "!="			{  return(NE_OP); }
 ";"			{  return(';'); }
-("{"|"<%")		{  makeList("{",'p',line); return('{'); }
-("}"|"%>")		{  makeList("}",'p',line); return('}'); }
+("{"|"<%")		{  makeList("{",'p',lineCount); return('{'); }
+("}"|"%>")		{  makeList("}",'p',lineCount); return('}'); }
 ","			{  return(','); }
 ":"			{  return(':'); }
 "="			{  return('='); }
@@ -126,12 +140,12 @@ L?\"(\\.|[^\\"])*\"	{  addToken(yytext); return(STRING_LITERAL); }
 "?"			{  return('?'); }
 
 
-"#include"(.)*"\n"	{ line++; }
-"#define"(.)*"\n"	{ line++; }
+"#include"(.)*"\n"	{ lineCount++; }
+"#define"(.)*"\n"	{ lineCount++; }
 
 [ ]			{}
 [\t\v\f]		{}
-[\n]			{line++;}
+[\n]			{lineCount++;}
 .			{ }
 
 %%
@@ -143,7 +157,7 @@ yywrap()
 void addToken(char *yytext)
 {
   int len = strlen(yytext);
-  tempid = (char*)malloc((len+1)*sizeof(char));
-  strcpy(tempid, yytext);
+  tablePtr = (char*)malloc((len+1)*sizeof(char));
+  strcpy(tablePtr, yytext);
 }
 

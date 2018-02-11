@@ -2,8 +2,8 @@
 #include<stdio.h>
 int main(){
 
-	int l=10,a=0;
-	for(int i=0;i<l;i++){
+	int l=10,a=0,i;
+	for(i=0;i<l;i++){
 		printf("\nHello World");
 	}
 	for(;a<l;a++){
@@ -14,10 +14,10 @@ int main(){
 	}
 
 	for(;;a++){
-		printf("\nNIT K surathkal")
+		printf("\nNo Comparison Statement : Error");
 	}
 
 	for(a=10;a<20;){
-		printf("\nCompiler Design");
+		printf("\nInfinite Loop");
 	}
 }
