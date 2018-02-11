@@ -13,7 +13,7 @@ IS			(u|U|l|L)*
 #include "y.tab.h"
 int line=1;
 char *tempid;
-void insert(char*);
+void addToken(char*);
 %}
 comment (\/\/.*)
 comstr (\/\*)
@@ -65,18 +65,18 @@ comend (\*\/)
 "volatile"		{   return(VOLATILE); }
 "while"			{   return(WHILE); }
 
-{L}({L}|{D})*		{  insert(yytext); return(IDENTIFIER); }
+{L}({L}|{D})*		{  addToken(yytext); return(IDENTIFIER); }
 
-0[xX]{H}+{IS}?		{  insert(yytext); return(CONSTANT); }
-0{D}+{IS}?		{  insert(yytext); return(CONSTANT); }
-{H}+{IS}?		{  insert(yytext); return(CONSTANT); }
-L?'(\\.|[^\\'])+'	{  insert(yytext); return(CONSTANT); }
+0[xX]{H}+{IS}?		{  addToken(yytext); return(CONSTANT); }
+0{D}+{IS}?		{  addToken(yytext); return(CONSTANT); }
+{H}+{IS}?		{  addToken(yytext); return(CONSTANT); }
+L?'(\\.|[^\\'])+'	{  addToken(yytext); return(CONSTANT); }
 
-{D}+{E}{FS}?		{  insert(yytext); return(CONSTANT); }
-{D}*"."{D}+({E})?{FS}?	{  insert(yytext); return(CONSTANT); }
-{D}+"."{D}*({E})?{FS}?	{  insert(yytext); return(CONSTANT); }
+{D}+{E}{FS}?		{  addToken(yytext); return(CONSTANT); }
+{D}*"."{D}+({E})?{FS}?	{  addToken(yytext); return(CONSTANT); }
+{D}+"."{D}*({E})?{FS}?	{  addToken(yytext); return(CONSTANT); }
 
-L?\"(\\.|[^\\"])*\"	{  insert(yytext); return(STRING_LITERAL); }
+L?\"(\\.|[^\\"])*\"	{  addToken(yytext); return(STRING_LITERAL); }
 
 "..."			{  return(ELLIPSIS); }
 ">>="			{  return(RIGHT_ASSIGN); }
@@ -140,7 +140,7 @@ yywrap()
 	return(1);
 }
 
-void insert(char *yytext)
+void addToken(char *yytext)
 {
   int len = strlen(yytext);
   tempid = (char*)malloc((len+1)*sizeof(char));

@@ -10,7 +10,6 @@ struct tokenList
 };
 typedef struct tokenList tokenList;
 
-
 extern FILE *yyin;
 extern int line;
 extern char *tempid;
@@ -18,6 +17,7 @@ extern char *tempid;
 tokenList *symbolPtr = NULL;
 tokenList *constantPtr = NULL;
 
+char *sourceCode=NULL;
 int errorFlag=0;
 void makeList(char *,char,int);
 %}
@@ -457,38 +457,39 @@ yyerror(s)
 {
 	errorFlag=1;
 	fflush(stdout);
-	printf("\nSyntax error at line: %d \n", line);
+	printf("\n%s : %d :Syntax error \n",sourceCode,line);
 }
 main(int argc,char **argv){
 	if(argc<=1){
 		
-		printf("Arguments missing ! correct format : ./a.out filename \n");
+		printf("Invalid ,Expected Format : ./a.out <\"sourceCode\"> \n");
 		return 0;
 	}
 	yyin=fopen(argv[1],"r");
+	sourceCode=(char *)malloc(strlen(argv[1])*sizeof(char));
+	sourceCode=argv[1];
 	yyparse();
 
 	if(!errorFlag){
 		
-		printf("\n\n\t\t\t\t\tCompilation Successful!\n\n\n");
+		printf("\n\n\t\t%s Parsing Completed\n\n",sourceCode);
+		
   		FILE *writeSymbol=fopen("symbolTable.txt","w");
     		fprintf(writeSymbol,"\n\t\t\t\tSymbolTable\n\n\t\tToken\t\t\tType\t\t\t\t\t\t\tLineNumber\n");
-  		tokenList *ptr;
-  		for(ptr=symbolPtr;ptr!=NULL;ptr=ptr->next){
+      		for(tokenList *ptr=symbolPtr;ptr!=NULL;ptr=ptr->next){
   			fprintf(writeSymbol,"\n%20s%30.30s%60s",ptr->token,ptr->type,ptr->line);
-			printf("\n%20s%30.30s%60s",ptr->token,ptr->type,ptr->line);
 		}
 		
 		FILE *writeConstant=fopen("constantTable.txt","w");
     		fprintf(writeConstant,"\n   \t\t\t\t\t\t\t\tConstant Table \n\n \t\t\t\t\t\tValue\t\t\t\t\t\t\tLine Number\n");
-    		for(ptr=constantPtr;ptr!=NULL;ptr=ptr->next)
+    		for(tokenList *ptr=constantPtr;ptr!=NULL;ptr=ptr->next)
   		fprintf(writeConstant,"\n%50s%60s",ptr->token,ptr->line);
   	
   	
   		fclose(writeSymbol);
 		fclose(writeConstant);
 	}
-printf("\n");	
+printf("\n\n");	
 }
 void makeList(char *sym_name,char sym_type, int linec)
 {
