@@ -516,11 +516,11 @@ printf("\n\n");
 
 void makeList(char *tokenName,char tokenType, int tokenLine)
 {
-	char line[39],linen[19];
+	char line[39],lineBuffer[19];
 	
-  	snprintf(linen, 19, "%d", tokenLine);
+  	snprintf(lineBuffer, 19, "%d", tokenLine);
 	strcpy(line," ");
-	strcat(line,linen);
+	strcat(line,lineBuffer);
 	char type[20];
 	switch(tokenType)
 	{
