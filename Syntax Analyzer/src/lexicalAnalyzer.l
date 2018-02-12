@@ -48,8 +48,8 @@ multilineCommentEnd (\*\/)
 
 
 "auto"			{  return(AUTO); }
-"break"			{   return(BREAK); }
-"case"			{   return(CASE); }
+"break"			{  return(BREAK); }
+"case"			{  return(CASE); }
 "char"			{  return(CHAR); }
 "const"			{  return(CONST); }
 "continue"		{  return(CONTINUE); }
@@ -74,23 +74,22 @@ multilineCommentEnd (\*\/)
 "struct"		{  return(STRUCT); }
 "switch"		{  return(SWITCH); }
 "typedef"		{  return(TYPEDEF); }
-"union"			{   return(UNION); }
-"unsigned"		{   return(UNSIGNED); }
-"void"			{   return(VOID); }
-"volatile"		{   return(VOLATILE); }
-"while"			{   return(WHILE); }
+"union"			{  return(UNION); }
+"unsigned"		{  return(UNSIGNED); }
+"void"			{  return(VOID); }
+"volatile"		{  return(VOLATILE); }
+"while"			{  return(WHILE); }
 
 {letter}({letter}|{digit})*		{  addToken(yytext); return(IDENTIFIER); }
+{letter}?\"(\\.|[^\\"])*\"		{  addToken(yytext); return(STRING_LITERAL); }
 
-0[xX]{hex}+{IS}?		{  addToken(yytext); return(CONSTANT); }
-0{digit}+{IS}?			{  addToken(yytext); return(CONSTANT); }
-{hex}+{IS}?			{  addToken(yytext); return(CONSTANT); }
-{letter}?'(\\.|[^\\'])+'	{  addToken(yytext); return(CONSTANT); }
-{digit}+{E}{FS}?		{  addToken(yytext); return(CONSTANT); }
-{digit}*"."{digit}+({E})?{FS}?	{  addToken(yytext); return(CONSTANT); }
-{digit}+"."{digit}*({E})?{FS}?	{  addToken(yytext); return(CONSTANT); }
-
-{letter}?\"(\\.|[^\\"])*\"	{  addToken(yytext); return(STRING_LITERAL); }
+0[xX]{hex}+{IS}?			{  addToken(yytext); return(CONSTANT); }
+0{digit}+{IS}?				{  addToken(yytext); return(CONSTANT); }
+{hex}+{IS}?				{  addToken(yytext); return(CONSTANT); }
+{letter}?'(\\.|[^\\'])+'		{  addToken(yytext); return(CONSTANT); }
+{digit}+{E}{FS}?			{  addToken(yytext); return(CONSTANT); }
+{digit}*"."{digit}+({E})?{FS}?		{  addToken(yytext); return(CONSTANT); }
+{digit}+"."{digit}*({E})?{FS}?		{  addToken(yytext); return(CONSTANT); }
 
 "..."			{  return(ELLIPSIS); }
 ">>="			{  return(RIGHT_ASSIGN); }

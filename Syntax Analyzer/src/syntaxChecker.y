@@ -50,21 +50,21 @@ void makeList(char *,char,int);
 %%
 
 primary_expression
-	: IDENTIFIER  { makeList(tablePtr, 'v', lineCount); }
-	| CONSTANT    { makeList(tablePtr, 'c', lineCount);}
-	| STRING_LITERAL  { makeList(tablePtr, 's', lineCount);}
-	| '(' expression ')' { makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
+	: IDENTIFIER  		{ makeList(tablePtr, 'v', lineCount); }
+	| CONSTANT    		{ makeList(tablePtr, 'c', lineCount);}
+	| STRING_LITERAL  	{ makeList(tablePtr, 's', lineCount);}
+	| '(' expression ')' 	{ makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
 	;
 
 postfix_expression
 	: primary_expression
-	| postfix_expression '[' expression ']' { makeList("[", 'p', lineCount); makeList("]", 'p', lineCount); }
-	| postfix_expression '(' ')' { makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
-	| postfix_expression '(' argument_expression_list ')' { makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
-	| postfix_expression '.' IDENTIFIER { makeList(tablePtr, 'v', lineCount);}
-	| postfix_expression PTR_OP IDENTIFIER { makeList(tablePtr, 'v', lineCount);}
-	| postfix_expression INC_OP  { makeList(tablePtr, 'o', lineCount);}
-	| postfix_expression DEC_OP  { makeList(tablePtr, 'o', lineCount);}
+	| postfix_expression '[' expression ']' 		{ makeList("[", 'p', lineCount); makeList("]", 'p', lineCount); }
+	| postfix_expression '(' ')' 				{ makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
+	| postfix_expression '(' argument_expression_list ')' 	{ makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
+	| postfix_expression '.' IDENTIFIER 			{ makeList(tablePtr, 'v', lineCount);}
+	| postfix_expression PTR_OP IDENTIFIER 			{ makeList(tablePtr, 'v', lineCount);}
+	| postfix_expression INC_OP  				{ makeList(tablePtr, 'o', lineCount);}
+	| postfix_expression DEC_OP  				{ makeList(tablePtr, 'o', lineCount);}
 	;
 
 argument_expression_list
@@ -74,11 +74,12 @@ argument_expression_list
 
 unary_expression
 	: postfix_expression
-	| INC_OP unary_expression { makeList("++",'o', lineCount); }
-	| DEC_OP unary_expression { makeList("--",'o', lineCount); }
+	| INC_OP unary_expression 	{ makeList("++",'o', lineCount); }
+	| DEC_OP unary_expression 	{ makeList("--",'o', lineCount); }
 	| unary_operator cast_expression
-	| SIZEOF unary_expression { makeList("sizeof",'o', lineCount); }
-	| SIZEOF '(' type_name ')' { makeList("sizeof",'o', lineCount); } { makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
+	| SIZEOF unary_expression 	{ makeList("sizeof",'o', lineCount); }
+	| SIZEOF '(' type_name ')' 	{ makeList("sizeof",'o', lineCount); } 
+					{ makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
 	;
 
 unary_operator
@@ -110,7 +111,7 @@ additive_expression
 
 shift_expression
 	: additive_expression
-	| shift_expression LEFT_OP additive_expression { makeList("<<",'o', lineCount); }
+	| shift_expression LEFT_OP additive_expression 	{ makeList("<<",'o', lineCount); }
 	| shift_expression RIGHT_OP additive_expression { makeList(">>",'o', lineCount); }
 	;
 
@@ -130,12 +131,12 @@ equality_expression
 
 and_expression
 	: equality_expression
-	| and_expression '&' equality_expression { makeList("&", 'o', lineCount);}
+	| and_expression '&' equality_expression 	{ makeList("&", 'o', lineCount);}
 	;
 
 exclusive_or_expression
 	: and_expression
-	| exclusive_or_expression '^' and_expression { makeList("^", 'o', lineCount); }
+	| exclusive_or_expression '^' and_expression 	{ makeList("^", 'o', lineCount); }
 	;
 
 inclusive_or_expression
@@ -164,17 +165,17 @@ assignment_expression
 	;
 
 assignment_operator
-	: '=' { makeList("=",'o', lineCount); }
-	| MUL_ASSIGN { makeList("*=",'o', lineCount); }
-	| DIV_ASSIGN { makeList("/=",'o', lineCount); }
-	| MOD_ASSIGN { makeList("%=",'o', lineCount); }
-	| ADD_ASSIGN { makeList("+=",'o', lineCount); }
-	| SUB_ASSIGN { makeList("-=",'o', lineCount); }
-	| LEFT_ASSIGN { makeList("<<=",'o', lineCount); }
-	| RIGHT_ASSIGN { makeList(">==",'o', lineCount); }
-	| AND_ASSIGN { makeList("&=",'o', lineCount); }
-	| XOR_ASSIGN { makeList("^=",'o', lineCount); }
-	| OR_ASSIGN { makeList("|=",'o', lineCount); }
+	: '=' 		{ makeList("=",'o', lineCount); }
+	| MUL_ASSIGN 	{ makeList("*=",'o', lineCount); }
+	| DIV_ASSIGN 	{ makeList("/=",'o', lineCount); }
+	| MOD_ASSIGN 	{ makeList("%=",'o', lineCount); }
+	| ADD_ASSIGN 	{ makeList("+=",'o', lineCount); }
+	| SUB_ASSIGN 	{ makeList("-=",'o', lineCount); }
+	| LEFT_ASSIGN 	{ makeList("<<=",'o', lineCount); }
+	| RIGHT_ASSIGN 	{ makeList(">==",'o', lineCount); }
+	| AND_ASSIGN 	{ makeList("&=",'o', lineCount); }
+	| XOR_ASSIGN 	{ makeList("^=",'o', lineCount); }
+	| OR_ASSIGN 	{ makeList("|=",'o', lineCount); }
 	;
 
 expression
@@ -187,7 +188,7 @@ constant_expression
 	;
 
 declaration
-	: declaration_specifiers ';' { makeList(";", 'p', lineCount); }
+	: declaration_specifiers ';' 			  { makeList(";", 'p', lineCount); }
 	| declaration_specifiers init_declarator_list ';' { makeList(";", 'p', lineCount); }
 	;
 
@@ -211,23 +212,23 @@ init_declarator
 	;
 
 storage_class_specifier
-	: TYPEDEF { makeList("typedef", 'k', lineCount);}
-	| EXTERN { makeList("extern", 'k', lineCount);}
-	| STATIC { makeList("static", 'k', lineCount);}
-	| AUTO { makeList("auto", 'k', lineCount);}
-	| REGISTER { makeList("register", 'k', lineCount);}
+	: TYPEDEF 	{ makeList("typedef", 'k', lineCount);}
+	| EXTERN 	{ makeList("extern", 'k', lineCount);}
+	| STATIC 	{ makeList("static", 'k', lineCount);}
+	| AUTO 		{ makeList("auto", 'k', lineCount);}
+	| REGISTER 	{ makeList("register", 'k', lineCount);}
 	;
 
 type_specifier
-	: VOID { makeList("void", 'k', lineCount);}
-	| CHAR { makeList("char", 'k', lineCount);}
-	| SHORT { makeList("short", 'k', lineCount);}
-	| INT { makeList("int", 'k', lineCount);}
-	| LONG { makeList("long", 'k', lineCount);}
-	| FLOAT { makeList("float", 'k', lineCount);}
-	| DOUBLE { makeList("double", 'k', lineCount);}
-	| SIGNED { makeList("signed", 'k', lineCount);}
-	| UNSIGNED { makeList("unsigned", 'k', lineCount);}
+	: VOID 		{ makeList("void", 'k', lineCount);}
+	| CHAR 		{ makeList("char", 'k', lineCount);}
+	| SHORT 	{ makeList("short", 'k', lineCount);}
+	| INT 		{ makeList("int", 'k', lineCount);}
+	| LONG 		{ makeList("long", 'k', lineCount);}
+	| FLOAT 	{ makeList("float", 'k', lineCount);}
+	| DOUBLE 	{ makeList("double", 'k', lineCount);}
+	| SIGNED 	{ makeList("signed", 'k', lineCount);}
+	| UNSIGNED 	{ makeList("unsigned", 'k', lineCount);}
 	| struct_or_union_specifier
 	| enum_specifier
 	| TYPE_NAME
@@ -240,8 +241,8 @@ struct_or_union_specifier
 	;
 
 struct_or_union
-	: STRUCT { makeList("struct", 'k', lineCount);}
-	| UNION { makeList("union", 'k', lineCount);}
+	: STRUCT 	{ makeList("struct", 'k', lineCount);}
+	| UNION 	{ makeList("union", 'k', lineCount);}
 	;
 
 struct_declaration_list
@@ -267,14 +268,14 @@ struct_declarator_list
 
 struct_declarator
 	: declarator
-	| ':' constant_expression { makeList(":", 'p', lineCount); }
-	| declarator ':' constant_expression { makeList(":", 'p', lineCount); }
+	| ':' constant_expression 		{ makeList(":", 'p', lineCount); }
+	| declarator ':' constant_expression 	{ makeList(":", 'p', lineCount); }
 	;
 
 enum_specifier
-	: ENUM '{' enumerator_list '}' { makeList("enum", 'k', lineCount);}
-	| ENUM IDENTIFIER '{' enumerator_list '}' { makeList("enum", 'k', lineCount); makeList(tablePtr, 'v', lineCount); }
-	| ENUM IDENTIFIER { makeList("enum", 'k', lineCount); makeList(tablePtr, 'v', lineCount); }
+	: ENUM '{' enumerator_list '}' 			{ makeList("enum", 'k', lineCount);}
+	| ENUM IDENTIFIER '{' enumerator_list '}' 	{ makeList("enum", 'k', lineCount); makeList(tablePtr, 'v', lineCount); }
+	| ENUM IDENTIFIER 				{ makeList("enum", 'k', lineCount); makeList(tablePtr, 'v', lineCount); }
 	;
 
 enumerator_list
@@ -283,13 +284,13 @@ enumerator_list
 	;
 
 enumerator
-	: IDENTIFIER { makeList(tablePtr, 'v', lineCount); }
-	| IDENTIFIER '=' constant_expression { makeList("=", 'o', lineCount); makeList("tablePtr", 'v', lineCount); }
+	: IDENTIFIER 				{ makeList(tablePtr, 'v', lineCount); }
+	| IDENTIFIER '=' constant_expression 	{ makeList("=", 'o', lineCount); makeList("tablePtr", 'v', lineCount); }
 	;
 
 type_qualifier
-	: CONST { makeList("const", 'k', lineCount); }
-	| VOLATILE { makeList("volatile", 'k', lineCount); }
+	: CONST 	{ makeList("const", 'k', lineCount); }
+	| VOLATILE 	{ makeList("volatile", 'k', lineCount); }
 	;
 
 declarator
@@ -298,20 +299,20 @@ declarator
 	;
 
 direct_declarator
-	: IDENTIFIER { makeList(tablePtr, 'v', lineCount); }
-	| '(' declarator ')' { makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
-	| direct_declarator '[' constant_expression ']' { makeList("[", 'p', lineCount); makeList("]", 'p', lineCount); }
-	| direct_declarator '[' ']' { makeList("[", 'p', lineCount); makeList("]", 'p', lineCount); }
-	| direct_declarator '(' parameter_type_list ')' { makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
-	| direct_declarator '(' identifier_list ')' { makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
-	| direct_declarator '(' ')' { makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
+	: IDENTIFIER 						{ makeList(tablePtr, 'v', lineCount); }
+	| '(' declarator ')' 					{ makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
+	| direct_declarator '[' constant_expression ']' 	{ makeList("[", 'p', lineCount); makeList("]", 'p', lineCount); }
+	| direct_declarator '[' ']' 				{ makeList("[", 'p', lineCount); makeList("]", 'p', lineCount); }
+	| direct_declarator '(' parameter_type_list ')' 	{ makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
+	| direct_declarator '(' identifier_list ')' 		{ makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
+	| direct_declarator '(' ')' 				{ makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
 	;
 
 pointer
-	: '*' { makeList("*", 'o', lineCount); }
-	| '*' type_qualifier_list { makeList("*", 'o', lineCount); }
-	| '*' pointer { makeList("*", 'o', lineCount); }
-	| '*' type_qualifier_list pointer { makeList("*", 'o', lineCount); }
+	: '*' 					{ makeList("*", 'o', lineCount); }
+	| '*' type_qualifier_list 		{ makeList("*", 'o', lineCount); }
+	| '*' pointer 				{ makeList("*", 'o', lineCount); }
+	| '*' type_qualifier_list pointer 	{ makeList("*", 'o', lineCount); }
 	;
 
 type_qualifier_list
@@ -322,7 +323,7 @@ type_qualifier_list
 
 parameter_type_list
 	: parameter_list
-	| parameter_list ',' ELLIPSIS { makeList(",", 'p', lineCount); makeList("::", 'o', lineCount); }
+	| parameter_list ',' ELLIPSIS 		{ makeList(",", 'p', lineCount); makeList("::", 'o', lineCount); }
 	;
 
 parameter_list
@@ -337,8 +338,8 @@ parameter_declaration
 	;
 
 identifier_list
-	: IDENTIFIER {makeList(tablePtr, 'v', lineCount);}
-	| identifier_list ',' IDENTIFIER { makeList(tablePtr, 'v', lineCount); makeList(",", 'p', lineCount); }
+	: IDENTIFIER 				{makeList(tablePtr, 'v', lineCount);}
+	| identifier_list ',' IDENTIFIER 	{ makeList(tablePtr, 'v', lineCount); makeList(",", 'p', lineCount); }
 	;
 
 type_name
@@ -353,15 +354,15 @@ abstract_declarator
 	;
 
 direct_abstract_declarator
-	: '(' abstract_declarator ')' { makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
-	| '[' ']' { makeList("[", 'p', lineCount); makeList("]", 'p', lineCount); }
-	| '[' constant_expression ']' { makeList("[", 'p', lineCount); makeList("]", 'p', lineCount); }
-	| direct_abstract_declarator '[' ']' { makeList("[", 'p', lineCount); makeList("]", 'p', lineCount); }
-	| direct_abstract_declarator '[' constant_expression ']' { makeList("[", 'p', lineCount); makeList("]", 'p', lineCount); }
-	| '(' ')' { makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
-	| '(' parameter_type_list ')' { makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
-	| direct_abstract_declarator '(' ')' { makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
-	| direct_abstract_declarator '(' parameter_type_list ')' { makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
+	: '(' abstract_declarator ')' 					{ makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
+	| '[' ']' 							{ makeList("[", 'p', lineCount); makeList("]", 'p', lineCount); }
+	| '[' constant_expression ']' 					{ makeList("[", 'p', lineCount); makeList("]", 'p', lineCount); }
+	| direct_abstract_declarator '[' ']' 				{ makeList("[", 'p', lineCount); makeList("]", 'p', lineCount); }
+	| direct_abstract_declarator '[' constant_expression ']' 	{ makeList("[", 'p', lineCount); makeList("]", 'p', lineCount); }
+	| '(' ')' 							{ makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
+	| '(' parameter_type_list ')' 					{ makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
+	| direct_abstract_declarator '(' ')' 				{ makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
+	| direct_abstract_declarator '(' parameter_type_list ')' 	{ makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
 	;
 
 initializer
@@ -385,9 +386,9 @@ statement
 	;
 
 labeled_statement
-	: IDENTIFIER ':' statement  { makeList(tablePtr, 'v', lineCount);  }
-	| CASE constant_expression ':'  statement { makeList(":", 'p', lineCount); makeList("case", 'k', lineCount);}
-	| DEFAULT ':' statement { makeList(":", 'p', lineCount); makeList("default", 'k', lineCount); }
+	: IDENTIFIER ':' statement  			{ makeList(tablePtr, 'v', lineCount);  }
+	| CASE constant_expression ':'  statement 	{ makeList(":", 'p', lineCount); makeList("case", 'k', lineCount);}
+	| DEFAULT ':' statement 			{ makeList(":", 'p', lineCount); makeList("default", 'k', lineCount); }
 	;
 
 compound_statement
@@ -408,29 +409,38 @@ statement_list
 	;
 
 expression_statement
-	: ';' { makeList(";", 'p', lineCount); }
-	| expression ';' { makeList(";", 'p', lineCount); }
+	: ';' 			{ makeList(";", 'p', lineCount); }
+	| expression ';' 	{ makeList(";", 'p', lineCount); }
 	;
 
 selection_statement
-	: IF '(' expression ')' statement    %prec LOWER_THAN_ELSE { makeList("if", 'k', lineCount); makeList("(", 'p', lineCount); makeList(")", 'p', lineCount);}
-  | IF '(' expression ')' statement ELSE statement { makeList("if", 'k', lineCount);  makeList("else", 'k', lineCount); makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
-	| SWITCH '(' expression ')' statement { makeList("switch", 'k', lineCount); makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
+	: IF '(' expression ')' statement %prec LOWER_THAN_ELSE 
+				{ makeList("if", 'k', lineCount); makeList("(", 'p', lineCount); makeList(")", 'p', lineCount);}
+  	| IF '(' expression ')' statement ELSE statement 
+  				{ makeList("if", 'k', lineCount);  makeList("else", 'k', lineCount); makeList("(", 'p', lineCount); 					  makeList(")", 'p', lineCount); 
+  				}
+	| SWITCH '(' expression ')' statement 
+				{ makeList("switch", 'k', lineCount); makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
 	;
 
 iteration_statement
-	: WHILE '(' expression ')' statement  { makeList("while", 'k', lineCount); makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
-	| DO statement WHILE '(' expression ')' ';' { makeList("do", 'k', lineCount); makeList("while", 'k', lineCount); makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); makeList(";", 'p', lineCount); }
-	| FOR '(' expression_statement expression_statement ')' statement  { makeList("for", 'k', lineCount); makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
-	| FOR '(' expression_statement expression_statement expression ')' statement { makeList("for", 'k', lineCount); makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
+	: WHILE '(' expression ')' statement  
+			{ makeList("while", 'k', lineCount); makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
+	| DO statement WHILE '(' expression ')' ';' 
+			{ makeList("do", 'k', lineCount); makeList("while", 'k', lineCount); makeList("(", 'p', lineCount);         				  makeList(")", 'p', lineCount); makeList(";", 'p', lineCount); 
+			}
+	| FOR '(' expression_statement expression_statement ')' statement  
+			{ makeList("for", 'k', lineCount); makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
+	| FOR '(' expression_statement expression_statement expression ')' statement 
+			{ makeList("for", 'k', lineCount); makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
 	;
 
 jump_statement
-	: GOTO IDENTIFIER ';' { makeList("goto", 'k', lineCount); makeList(";", 'p', lineCount); makeList(tablePtr, 'v', lineCount);}
-	| CONTINUE ';' { makeList("continue", 'k', lineCount); makeList(";", 'p', lineCount); }
-	| BREAK ';'  { makeList("break", 'k', lineCount); makeList(";", 'p', lineCount);}
-	| RETURN ';'  { makeList("return", 'k', lineCount); makeList(";", 'p', lineCount);}
-	| RETURN expression ';'{ makeList("return", 'k', lineCount); makeList(";", 'p', lineCount);}
+	: GOTO IDENTIFIER ';' 	{ makeList("goto", 'k', lineCount); makeList(";", 'p', lineCount); makeList(tablePtr, 'v', lineCount);}
+	| CONTINUE ';' 		{ makeList("continue", 'k', lineCount); makeList(";", 'p', lineCount); }
+	| BREAK ';'  		{ makeList("break", 'k', lineCount); makeList(";", 'p', lineCount);}
+	| RETURN ';'  		{ makeList("return", 'k', lineCount); makeList(";", 'p', lineCount);}
+	| RETURN expression ';'	{ makeList("return", 'k', lineCount); makeList(";", 'p', lineCount);}
 	;
 
 translation_unit
@@ -476,7 +486,7 @@ main(int argc,char **argv){
 	}
 	if(commentFlag==1){
 		errorFlag=1;
-		printf("%s : %d : Nested Comment\n",sourceCode,lineCount);
+		printf("%s :					 %d : Nested Comment\n",sourceCode,lineCount);
     	}
 
 	if(!errorFlag){
