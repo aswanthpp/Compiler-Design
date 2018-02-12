@@ -464,7 +464,7 @@ function_definition
 yyerror()
 {
 	errorFlag=1;
-	fflush(stdout);
+	//fflush(stdout);
 	printf("\n%s : %d :Syntax error \n",sourceCode,lineCount);
 }
 main(int argc,char **argv){

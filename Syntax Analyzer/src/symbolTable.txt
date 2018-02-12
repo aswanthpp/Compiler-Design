@@ -3,29 +3,27 @@
 
 		Token			Type							LineNumber
 
-                void                       Keyword                                                        3 24
+                void                       Keyword                                                      2 3 10
+                 sum                    Identifier                                                      2 8 10
+                 int                       Keyword                                              2 2 5 10 10 11
+                   ,                    Punctuator                                               2 5 7 8 10 13
+                   (                    Punctuator                                             2 3 6 7 8 10 13
+                   )                    Punctuator                                             2 3 6 7 8 10 13
+                   ;                    Punctuator                                       2 5 6 7 8 11 12 13 14
                 main                    Identifier                                                           3
-                   (                    Punctuator                                       3 9 10 18 20 20 21 24
-                   )                    Punctuator                                       3 9 10 18 20 20 21 24
-                   {                    Punctuator                                             4 8 13 15 17 25
-                 int                       Keyword                                                     5 24 24
-                   a                    Identifier                           5 9 16 16 18 18 24 26 26 27 28 28
-                   [                    Punctuator                                             5 9 16 16 18 18
-                   ]                    Punctuator                                             5 9 16 16 18 18
-                   i                    Identifier                                        5 7 9 12 12 12 12 14
-                   ,                    Punctuator                                                 5 5 9 18 24
-                   j                    Identifier                                   5 14 14 14 14 16 16 18 18
-                   ;                    Punctuator                                 5 9 12 12 14 14 18 26 27 28
-               scanf                    Identifier                                                           9
-                "%d"                String Literal                                                           9
-                   &                      Operator                                                     9 18 18
-                   }                    Punctuator                                           10 19 20 21 22 29
-               while                       Keyword                                                          10
-                   =                      Operator                                              12 14 26 27 28
-                   -                      Operator                                                    14 27 28
-                   +                      Operator                                                    16 18 26
-                swap                    Identifier                                                       18 24
-                  if                       Keyword                                                          20
-                 for                       Keyword                                                       20 21
-                   *                      Operator                            24 24 26 26 26 27 27 27 28 28 28
-                   b                    Identifier                                              24 26 27 27 28
+                   {                    Punctuator                                                        4 10
+                   a                    Identifier                                                           5
+                   =                      Operator                                                     5 11 12
+                   b                    Identifier                                                       5 7 8
+              printf                    Identifier                                                        6 13
+   "\nEnter Number:"                String Literal                                                           6
+               scanf                    Identifier                                                           7
+                "%d"                String Literal                                                           7
+                   &                      Operator                                                           7
+                   }                    Punctuator                                                        9 15
+                inp1                    Identifier                                                       10 12
+                inp2                    Identifier                                                       10 12
+                   s                    Identifier                                                    11 12 13
+                   +                      Operator                                                          12
+        "\nSum : %d"                String Literal                                                          13
+              return                       Keyword                                                          14

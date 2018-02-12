@@ -1,29 +1,15 @@
 #include<stdio.h>
-
+void sum(int ,int);
 void main()
 {
- 	int a[10],i,j;
-
- 	while(i<10)
- 	{
- 		scanf("%d",&a[i]);
- 	}
-
-	for(i=0;i<10;i++)
- 	{
- 		for(j=0;j<9-i;j++)
- 		{
- 			if(a[j]>a[j+1])
- 			{
- 				swap(&a[j],&a[j+1]);
- 			}
- 		}
- 	}
+ 	int a=5,b;
+ 	printf("\nEnter Number:");
+ 	scanf("%d",&b);
+ 	sum(5,b);
 }
-
-void swap(int *a,int *b)
-{
- 	*a=*a+*b;
- 	*b=*a-*b;
- 	*a=*a-*b;
+void sum(int inp1,int inp2){
+	int s=0;
+	s=inp1+inp2;
+	printf("\nSum : %d",s);
+	return ;
 }
