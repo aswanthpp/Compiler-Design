@@ -16,6 +16,8 @@ extern char *tablePtr;
 extern int nestedCommentCount;
 extern int commentFlag;
 
+char typeBuffer=' ';
+
 tokenList *symbolPtr = NULL;
 tokenList *constantPtr = NULL;
 tokenList *parsedPtr=NULL;
@@ -221,12 +223,12 @@ storage_class_specifier
 	;
 
 type_specifier
-	: VOID 		{ makeList("void", 'k', lineCount);}
-	| CHAR 		{ makeList("char", 'k', lineCount);}
+	: VOID 		{ makeList("void", 'k', lineCount);typeBuffer='v';}
+	| CHAR 		{ makeList("char", 'k', lineCount); typeBuffer='c';}
 	| SHORT 	{ makeList("short", 'k', lineCount);}
-	| INT 		{ makeList("int", 'k', lineCount);}
-	| LONG 		{ makeList("long", 'k', lineCount);}
-	| FLOAT 	{ makeList("float", 'k', lineCount);}
+	| INT 		{ makeList("int", 'k', lineCount); typeBuffer='i';}
+	| LONG 		{ makeList("lon``g", 'k', lineCount);}
+	| FLOAT 	{ makeList("float", 'k', lineCount);	typeBuffer='f';}
 	| DOUBLE 	{ makeList("double", 'k', lineCount);}
 	| SIGNED 	{ makeList("signed", 'k', lineCount);}
 	| UNSIGNED 	{ makeList("unsigned", 'k', lineCount);}
@@ -410,7 +412,7 @@ statement_list
 	;
 
 expression_statement
-	: ';' 			{ makeList(";", 'p', lineCount); }
+	: ';' 				{ makeList(";", 'p', lineCount); }
 	| expression ';' 	{ makeList(";", 'p', lineCount); }
 	;
 
@@ -503,9 +505,9 @@ void main(int argc,char **argv){
 		
 		
   		FILE *writeSymbol=fopen("symbolTable.txt","w");
-    		fprintf(writeSymbol,"\n\t\t\t\tSymbolTable\n\n\t\tToken\t\t\t\t\t\t\tLine Number\n");
+    		fprintf(writeSymbol,"\n\t\t\t\tSymbolTable\n\n\t\tToken\t\t\t\t\t\tType\t\t\t\t\t\t\tLine Number\n");
       		for(tokenList *ptr=symbolPtr;ptr!=NULL;ptr=ptr->next){
-  			fprintf(writeSymbol,"\n%20s%60s",ptr->token,ptr->line);
+  			fprintf(writeSymbol,"\n%20s%30.30s%60s",ptr->token,ptr->type,ptr->line);
 		}
 		
 		FILE *writeConstant=fopen("constantTable.txt","w");
@@ -566,6 +568,7 @@ void makeList(char *tokenName,char tokenType, int tokenLine)
     		
     		tokenList *p=parsedPtr;
     		if(p==NULL){
+    			
     			parsedPtr=temp;
     		}
     		else{
@@ -615,11 +618,20 @@ void makeList(char *tokenName,char tokenType, int tokenLine)
 		tokenList *temp=(tokenList *)malloc(sizeof(tokenList));
 		temp->token=(char *)malloc(strlen(tokenName)+1);
 		strcpy(temp->token,tokenName);
-		strcpy(temp->type,type);
+		switch(typeBuffer){
+		case 'i': strcpy(temp->type,"INT"); break;
+		case 'f': strcpy(temp->type,"FLOAT");break;
+		case 'v' :strcpy(temp->type,"VOID");break;
+		case 'c': strcpy(temp->type,"CHAR");break;
+		//default: strcpy(temp->type," ");
+		}
+		typeBuffer=' ';
+		
     		strcpy(temp->line,line);
     		temp->next=NULL;
     		tokenList *p=symbolPtr;
     		if(p==NULL){
+    			
     			symbolPtr=temp;
     		}
     		else{
