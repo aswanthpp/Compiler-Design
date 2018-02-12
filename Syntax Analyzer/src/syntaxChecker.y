@@ -462,13 +462,13 @@ function_definition
 	;
 
 %%
-yyerror()
+void yyerror()
 {
 	errorFlag=1;
 	fflush(stdout);
 	printf("\n%s : %d :Syntax error \n",sourceCode,lineCount);
 }
-main(int argc,char **argv){
+void main(int argc,char **argv){
 	if(argc<=1){
 		
 		printf("Invalid ,Expected Format : ./a.out <\"sourceCode\"> \n");
@@ -496,16 +496,16 @@ main(int argc,char **argv){
 		
 		
 		FILE *writeParsed=fopen("parsedTable.txt","w");
-    		fprintf(writeParsed,"\n\t\t\t\tSymbolTable\n\n\t\tToken\t\t\tType\t\t\t\t\t\t\tLineNumber\n");
+    		fprintf(writeParsed,"\n\t\t\t\tParsed	Table\n\n\t\tToken\t\t\tType\t\t\t\t\t\t\tLineNumber\n");
       		for(tokenList *ptr=parsedPtr;ptr!=NULL;ptr=ptr->next){
   			fprintf(writeParsed,"\n%20s%30.30s%60s",ptr->token,ptr->type,ptr->line);
 		}
 		
 		
   		FILE *writeSymbol=fopen("symbolTable.txt","w");
-    		fprintf(writeSymbol,"\n\t\t\t\tSymbolTable\n\n\t\tToken\t\t\t\t\t\t\tAttributes\n");
+    		fprintf(writeSymbol,"\n\t\t\t\tSymbolTable\n\n\t\tToken\t\t\t\t\t\t\tLine Number\n");
       		for(tokenList *ptr=symbolPtr;ptr!=NULL;ptr=ptr->next){
-  			fprintf(writeSymbol,"\n%20s%30.30s%60s",ptr->token,ptr->type,ptr->line);
+  			fprintf(writeSymbol,"\n%20s%60s",ptr->token,ptr->line);
 		}
 		
 		FILE *writeConstant=fopen("constantTable.txt","w");
@@ -630,4 +630,3 @@ void makeList(char *tokenName,char tokenType, int tokenLine)
     		}
 	}
 }
-
