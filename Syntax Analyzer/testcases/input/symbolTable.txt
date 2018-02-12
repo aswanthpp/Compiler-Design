@@ -1,0 +1,23 @@
+
+				SymbolTable
+
+		Token			Type							LineNumber
+
+                 int                       Keyword                                                         4 6
+                main                    Identifier                                                           4
+                   (                    Punctuator                                           4 8 9 11 12 14 15
+                   )                    Punctuator                                           4 8 9 11 12 14 15
+                   {                    Punctuator                                                   4 7 10 13
+                   l                    Identifier                                                      6 7 10
+                   =                      Operator                                                       6 6 7
+                   a                    Identifier                                                  6 10 10 10
+                   ,                    Punctuator                                                         6 6
+                   i                    Identifier                                                6 7 7 7 7 13
+                   ;                    Punctuator                                         6 7 7 8 10 10 11 14
+              printf                    Identifier                                                     8 11 14
+     "\nHello World"                String Literal                                                           8
+                   }                    Punctuator                                                  9 12 15 17
+                 for                       Keyword                                                        9 12
+  "\nInvalid Syntax"                String Literal                                                          11
+ "\nCompiler Design"                String Literal                                                          14
+               while                       Keyword                                                          15

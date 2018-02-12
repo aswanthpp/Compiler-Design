@@ -18,7 +18,6 @@ extern int commentFlag;
 
 tokenList *symbolPtr = NULL;
 tokenList *constantPtr = NULL;
-tokenList *parsedPtr=NULL;
 
 char *sourceCode=NULL;
 int errorFlag=0;
@@ -462,13 +461,13 @@ function_definition
 	;
 
 %%
-yyerror()
+void yyerror()
 {
 	errorFlag=1;
-	fflush(stdout);
+	//fflush(stdout);
 	printf("\n%s : %d :Syntax error \n",sourceCode,lineCount);
 }
-main(int argc,char **argv){
+void main(int argc,char **argv){
 	if(argc<=1){
 		
 		printf("Invalid ,Expected Format : ./a.out <\"sourceCode\"> \n");
@@ -495,15 +494,10 @@ main(int argc,char **argv){
 		printf("\n\n\t\t%s Parsing Completed\n\n",sourceCode);
 		
 		
-		FILE *writeParsed=fopen("parsedTable.txt","w");
-    		fprintf(writeParsed,"\n\t\t\t\tSymbolTable\n\n\t\tToken\t\t\tType\t\t\t\t\t\t\tLineNumber\n");
-      		for(tokenList *ptr=parsedPtr;ptr!=NULL;ptr=ptr->next){
-  			fprintf(writeParsed,"\n%20s%30.30s%60s",ptr->token,ptr->type,ptr->line);
-		}
 		
 		
   		FILE *writeSymbol=fopen("symbolTable.txt","w");
-    		fprintf(writeSymbol,"\n\t\t\t\tSymbolTable\n\n\t\tToken\t\t\t\t\t\t\tAttributes\n");
+    		fprintf(writeSymbol,"\n\t\t\t\tSymbolTable\n\n\t\tToken\t\t\tType\t\t\t\t\t\t\tLineNumber\n");
       		for(tokenList *ptr=symbolPtr;ptr!=NULL;ptr=ptr->next){
   			fprintf(writeSymbol,"\n%20s%30.30s%60s",ptr->token,ptr->type,ptr->line);
 		}
@@ -552,31 +546,9 @@ void makeList(char *tokenName,char tokenType, int tokenLine)
 					strcpy(type,"Preprocessor Statement");
 					break;
 	}
-	for(tokenList *p=parsedPtr;p!=NULL;p=p->next)
-  	 		if(strcmp(p->token,tokenName)==0){
-       				strcat(p->line,line);
-       				goto xx;
-     			}
-		tokenList *temp=(tokenList *)malloc(sizeof(tokenList));
-		temp->token=(char *)malloc(strlen(tokenName)+1);
-		strcpy(temp->token,tokenName);
-		strcpy(temp->type,type);
-    		strcpy(temp->line,line);
-    		temp->next=NULL;
-    		
-    		tokenList *p=parsedPtr;
-    		if(p==NULL){
-    			parsedPtr=temp;
-    		}
-    		else{
-    			while(p->next!=NULL){
-    				p=p->next;
-    			}
-    			p->next=temp;
-    		}	
-    		
 	
-	xx:
+	
+	
 	if(tokenType == 'c')
 	{
     		
@@ -605,7 +577,7 @@ void makeList(char *tokenName,char tokenType, int tokenLine)
     		
 
 	}
-	if(tokenType=='v')
+	else 
 	{
     		for(tokenList *p=symbolPtr;p!=NULL;p=p->next)
   	 		if(strcmp(p->token,tokenName)==0){

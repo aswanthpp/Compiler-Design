@@ -1,0 +1,31 @@
+
+				SymbolTable
+
+		Token			Type							LineNumber
+
+                void                       Keyword                                                      2 3 12
+                 sum                    Identifier                                                      2 8 12
+                 int                       Keyword                                              2 2 5 12 12 13
+                   ,                    Punctuator                                               2 5 7 8 12 15
+                   (                    Punctuator                                             2 3 6 7 8 12 15
+                   )                    Punctuator                                             2 3 6 7 8 12 15
+                   ;                    Punctuator                                       2 5 6 7 8 13 14 15 16
+                main                    Identifier                                                           3
+                   {                    Punctuator                                                        4 12
+                   a                    Identifier                                                           5
+                   5                      Constant                                                         5 8
+                   =                      Operator                                                     5 13 14
+                   b                    Identifier                                                       5 7 8
+              printf                    Identifier                                                        6 15
+   "\nEnter Number:"                String Literal                                                           6
+               scanf                    Identifier                                                           7
+                "%d"                String Literal                                                           7
+                   &                      Operator                                                           7
+                   }                    Punctuator                                                       11 17
+                inp1                    Identifier                                                       12 14
+                inp2                    Identifier                                                       12 14
+                   s                    Identifier                                                    13 14 15
+                   0                      Constant                                                          13
+                   +                      Operator                                                          14
+        "\nSum : %d"                String Literal                                                          15
+              return                       Keyword                                                          16

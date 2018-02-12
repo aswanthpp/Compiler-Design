@@ -1,29 +1,14 @@
 
 				SymbolTable
 
-		Token			Type							LineNumber
+		Token							Attributes
 
-                void                       Keyword                                                      2 3 10
-                 sum                    Identifier                                                      2 8 10
-                 int                       Keyword                                              2 2 5 10 10 11
-                   ,                    Punctuator                                               2 5 7 8 10 13
-                   (                    Punctuator                                             2 3 6 7 8 10 13
-                   )                    Punctuator                                             2 3 6 7 8 10 13
-                   ;                    Punctuator                                       2 5 6 7 8 11 12 13 14
+                 sum                    Identifier                                                      2 8 12
                 main                    Identifier                                                           3
-                   {                    Punctuator                                                        4 10
                    a                    Identifier                                                           5
-                   =                      Operator                                                     5 11 12
                    b                    Identifier                                                       5 7 8
-              printf                    Identifier                                                        6 13
-   "\nEnter Number:"                String Literal                                                           6
+              printf                    Identifier                                                        6 15
                scanf                    Identifier                                                           7
-                "%d"                String Literal                                                           7
-                   &                      Operator                                                           7
-                   }                    Punctuator                                                        9 15
-                inp1                    Identifier                                                       10 12
-                inp2                    Identifier                                                       10 12
-                   s                    Identifier                                                    11 12 13
-                   +                      Operator                                                          12
-        "\nSum : %d"                String Literal                                                          13
-              return                       Keyword                                                          14
+                inp1                    Identifier                                                       12 14
+                inp2                    Identifier                                                       12 14
+                   s                    Identifier                                                    13 14 15
