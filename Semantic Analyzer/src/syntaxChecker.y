@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "y.tab.h"
+#include "semantic.h"
 struct tokenList
 {
 	char *token,type[20],line[100];
@@ -20,7 +21,6 @@ char typeBuffer=' ';
 
 tokenList *symbolPtr = NULL;
 tokenList *constantPtr = NULL;
-tokenList *parsedPtr=NULL;
 
 char *sourceCode=NULL;
 int errorFlag=0;
@@ -497,11 +497,7 @@ void main(int argc,char **argv){
 		printf("\n\n\t\t%s Parsing Completed\n\n",sourceCode);
 		
 		
-		FILE *writeParsed=fopen("parsedTable.txt","w");
-    		fprintf(writeParsed,"\n\t\t\t\tParsed	Table\n\n\t\tToken\t\t\tType\t\t\t\t\t\t\tLineNumber\n");
-      		for(tokenList *ptr=parsedPtr;ptr!=NULL;ptr=ptr->next){
-  			fprintf(writeParsed,"\n%20s%30.30s%60s",ptr->token,ptr->type,ptr->line);
-		}
+	
 		
 		
   		FILE *writeSymbol=fopen("symbolTable.txt","w");
@@ -554,32 +550,7 @@ void makeList(char *tokenName,char tokenType, int tokenLine)
 					strcpy(type,"Preprocessor Statement");
 					break;
 	}
-	for(tokenList *p=parsedPtr;p!=NULL;p=p->next)
-  	 		if(strcmp(p->token,tokenName)==0){
-       				strcat(p->line,line);
-       				goto xx;
-     			}
-		tokenList *temp=(tokenList *)malloc(sizeof(tokenList));
-		temp->token=(char *)malloc(strlen(tokenName)+1);
-		strcpy(temp->token,tokenName);
-		strcpy(temp->type,type);
-    		strcpy(temp->line,line);
-    		temp->next=NULL;
-    		
-    		tokenList *p=parsedPtr;
-    		if(p==NULL){
-    			
-    			parsedPtr=temp;
-    		}
-    		else{
-    			while(p->next!=NULL){
-    				p=p->next;
-    			}
-    			p->next=temp;
-    		}	
-    		
 	
-	xx:
 	if(tokenType == 'c')
 	{
     		
