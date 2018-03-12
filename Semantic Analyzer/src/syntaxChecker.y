@@ -4,12 +4,8 @@
 #include <stdlib.h>
 #include "y.tab.h"
 #include "semantic.h"
-struct tokenList
-{
-	char *token,type[20],line[100];
-	struct tokenList *next;
-};
-typedef struct tokenList tokenList;
+
+
 
 extern FILE *yyin;
 extern int lineCount;
@@ -17,10 +13,9 @@ extern char *tablePtr;
 extern int nestedCommentCount;
 extern int commentFlag;
 
-char typeBuffer=' ';
 
-tokenList *symbolPtr = NULL;
-tokenList *constantPtr = NULL;
+
+
 
 char *sourceCode=NULL;
 int errorFlag=0;
@@ -53,14 +48,14 @@ void makeList(char *,char,int);
 %%
 
 primary_expression
-	: IDENTIFIER  		{ makeList(tablePtr, 'v', lineCount); }
+	: IDENTIFIER  		{ makeList(tablePtr, 'v', lineCount); $$=$1; }
 	| CONSTANT    		{ makeList(tablePtr, 'c', lineCount);}
 	| STRING_LITERAL  	{ makeList(tablePtr, 's', lineCount);}
-	| '(' expression ')' 	{ makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
+	| '(' expression ')' 	{ makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); $$=$2; }
 	;
 
 postfix_expression
-	: primary_expression
+	: primary_expression   {$$=$1;}
 	| postfix_expression '[' expression ']' 		{ makeList("[", 'p', lineCount); makeList("]", 'p', lineCount); }
 	| postfix_expression '(' ')' 				{ makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
 	| postfix_expression '(' argument_expression_list ')' 	{ makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
@@ -71,12 +66,12 @@ postfix_expression
 	;
 
 argument_expression_list
-	: assignment_expression
+	: assignment_expression {$$=$1;}
 	| argument_expression_list ',' assignment_expression { makeList(",",'p', lineCount); }
 	;
 
 unary_expression
-	: postfix_expression
+	: postfix_expression {$$=$1;}
 	| INC_OP unary_expression 	{ makeList("++",'o', lineCount); }
 	| DEC_OP unary_expression 	{ makeList("--",'o', lineCount); }
 	| unary_operator cast_expression
@@ -95,31 +90,31 @@ unary_operator
 	;
 
 cast_expression
-	: unary_expression
+	: unary_expression   {$$=$1;}
 	| '(' type_name ')' cast_expression { makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
 	;
 
 multiplicative_expression
-	: cast_expression
+	: cast_expression {$$=$1;}
 	| multiplicative_expression '*' cast_expression { makeList("*",'o', lineCount); }
 	| multiplicative_expression '/' cast_expression { makeList("/",'o', lineCount); }
 	| multiplicative_expression '%' cast_expression { makeList("%",'o', lineCount); }
 	;
 
 additive_expression
-	: multiplicative_expression
+	: multiplicative_expression {$$=$1;}
 	| additive_expression '+' multiplicative_expression { makeList("+",'o', lineCount); }
 	| additive_expression '-' multiplicative_expression { makeList("-",'o', lineCount); }
 	;
 
 shift_expression
-	: additive_expression
+	: additive_expression {$$=$1;}
 	| shift_expression LEFT_OP additive_expression 	{ makeList("<<",'o', lineCount); }
 	| shift_expression RIGHT_OP additive_expression { makeList(">>",'o', lineCount); }
 	;
 
 relational_expression
-	: shift_expression
+	: shift_expression {$$=$1;}
 	| relational_expression '<' shift_expression
 	| relational_expression '>' shift_expression
 	| relational_expression LE_OP shift_expression { makeList("<=",'o', lineCount); }
@@ -127,44 +122,44 @@ relational_expression
 	;
 
 equality_expression
-	: relational_expression
+	: relational_expression {$$=$1;}
 	| equality_expression EQ_OP relational_expression { makeList("==",'o', lineCount); }
 	| equality_expression NE_OP relational_expression { makeList("!=",'o', lineCount); }
 	;
 
 and_expression
-	: equality_expression
+	: equality_expression {$$=$1;}
 	| and_expression '&' equality_expression 	{ makeList("&", 'o', lineCount);}
 	;
 
 exclusive_or_expression
-	: and_expression
+	: and_expression {$$=$1;}
 	| exclusive_or_expression '^' and_expression 	{ makeList("^", 'o', lineCount); }
 	;
 
 inclusive_or_expression
-	: exclusive_or_expression
+	: exclusive_or_expression {$$=$1;}
 	| inclusive_or_expression '|' exclusive_or_expression { makeList("|", 'o', lineCount); }
 	;
 
 logical_and_expression
-	: inclusive_or_expression
+	: inclusive_or_expression {$$=$1;}
 	| logical_and_expression AND_OP inclusive_or_expression { makeList("&&", 'o', lineCount); }
 	;
 
 logical_or_expression
-	: logical_and_expression
+	: logical_and_expression {$$=$1;}
 	| logical_or_expression OR_OP logical_and_expression { makeList("||", 'o', lineCount); }
 	;
 
 conditional_expression
-	: logical_or_expression
+	: logical_or_expression {$$=$1;}
 	| logical_or_expression '?' expression ':' conditional_expression { makeList("?:",'o', lineCount); }
 	;
 
 assignment_expression
-	: conditional_expression
-	| unary_expression assignment_operator assignment_expression
+	: conditional_expression {$$=$1;}
+	| unary_expression assignment_operator assignment_expression {$$=$1; checkType($1,$3,lineCount);}
 	;
 
 assignment_operator
@@ -182,7 +177,7 @@ assignment_operator
 	;
 
 expression
-	: assignment_expression
+	: assignment_expression {$$=$1;}
 	| expression ',' assignment_expression { makeList(",", 'p', lineCount); }
 	;
 
@@ -302,7 +297,7 @@ declarator
 	;
 
 direct_declarator
-	: IDENTIFIER 						{ makeList(tablePtr, 'v', lineCount); }
+	: IDENTIFIER 						{ checkDeclaration(tablePtr,lineCount);}//makeList(tablePtr, 'v', lineCount); }
 	| '(' declarator ')' 					{ makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
 	| direct_declarator '[' constant_expression ']' 	{ makeList("[", 'p', lineCount); makeList("]", 'p', lineCount); }
 	| direct_declarator '[' ']' 				{ makeList("[", 'p', lineCount); makeList("]", 'p', lineCount); }
@@ -341,8 +336,9 @@ parameter_declaration
 	;
 
 identifier_list
-	: IDENTIFIER 				{makeList(tablePtr, 'v', lineCount);}
-	| identifier_list ',' IDENTIFIER 	{ makeList(tablePtr, 'v', lineCount); makeList(",", 'p', lineCount); }
+	: IDENTIFIER 				{ checkDeclaration(tablePtr,lineCount);}//makeList(tablePtr, 'v', lineCount);}
+	| identifier_list ',' IDENTIFIER 	{ checkDeclaration(tablePtr,lineCount);//makeList(tablePtr, 'v', lineCount); 
+							makeList(",", 'p', lineCount); }
 	;
 
 type_name
@@ -369,7 +365,7 @@ direct_abstract_declarator
 	;
 
 initializer
-	: assignment_expression
+	: assignment_expression {$$=$1;}
 	| '{' initializer_list '}'
 	| '{' initializer_list ',' '}'
 	;
@@ -489,10 +485,12 @@ void main(int argc,char **argv){
 	}
 	if(commentFlag==1){
 		errorFlag=1;
-		printf("%s :					 %d : Nested Comment\n",sourceCode,lineCount);
+		printf("%s : %d : Nested Comment\n",sourceCode,lineCount);
     	}
-
-	if(!errorFlag){
+	
+		
+	
+	if(!errorFlag  && !semanticErr){
 		
 		printf("\n\n\t\t%s Parsing Completed\n\n",sourceCode);
 		
@@ -518,97 +516,4 @@ void main(int argc,char **argv){
 printf("\n\n");	
 }
 
-void makeList(char *tokenName,char tokenType, int tokenLine)
-{
-	char line[39],lineBuffer[19];
-	
-  	snprintf(lineBuffer, 19, "%d", tokenLine);
-	strcpy(line," ");
-	strcat(line,lineBuffer);
-	char type[20];
-	switch(tokenType)
-	{
-			case 'c':
-					strcpy(type,"Constant");
-					break;
-			case 'v':
-					strcpy(type,"Identifier");
-					break;
-			case 'p':
-					strcpy(type,"Punctuator");
-					break;
-			case 'o':
-					strcpy(type,"Operator");
-					break;
-			case 'k':
-					strcpy(type,"Keyword");
-					break;
-			case 's':
-					strcpy(type,"String Literal");
-					break;
-			case 'd':
-					strcpy(type,"Preprocessor Statement");
-					break;
-	}
-	
-	if(tokenType == 'c')
-	{
-    		
-    		for(tokenList *p=constantPtr;p!=NULL;p=p->next)
-  	 		if(strcmp(p->token,tokenName)==0){
-       				strcat(p->line,line);
-       				return;
-     			}
-		tokenList *temp=(tokenList *)malloc(sizeof(tokenList));
-		temp->token=(char *)malloc(strlen(tokenName)+1);
-		strcpy(temp->token,tokenName);
-		strcpy(temp->type,type);
-    		strcpy(temp->line,line);
-    		temp->next=NULL;
-    		
-    		tokenList *p=constantPtr;
-    		if(p==NULL){
-    			constantPtr=temp;
-    		}
-    		else{
-    			while(p->next!=NULL){
-    				p=p->next;
-    			}
-    			p->next=temp;
-    		}	
-    		
 
-	}
-	if(tokenType=='v')
-	{
-    		for(tokenList *p=symbolPtr;p!=NULL;p=p->next)
-  	 		if(strcmp(p->token,tokenName)==0){
-       				strcat(p->line,line);
-       				return;
-     			}
-		tokenList *temp=(tokenList *)malloc(sizeof(tokenList));
-		temp->token=(char *)malloc(strlen(tokenName)+1);
-		strcpy(temp->token,tokenName);
-		switch(typeBuffer){
-		case 'i': strcpy(temp->type,"INT"); break;
-		case 'f': strcpy(temp->type,"FLOAT");break;
-		case 'v' :strcpy(temp->type,"VOID");break;
-		case 'c': strcpy(temp->type,"CHAR");break;
-		
-		}
-		
-    		strcpy(temp->line,line);
-    		temp->next=NULL;
-    		tokenList *p=symbolPtr;
-    		if(p==NULL){
-    			
-    			symbolPtr=temp;
-    		}
-    		else{
-    			while(p->next!=NULL){
-    				p=p->next;
-    			}
-    			p->next=temp;
-    		}
-	}
-}

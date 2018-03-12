@@ -3,14 +3,10 @@
 
 		Token						Type							Line Number
 
-                 sum                          VOID                                                      2 9 11
-                main                          VOID                                                           3
-                   a                           INT                                                           5
-                   c                           INT                                                           5
-                   d                           INT                                                           5
-                   b                          CHAR                                                       6 8 9
-              printf                                                                                      7 14
-               scanf                                                                                         8
-                inp1                           INT                                                       11 13
-                inp2                          CHAR                                                       11 13
-                   s                           INT                                                    12 13 14
+                main                          VOID                                                           2
+                   a                           INT                                                           4
+                   c                           INT                                                           4
+                   d                           INT                                                           4
+                   b                          CHAR                                                        6 10
+              printf                                                                                         9
+               scanf                                                                                        10
