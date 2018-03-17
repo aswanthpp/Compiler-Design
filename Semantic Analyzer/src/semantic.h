@@ -11,6 +11,36 @@ char typeBuffer=' ';
 char *sourceCode;
 
 int semanticErr=0,lineSemanticCount;
+int context_check(char *tempToken,int lineCount)
+{	tokenList *temp=NULL;
+	int flag=0;
+	for(tokenList *p=symbolPtr;p!=NULL;p=p->next){
+		if(strcmp(tempToken,p->token)==0){
+			temp=p;
+			flag=1;
+		}
+	}
+	if (flag == 0 )
+	{
+	
+		printf("\n%s : %d :Undeclared variable %s \n",sourceCode,lineCount,temp->token);		
+		semanticErr=1;
+	}
+	else
+	{
+	if(strcmp(temp->type,"VOID")==0)
+            return(1);
+        if(strcmp(temp->type,"INT")==0)
+            return(3);
+        if(strcmp(temp->type,"FLOAT")==0)
+            return(4);
+        if(strcmp(temp->type,"CHAR")==0)
+	    return(2);
+	if(strcmp(temp->type," ")==0)
+	    return(5);
+	}
+}
+
 void checkType(int value1,int value2,int lineCount)
 {	lineSemanticCount=lineCount;
 	if(value2 == 0)

@@ -3,5 +3,4 @@
 
  						Value							Line Number
 
-                                                 5                                                           4
-                                                10                                                           4
+                                                10                                                           5

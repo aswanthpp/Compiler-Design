@@ -10,6 +10,7 @@
 extern FILE *yyin;
 extern int lineCount;
 extern char *tablePtr;
+extern char *tablePtr;
 extern int nestedCommentCount;
 extern int commentFlag;
 
@@ -48,7 +49,7 @@ void makeList(char *,char,int);
 %%
 
 primary_expression
-	: IDENTIFIER  		{ makeList(tablePtr, 'v', lineCount); $$=$1; }
+	: IDENTIFIER  		{ makeList(tablePtr, 'v', lineCount); $$=context_check(tablePtr,lineCount); }
 	| CONSTANT    		{ makeList(tablePtr, 'c', lineCount);}
 	| STRING_LITERAL  	{ makeList(tablePtr, 's', lineCount);}
 	| '(' expression ')' 	{ makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); $$=$2; }
@@ -222,7 +223,7 @@ type_specifier
 	| CHAR 		{ makeList("char", 'k', lineCount); typeBuffer='c';}
 	| SHORT 	{ makeList("short", 'k', lineCount);}
 	| INT 		{ makeList("int", 'k', lineCount); typeBuffer='i';}
-	| LONG 		{ makeList("lon``g", 'k', lineCount);}
+	| LONG 		{ makeList("long", 'k', lineCount);}
 	| FLOAT 	{ makeList("float", 'k', lineCount);	typeBuffer='f';}
 	| DOUBLE 	{ makeList("double", 'k', lineCount);}
 	| SIGNED 	{ makeList("signed", 'k', lineCount);}
@@ -297,7 +298,7 @@ declarator
 	;
 
 direct_declarator
-	: IDENTIFIER 						{ checkDeclaration(tablePtr,lineCount);}//makeList(tablePtr, 'v', lineCount); }
+	: IDENTIFIER 						{ checkDeclaration(tablePtr,lineCount);}
 	| '(' declarator ')' 					{ makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
 	| direct_declarator '[' constant_expression ']' 	{ makeList("[", 'p', lineCount); makeList("]", 'p', lineCount); }
 	| direct_declarator '[' ']' 				{ makeList("[", 'p', lineCount); makeList("]", 'p', lineCount); }
@@ -336,9 +337,8 @@ parameter_declaration
 	;
 
 identifier_list
-	: IDENTIFIER 				{ checkDeclaration(tablePtr,lineCount);}//makeList(tablePtr, 'v', lineCount);}
-	| identifier_list ',' IDENTIFIER 	{ checkDeclaration(tablePtr,lineCount);//makeList(tablePtr, 'v', lineCount); 
-							makeList(",", 'p', lineCount); }
+	: IDENTIFIER 				{ checkDeclaration(tablePtr,lineCount);}
+	| identifier_list ',' IDENTIFIER 	{ checkDeclaration(tablePtr,lineCount);makeList(",", 'p', lineCount); }
 	;
 
 type_name
@@ -409,7 +409,7 @@ statement_list
 
 expression_statement
 	: ';' 				{ makeList(";", 'p', lineCount); }
-	| expression ';' 	{ makeList(";", 'p', lineCount); }
+	| expression ';' 	        { makeList(";", 'p', lineCount); }
 	;
 
 selection_statement
@@ -453,7 +453,7 @@ external_declaration
 	;
 
 function_definition
-	: declaration_specifiers declarator declaration_list compound_statement
+	: declaration_specifiers declarator declaration_list compound_statement  {typeBuffer='p';}
 	| declaration_specifiers declarator compound_statement
 	| declarator declaration_list compound_statement
 	| declarator compound_statement

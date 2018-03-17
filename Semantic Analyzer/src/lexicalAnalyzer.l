@@ -79,7 +79,9 @@ multilineCommentEnd (\*\/)
 "void"			{  return(VOID); }
 "volatile"		{  return(VOLATILE); }
 "while"			{  return(WHILE); }
-
+  /*"printf"		{ return(PRINTF);}
+"scanf"			{ return(SCANF);}
+*/
 {letter}({letter}|{digit})*		{  addToken(yytext); return(IDENTIFIER); }
 {letter}?\"(\\.|[^\\"])*\"		{  addToken(yytext); return(STRING_LITERAL); }
 
