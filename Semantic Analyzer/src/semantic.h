@@ -9,47 +9,49 @@ tokenList *symbolPtr = NULL;
 tokenList *constantPtr = NULL;
 char typeBuffer=' ';
 char *sourceCode;
+int tchk=3;
 
 int semanticErr=0,lineSemanticCount;
 int context_check(char *tempToken,int lineCount)
 {	tokenList *temp=NULL;
 	int flag=0;
-	for(tokenList *p=symbolPtr;p!=NULL;p=p->next){
+	for(tokenList *p=symbolPtr;p!=NULL;p=p->next){		
 		if(strcmp(tempToken,p->token)==0){
 			temp=p;
 			flag=1;
+			break;
 		}
 	}
 	if (flag == 0 )
 	{
-	
 		printf("\n%s : %d :Undeclared variable %s \n",sourceCode,lineCount,temp->token);		
 		semanticErr=1;
 	}
 	else
 	{
-	if(strcmp(temp->type,"VOID")==0)
-            return(1);
-        if(strcmp(temp->type,"INT")==0)
-            return(3);
-        if(strcmp(temp->type,"FLOAT")==0)
-            return(4);
-        if(strcmp(temp->type,"CHAR")==0)
-	    return(2);
-	if(strcmp(temp->type," ")==0)
-	    return(5);
-	}
+		makeList(tempToken,'v',lineCount);
+		if(strcmp(temp->type,"VOID")==0)
+            		return(1);
+        	if(strcmp(temp->type,"CHAR")==0)
+	    		return(2);
+       		if(strcmp(temp->type,"INT")==0)
+            		return(3);
+        	if(strcmp(temp->type,"FLOAT")==0)
+            		return(4);
+        }
+        
 }
 
 void checkType(int value1,int value2,int lineCount)
 {	lineSemanticCount=lineCount;
 	if(value2 == 0)
-		value2 = 3;
+		value2 = tchk;
 	if(value1!=value2)
 	{
 		printf("\n%s : %d :Type Mismatch error \n",sourceCode,lineSemanticCount);		
 		semanticErr=1;
 	}
+	tchk=3;
 }
 void checkDeclaration(char *tokenName,int tokenLine){
 	char type[20];
@@ -60,7 +62,7 @@ void checkDeclaration(char *tokenName,int tokenLine){
 	switch(typeBuffer){
 		case 'i': strcpy(type,"INT"); break;
 		case 'f': strcpy(type,"FLOAT");break;
-		case 'v' :strcpy(type,"VOID");break;
+		case 'v': strcpy(type,"VOID");break;
 		case 'c': strcpy(type,"CHAR");break;
 		
 	}	

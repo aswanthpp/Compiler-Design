@@ -79,9 +79,6 @@ multilineCommentEnd (\*\/)
 "void"			{  return(VOID); }
 "volatile"		{  return(VOLATILE); }
 "while"			{  return(WHILE); }
-  /*"printf"		{ return(PRINTF);}
-"scanf"			{ return(SCANF);}
-*/
 {letter}({letter}|{digit})*		{  addToken(yytext); return(IDENTIFIER); }
 {letter}?\"(\\.|[^\\"])*\"		{  addToken(yytext); return(STRING_LITERAL); }
 
@@ -89,9 +86,12 @@ multilineCommentEnd (\*\/)
 0{digit}+{IS}?				{  addToken(yytext); return(CONSTANT); }
 {hex}+{IS}?				{  addToken(yytext); return(CONSTANT); }
 {letter}?'(\\.|[^\\'])+'		{  addToken(yytext); return(CONSTANT); }
-{digit}+{E}{FS}?			{  addToken(yytext); return(CONSTANT); }
-{digit}*"."{digit}+({E})?{FS}?		{  addToken(yytext); return(CONSTANT); }
-{digit}+"."{digit}*({E})?{FS}?		{  addToken(yytext); return(CONSTANT); }
+
+
+{digit}+{E}{FS}?			{  addToken(yytext); return(FLCONSTANT);}
+{digit}*"."{digit}+({E})?{FS}?		{  addToken(yytext); return(FLCONSTANT); }
+{digit}+"."{digit}*({E})?{FS}?		{  addToken(yytext); return(FLCONSTANT); }
+
 
 "..."			{  return(ELLIPSIS); }
 ">>="			{  return(RIGHT_ASSIGN); }

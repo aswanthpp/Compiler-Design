@@ -4,6 +4,6 @@
 		Token						Type							Line Number
 
                 main                          VOID                                                           2
-                   a                           INT                                                         5 6
-                   b                           INT                                                         5 6
-                   c                                                                                         6
+                   a                           INT                                                           5
+                   b                           INT                                                           5
+              printf                                                                                         6

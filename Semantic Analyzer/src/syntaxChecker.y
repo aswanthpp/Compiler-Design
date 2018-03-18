@@ -28,11 +28,12 @@ void makeList(char *,char,int);
 
 %token SIZEOF STATIC STRUCT SWITCH TYPEDEF UNION UNSIGNED VOID VOLATILE WHILE 
 
+//%token SCANF PRINTF
 
 
 %token IDENTIFIER
 
-%token CONSTANT STRING_LITERAL
+%token CONSTANT FLCONSTANT STRING_LITERAL
 
 %token ELLIPSIS
 
@@ -49,7 +50,8 @@ void makeList(char *,char,int);
 %%
 
 primary_expression
-	: IDENTIFIER  		{ makeList(tablePtr, 'v', lineCount); $$=context_check(tablePtr,lineCount); }
+	: IDENTIFIER  		{ makeList(tablePtr,'v',lineCount);}//$$=context_check(tablePtr,lineCount); }
+	| FLCONSTANT {tchk=4;}
 	| CONSTANT    		{ makeList(tablePtr, 'c', lineCount);}
 	| STRING_LITERAL  	{ makeList(tablePtr, 's', lineCount);}
 	| '(' expression ')' 	{ makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); $$=$2; }
@@ -448,12 +450,12 @@ translation_unit
 	;
 
 external_declaration
-	: function_definition
+	: function_definition	
 	| declaration
 	;
 
 function_definition
-	: declaration_specifiers declarator declaration_list compound_statement  {typeBuffer='p';}
+	: declaration_specifiers declarator declaration_list compound_statement  
 	| declaration_specifiers declarator compound_statement
 	| declarator declaration_list compound_statement
 	| declarator compound_statement
