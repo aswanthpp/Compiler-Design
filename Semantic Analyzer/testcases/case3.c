@@ -1,5 +1,4 @@
-// Testcase to check  looping statements
-
+// Testcase to check type mismatch
 #include<stdio.h>
 int main()
 {
@@ -9,14 +8,7 @@ int main()
 		printf("\nHello World");
 	}
 	
-	for(a<l;a++)
-	{
-		printf("\nInvalid Syntax");
-	}
-	
-	while(i<10)
-	{
-		printf("\nCompiler Design");
-	}
-	
+	float l=5.0;
+	l = l + 3.14;
+	printf("%d",l);	
 }

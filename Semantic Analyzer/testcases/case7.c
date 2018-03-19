@@ -1,15 +1,17 @@
-//testcase to check struct and uninon operations
-#include<stdio.h>
-struct Node {
-	int data;
-};
-union Node2{
-	int w;
-};
+// Testcase to check array dimensions
 
-int main(){
-	struct Node x;
-	printf("\nEnjter Number : ");
-	scanf("%d",&x->data);
-	return 1;
+#include <stdio.h>
+int main()
+{
+    int i, arr1[100], arr2[-100];
+    for(i=0;i<100;i++)
+    {
+        scanf("%d",&arr1[i]);
+        arr2[i] = arr1[i] * 2;
+    }
+
+    for(i=0;i<100;i++)
+    {
+        printf("%d",arr2[i]);
+    }
 }
