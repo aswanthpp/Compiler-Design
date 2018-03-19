@@ -1,6 +1,7 @@
 //Testcase to check printf and scanf errors
 #include<stdio.h>
-int main(){
+int main()
+{
 	int a=10;
 
 	printf("\nHello world");
