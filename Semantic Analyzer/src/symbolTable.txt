@@ -6,4 +6,3 @@
                 main                          VOID                                                           2
                    a                           INT                                                           5
                    b                           INT                                                           5
-              printf                                                                                         6

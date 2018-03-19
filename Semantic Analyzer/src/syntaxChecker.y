@@ -50,8 +50,8 @@ void makeList(char *,char,int);
 %%
 
 primary_expression
-	: IDENTIFIER  		{ makeList(tablePtr,'v',lineCount);}//$$=context_check(tablePtr,lineCount); }
-	| FLCONSTANT {tchk=4;}
+	: IDENTIFIER  		{ makeList(tablePtr,'v',lineCount);context_check(tablePtr,lineCount); }
+	| FLCONSTANT 		{tchk=4;}
 	| CONSTANT    		{ makeList(tablePtr, 'c', lineCount);}
 	| STRING_LITERAL  	{ makeList(tablePtr, 's', lineCount);}
 	| '(' expression ')' 	{ makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); $$=$2; }

@@ -7,6 +7,7 @@ typedef struct tokenList tokenList;
 
 tokenList *symbolPtr = NULL;
 tokenList *constantPtr = NULL;
+tokenList *parsedPtr =NULL;
 char typeBuffer=' ';
 char *sourceCode;
 int tchk=3;
@@ -14,29 +15,37 @@ int tchk=3;
 int semanticErr=0,lineSemanticCount;
 int context_check(char *tempToken,int lineCount)
 {	tokenList *temp=NULL;
-	int flag=0;
-	for(tokenList *p=symbolPtr;p!=NULL;p=p->next){		
-		if(strcmp(tempToken,p->token)==0){
-			temp=p;
-			flag=1;
-			break;
+	char type[20];
+	int flag=0,tempFlag=0;
+	for(tokenList *p=symbolPtr;p!=NULL;p=p->next){
+		if(strcmp(tempToken,"printf")==0 ||  strcmp(tempToken,"scanf")==0 ){
+		 	tempFlag=1;		
+		 }
+		else{		
+			if(strcmp(tempToken,p->token)==0){
+				//temp=p;
+				strcpy(type,p->type);
+				flag=1;
+				break;
+			}
 		}
+		
 	}
-	if (flag == 0 )
+	if (flag == 0 && tempFlag ==0 )
 	{
-		printf("\n%s : %d :Undeclared variable %s \n",sourceCode,lineCount,temp->token);		
+		printf("\n%s : %d :Undeclared variable  \n",sourceCode,lineCount);		
 		semanticErr=1;
 	}
 	else
 	{
-		makeList(tempToken,'v',lineCount);
-		if(strcmp(temp->type,"VOID")==0)
+		//addSymbol(tempToken,lineCount);
+		if(strcmp(type,"VOID")==0)
             		return(1);
-        	if(strcmp(temp->type,"CHAR")==0)
+        	if(strcmp(type,"CHAR")==0)
 	    		return(2);
-       		if(strcmp(temp->type,"INT")==0)
+       		if(strcmp(type,"INT")==0)
             		return(3);
-        	if(strcmp(temp->type,"FLOAT")==0)
+        	if(strcmp(type,"FLOAT")==0)
             		return(4);
         }
         
@@ -79,8 +88,73 @@ void checkDeclaration(char *tokenName,int tokenLine){
 			}				
 		}	
 	}
-	makeList(tokenName,'v',tokenLine);
+	addSymbol(tokenName,tokenLine);
 
+}
+void addSymbol(char *tokenName,int tokenLine){
+	char line[39],lineBuffer[19];
+  	snprintf(lineBuffer, 19, "%d", tokenLine);
+	strcpy(line," ");
+	strcat(line,lineBuffer);
+	char type[20];
+	for(tokenList *p=symbolPtr;p!=NULL;p=p->next)
+  	 		if(strcmp(p->token,tokenName)==0){
+       				strcat(p->line,line);
+       				return;
+     			}
+	tokenList *temp=(tokenList *)malloc(sizeof(tokenList));
+	temp->token=(char *)malloc(strlen(tokenName)+1);
+	strcpy(temp->token,tokenName);
+	switch(typeBuffer){
+		case 'i': strcpy(temp->type,"INT"); break;
+		case 'f': strcpy(temp->type,"FLOAT");break;
+		case 'v' :strcpy(temp->type,"VOID");break;
+		case 'c': strcpy(temp->type,"CHAR");break;		
+	}
+		
+    	strcpy(temp->line,line);
+    	temp->next=NULL;
+    	tokenList *p=symbolPtr;
+    	if(p==NULL){	
+    		symbolPtr=temp;
+    	}
+    	else{
+    		while(p->next!=NULL){
+    			p=p->next;
+    		}
+		p->next=temp;
+    	}
+	
+
+}
+void addConstant(char *tokenName,int tokenLine){
+	char line[39],lineBuffer[19];	
+  	snprintf(lineBuffer, 19, "%d", tokenLine);
+	strcpy(line," ");
+	strcat(line,lineBuffer);
+	for(tokenList *p=constantPtr;p!=NULL;p=p->next)
+  	 		if(strcmp(p->token,tokenName)==0){
+       				strcat(p->line,line);
+       				return;
+     			}
+		tokenList *temp=(tokenList *)malloc(sizeof(tokenList));
+		temp->token=(char *)malloc(strlen(tokenName)+1);
+		strcpy(temp->token,tokenName);
+    		strcpy(temp->line,line);
+    		temp->next=NULL;
+    		
+    		tokenList *p=constantPtr;
+    		if(p==NULL){
+    			constantPtr=temp;
+    		}
+    		else{
+    			while(p->next!=NULL){
+    				p=p->next;
+    			}
+    			p->next=temp;
+    		}	
+    		
+	
 }
 void makeList(char *tokenName,char tokenType, int tokenLine)
 {
@@ -115,7 +189,31 @@ void makeList(char *tokenName,char tokenType, int tokenLine)
 					break;
 	}
 	
-	if(tokenType == 'c')
+	
+	for(tokenList *p=parsedPtr;p!=NULL;p=p->next)
+  	 		if(strcmp(p->token,tokenName)==0){
+       				strcat(p->line,line);
+       				return;
+     			}
+		tokenList *temp=(tokenList *)malloc(sizeof(tokenList));
+		temp->token=(char *)malloc(strlen(tokenName)+1);
+		strcpy(temp->token,tokenName);
+		strcpy(temp->type,type);
+    		strcpy(temp->line,line);
+    		temp->next=NULL;
+    		
+    		tokenList *p=parsedPtr;
+    		if(p==NULL){
+    			parsedPtr=temp;
+    		}
+    		else{
+    			while(p->next!=NULL){
+    				p=p->next;
+    			}
+    			p->next=temp;
+    		}	
+    		
+	/*if(tokenType == 'c')
 	{
     		
     		for(tokenList *p=constantPtr;p!=NULL;p=p->next)
@@ -174,5 +272,5 @@ void makeList(char *tokenName,char tokenType, int tokenLine)
     			}
     			p->next=temp;
     		}
-	}
+	}*/
 }
