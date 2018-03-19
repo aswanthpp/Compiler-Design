@@ -13,7 +13,7 @@ extern char *tablePtr;
 extern char *tablePtr;
 extern int nestedCommentCount;
 extern int commentFlag;
-
+extern int arrayIndexErr;
 
 
 
@@ -50,7 +50,7 @@ void makeList(char *,char,int);
 
 primary_expression
 	: IDENTIFIER  		{ $$=checkScope(tablePtr,lineCount); }
-	| FLCONSTANT 		{tchk=4;}
+	| FLCONSTANT 		{tempCheckType=4;}
 	| CONSTANT    		{ addConstant(tablePtr, lineCount);}
 	| STRING_LITERAL  	{ makeList(tablePtr, 's', lineCount);}
 	| '(' expression ')' 	{ makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); $$=$2; }
@@ -299,8 +299,8 @@ declarator
 	;
 
 direct_declarator
-	: IDENTIFIER 						{ checkDeclaration(tablePtr,lineCount,scopeCount);}
-	| '(' declarator ')' 					{ makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
+	: IDENTIFIER 						{  checkDeclaration(tablePtr,lineCount,scopeCount);}
+	| '(' declarator ')' 					{  makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
 	| direct_declarator '[' constant_expression ']' 	{ makeList("[", 'p', lineCount); makeList("]", 'p', lineCount); }
 	| direct_declarator '[' ']' 				{ makeList("[", 'p', lineCount); makeList("]", 'p', lineCount); }
 	| direct_declarator '(' parameter_type_list ')' 	{ makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
@@ -491,7 +491,7 @@ void main(int argc,char **argv){
 	
 		
 	
-	if(!errorFlag  && !semanticErr){
+	if(!errorFlag  && !semanticErr  && arrayIndexErr!=1){
 		
 		printf("\n\n\t\t%s Parsing Completed\n\n",sourceCode);
 		
@@ -503,9 +503,9 @@ void main(int argc,char **argv){
   			fprintf(writeParsed,"\n%20s%30.30s%60s",ptr->token,ptr->type,ptr->line);
 		}
   		FILE *writeSymbol=fopen("symbolTable.txt","w");
-    		fprintf(writeSymbol,"\n\t\t\t\tSymbolTable\n\n\t\tToken\t\t\t\t\t\tType\t\t\t\tLine Number\t\t Scope\n");
+    		fprintf(writeSymbol,"\n\t\t\t\tSymbolTable\n\n\t\tToken\t\t\t\tType\t\tLine Number\t\t\t\tScope\t\tFunction Number\n");
       		for(tokenList *ptr=symbolPtr;ptr!=NULL;ptr=ptr->next){
-  			fprintf(writeSymbol,"\n%20s%30.30s%60s%30s %d",ptr->token,ptr->type,ptr->line,ptr->scope,ptr->scopeValue);
+  			fprintf(writeSymbol,"\n%20s%30.30s%30s%30s\t%d\t%d",ptr->token,ptr->type,ptr->line,ptr->scope,ptr->scopeValue,ptr->funcCount+1);
 		}
 		
 		FILE *writeConstant=fopen("constantTable.txt","w");

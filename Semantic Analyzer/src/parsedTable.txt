@@ -3,15 +3,17 @@
 
 		Token						Type							Line Number
 
-                 int                       Keyword                                                 2 3 8 17 18
-                   (                    Punctuator                                                2 5 14 15 20
-                   )                    Punctuator                                                2 5 14 15 20
-                   {                    Punctuator                                                      2 6 16
-                   ;                    Punctuator                                  3 8 9 10 11 14 15 17 18 20
-                   }                    Punctuator                                                     4 19 23
-                void                       Keyword                                                           5
-                   =                      Operator                                                     8 10 11
+                void                       Keyword                                                         2 5
+                   (                    Punctuator                                                   2 5 13 14
+                   )                    Punctuator                                                   2 5 13 14
+                   {                    Punctuator                                                      2 6 15
+                 int                       Keyword                                                3 8 10 16 17
+                   ;                    Punctuator                                  3 8 9 10 11 12 13 14 16 17
+                   }                    Punctuator                                                     4 18 21
+                   =                      Operator                                                     8 11 12
                    ,                    Punctuator                                                           8
                 char                       Keyword                                                           9
-                   +                      Operator                                                          11
-     "\nHello World"                String Literal                                                          14
+                   [                    Punctuator                                                       10 10
+                   ]                    Punctuator                                                       10 10
+                   +                      Operator                                                          12
+     "\nHello World"                String Literal                                                          13

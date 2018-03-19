@@ -1,5 +1,5 @@
 //Testcase to check scope of variables
-#include<stdio.h>
+#include<stdio.h>	
 int func(){
 	int a;
 }
@@ -10,7 +10,6 @@ int main()
 		int a;
 	}
 	func();
-	int a;
 }
 
 

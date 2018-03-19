@@ -1,0 +1,17 @@
+
+				SymbolTable
+
+		Token				Type		Line Number				Scope		Function Number
+
+                main                           INT                             5                        GLOBAL	0	1
+                   i                           INT                       7 8 8 8                       NESTING	1	1
+                arr1                           INT                             7                       NESTING	1	1
+                arr2                           INT                             7                       NESTING	1	1
+               scanf                                                          10                       NESTING	2	1
+                arr1                                                       10 11                       NESTING	2	1
+                   i                                                    10 11 11                       NESTING	2	1
+                arr2                                                          11                       NESTING	2	1
+                   i                                                    14 14 14                       NESTING	1	2
+              printf                                                          16                       NESTING	2	2
+                arr2                                                          16                       NESTING	2	2
+                   i                                                          16                       NESTING	2	2

@@ -1,10 +1,12 @@
 %{
 #include <stdio.h>
 #include "y.tab.h"
+int arrayIndexErr=0;
 int lineCount=1;
 int nestedCommentCount=0;
 int scopeCount=0;
 int commentFlag=0;
+int functionCount;
 char *tablePtr;
 void addToken(char*);
 %}
@@ -80,6 +82,9 @@ multilineCommentEnd (\*\/)
 "void"			{  return(VOID); }
 "volatile"		{  return(VOLATILE); }
 "while"			{  return(WHILE); }
+"["[-]{digit}+"]"	{arrayIndexErr=1;printf("\n Invalid array Index %d",lineCount);}
+"["{digit}*"."{digit}+({E})?{FS}?"]"  {arrayIndexErr=1;printf("\nInvalid array Index %d",lineCount);}
+							
 {letter}({letter}|{digit})*		{  addToken(yytext); return(IDENTIFIER); }
 {letter}?\"(\\.|[^\\"])*\"		{  addToken(yytext); return(STRING_LITERAL); }
 
@@ -118,7 +123,7 @@ multilineCommentEnd (\*\/)
 "!="			{  return(NE_OP); }
 ";"			{  return(';'); }
 ("{"|"<%")		{  scopeCount++;makeList("{",'p',lineCount); return('{'); }
-("}"|"%>")		{  scopeCount--;makeList("}",'p',lineCount); return('}'); }
+("}"|"%>")		{  scopeCount--;functionCount++;makeList("}",'p',lineCount); return('}'); }
 ","			{  return(','); }
 ":"			{  return(':'); }
 "="			{  return('='); }

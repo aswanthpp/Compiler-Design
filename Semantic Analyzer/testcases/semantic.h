@@ -7,15 +7,23 @@ struct tokenList
 	struct tokenList *next;
 };
 typedef struct tokenList tokenList;
+struct funcNode{
+	char funcName[30];
+	int line;
+	char funcReturn[20];
+	struct  funcNode *next;
+};
+typedef struct funcNode funcNode;
+
 
 tokenList *symbolPtr = NULL;
 tokenList *constantPtr = NULL;
 tokenList *parsedPtr =NULL;
-int functionCount=0;
+extern int functionCount;
 extern int scopeCount;
 char typeBuffer=' ';
 char *sourceCode;
-int tchk=3;
+int tempCheckType=3;
 
 int semanticErr=0,lineSemanticCount;
 int checkScope(char *tempToken,int lineCount)
@@ -23,12 +31,11 @@ int checkScope(char *tempToken,int lineCount)
 	char type[20];
 	int flag=0,tempFlag=0;
 	for(tokenList *p=symbolPtr;p!=NULL;p=p->next){
-		if(strcmp(tempToken,"printf")==0 ||  strcmp(tempToken,"scanf")==0 ||strcmp(tempToken,"func")==0){
+		if(strcmp(tempToken,"printf")==0 ||  strcmp(tempToken,"scanf")==0){
 		 	tempFlag=1;		
 		 }
 		else{		
 			if(strcmp(tempToken,p->token)==0){
-				//temp=p;
 				strcpy(type,p->type);
 				flag=1;
 				break;
@@ -59,13 +66,13 @@ int checkScope(char *tempToken,int lineCount)
 void checkType(int value1,int value2,int lineCount)
 {	lineSemanticCount=lineCount;
 	if(value2 == 0)
-		value2 = tchk;
+		value2 = tempCheckType;
 	if(value1!=value2)
 	{
 		printf("\n%s : %d :Type Mismatch error \n",sourceCode,lineSemanticCount-1);		
 		semanticErr=1;
 	}
-	tchk=3;
+	tempCheckType=3;
 }
 void checkDeclaration(char *tokenName,int tokenLine,int scopeVal){
 	char type[20];
@@ -81,19 +88,19 @@ void checkDeclaration(char *tokenName,int tokenLine,int scopeVal){
 		
 	}	
 	for(tokenList *p=symbolPtr;p!=NULL;p=p->next){
-		if(strcmp(p->token,tokenName)==0 && p->scopeValue == scopeVal && p->funcCount == functionCount){
+		if(strcmp(p->token,tokenName)==0 && p->scopeValue == scopeCount && p->funcCount == functionCount){
 			semanticErr=1;
 			if(strcmp(p->type,type)==0){
-				printf("\n%s : %d :Multiple Declaration \n",sourceCode,tokenLine-1);		
+				printf("\n%s : %d :Multiple Declaration \n",sourceCode,tokenLine);		
        				return;				
 			}
 			else{
-				printf("\n%s : %d :Multiple Declration with Different Type \n",sourceCode,tokenLine-1);		
+				printf("\n%s : %d :Multiple Declration with Different Type \n",sourceCode,tokenLine);		
 				return;			
 			}				
 		}	
 	}
-	addSymbol(tokenName,tokenLine);
+	addSymbol(tokenName,tokenLine,scopeCount);
 
 }
 void checkArray(int val,int lineCount){
@@ -102,14 +109,14 @@ void checkArray(int val,int lineCount){
 		printf("\n%s : %d :Array Index error\n",sourceCode,lineCount-1);		
 	}
 }
-void addSymbol(char *tokenName,int tokenLine){
+void addSymbol(char *tokenName,int tokenLine,int scopeVal){
 	char line[39],lineBuffer[19];
   	snprintf(lineBuffer, 19, "%d", tokenLine);
 	strcpy(line," ");
 	strcat(line,lineBuffer);
 	char type[20];
 	for(tokenList *p=symbolPtr;p!=NULL;p=p->next)
-  	 		if(strcmp(p->token,tokenName)==0){
+  	 		if(strcmp(p->token,tokenName)==0 && p->scopeValue == scopeCount && p->funcCount ==functionCount ){
        				strcat(p->line,line);
        				return;
      			}
@@ -126,7 +133,7 @@ void addSymbol(char *tokenName,int tokenLine){
 	if(scopeCount==0){
 		strcpy(temp->scope,"GLOBAL");	
 		temp->scopeValue=scopeCount;
-		functionCount++;
+		
 	}
 	else{
 		strcpy(temp->scope,"NESTING");

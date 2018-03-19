@@ -1,0 +1,20 @@
+
+				Parsed Table
+
+		Token						Type							Line Number
+
+                 int                       Keyword                                                         5 7
+                   (                    Punctuator                                               5 10 12 16 17
+                   )                    Punctuator                                               5 10 12 16 17
+                   {                    Punctuator                                                      6 9 15
+                   [                    Punctuator                                             7 7 10 11 11 16
+                   ]                    Punctuator                                             7 7 10 11 11 16
+                   ,                    Punctuator                                                   7 7 10 16
+                   ;                    Punctuator                                        7 8 8 10 11 14 14 16
+                   =                      Operator                                                     8 11 14
+                   i                      Operator                                                        8 14
+                "%d"                String Literal                                                       10 16
+                   &                      Operator                                                          10
+                   *                      Operator                                                          11
+                   }                    Punctuator                                                    12 17 18
+                 for                       Keyword                                                       12 17

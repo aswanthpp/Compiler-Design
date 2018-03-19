@@ -1,16 +1,13 @@
-//Testcase to check printf and scanf errors
-#include<stdio.h>
-int main()
+// Testcase to check scope of a variable
+
+#include <stdio.h>
+void main()
 {
-	int a=10;
+    int a = 10, b = 5;
 
-	printf("\nHello world");
-	printf("%d",a);
-	printf("hello",);
-	printf("%d");
-
-	scanf("%d",&a);
-	scanf("%d",a);
-	scanf("%d",);
-	
+    {
+        printf("Enter a variable");
+        int b;
+        scanf("%d",&b);
+    }
 }

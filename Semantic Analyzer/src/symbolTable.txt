@@ -1,13 +1,16 @@
 
 				SymbolTable
 
-		Token						Type				Line Number		 Scope
+		Token				Type		Line Number				Scope		Function Number
 
-                func                           INT                                                        2 20                        GLOBAL 0
-                   a                           INT                                                3 8 10 11 18                       NESTING 1
-                main                          VOID                                                           5                        GLOBAL 0
-                   b                           INT                                                     8 10 11                       NESTING 1
-                   c                          CHAR                                                           9                       NESTING 1
-              printf                                                                                        14                       NESTING 1
-               scanf                                                                                        15                       NESTING 1
-                   y                           INT                                                          17                       NESTING 2
+                func                          VOID                             2                        GLOBAL	0	1
+                   a                           INT                             3                       NESTING	1	1
+                main                          VOID                             5                        GLOBAL	0	2
+                   a                           INT                       8 11 12                       NESTING	1	2
+                   b                           INT                       8 11 12                       NESTING	1	2
+                   c                          CHAR                             9                       NESTING	1	2
+                   f                           INT                            10                       NESTING	1	2
+              printf                                                          13                       NESTING	1	2
+               scanf                                                          14                       NESTING	1	2
+                   y                           INT                            16                       NESTING	2	2
+                   a                           INT                            17                       NESTING	2	2

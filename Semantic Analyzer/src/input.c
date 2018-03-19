@@ -1,5 +1,5 @@
 #include<stdio.h>
-int func(){
+void func(){
 	int a;
 }
 void main()
@@ -7,16 +7,15 @@ void main()
 	
 	int a=10,b;
 	char c;
+	int f[100][10];
 	a=b;
 	a=b+12;
-	//a=c;
 	printf("\nHello World");
 	scanf();
 	{
 	int y;
 	int a;
 	}
-	func();
 	
 	
 }
