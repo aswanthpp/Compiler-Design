@@ -1,13 +1,16 @@
-//Testcase to check function declaration and parameter passing
-
+//Testcase to check scope of variables
 #include<stdio.h>
+int func(){
+	int a;
+}
 int main()
 {	
-	int a[]={1,2,3,4};
-	function1();
+	int a;
+	{
+		int a;
+	}
+	func();
+	int a;
 }
 
-void function1(){
-	printf("\nHello World");
-}
 

@@ -5,6 +5,7 @@ int main()
 {
 	int a = 5, b = 3;
 	float x;
+	char b;
 
 	int a = b + 10;
 }

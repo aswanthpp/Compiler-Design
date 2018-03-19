@@ -1,8 +1,13 @@
 
 				SymbolTable
 
-		Token						Type							Line Number
+		Token						Type				Line Number		 Scope
 
-                main                          VOID                                                           2
-                   a                           INT                                                           5
-                   b                           INT                                                           5
+                func                           INT                                                        2 20                        GLOBAL 0
+                   a                           INT                                                3 8 10 11 18                       NESTING 1
+                main                          VOID                                                           5                        GLOBAL 0
+                   b                           INT                                                     8 10 11                       NESTING 1
+                   c                          CHAR                                                           9                       NESTING 1
+              printf                                                                                        14                       NESTING 1
+               scanf                                                                                        15                       NESTING 1
+                   y                           INT                                                          17                       NESTING 2
