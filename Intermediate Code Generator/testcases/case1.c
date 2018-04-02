@@ -5,5 +5,5 @@ int main(){
 	float t;
 	a=10;
 	t=t*10;
-	return 1l
+	return 1;
 }

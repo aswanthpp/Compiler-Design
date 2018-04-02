@@ -5,10 +5,10 @@ int main(){
 	float t;
 	a=20;
 	if(a<30){
-		t=3;
+		t=3.0;
 	}
 	else{
-		t=4;
+		t=4.0;
 	}
 	return 2;
 }

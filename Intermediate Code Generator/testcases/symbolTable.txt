@@ -1,0 +1,8 @@
+
+			   Symbol Table
+			------------------
+
+   Name            DataType      ReturnType      Offset          Scope
+------------------------------------------------------------------------
+y                    Int            None           0            main        
+main                 Main           Int            4            None        
