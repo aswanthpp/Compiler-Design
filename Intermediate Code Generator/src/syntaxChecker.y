@@ -1,525 +1,924 @@
 %{
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include "y.tab.h"
-#include "semantic.h"
 #include "icg.h"
 
 
+extern int yylineno;
+extern char *yytext;
 
-extern FILE *yyin;
-extern int lineCount;
-extern char *tablePtr;
-extern char *tablePtr;
-extern int nestedCommentCount;
-extern int commentFlag;
-extern int arrayIndexErr;
+int paramCount;
+char icgQuad[50];
+int funcLineNumber = 0;
 
-
-
-
-char *sourceCode=NULL;
-int errorFlag=0;
-void makeList(char *,char,int);
 %}
 
-%token  AUTO BREAK  CASE CHAR  CONST  CONTINUE  DEFAULT  DO DOUBLE  ELSE ENUM 
-%token EXTERN FLOAT  FOR GOTO  IF INT LONG REGISTER  RETURN SHORT SIGNED 
+%token VOID INT FLOAT CONSTANT IDENTIFIER
+%token IF ELSE RETURN DO WHILE FOR
+%token INC_OP DEC_OP U_PLUS U_MINUS  
+%token EQUAL NOT_EQUAL GREATER_OR_EQUAL LESS_OR_EQUAL SHIFTLEFT LOG_AND LOG_OR
 
-%token SIZEOF STATIC STRUCT SWITCH TYPEDEF UNION UNSIGNED VOID VOLATILE WHILE 
+%right '='
+%left LOG_OR    
+%left LOG_AND
+%left '<' '>' LESS_OR_EQUAL GREATER_OR_EQUAL
+%left EQUAL NOT_EQUAL
+%left SHIFTLEFT
+%left '+' '-'
+%left '*' '/' '%'
+%right U_PLUS U_MINUS '!'
+%left INC_OP DEC_OP
 
+%union
+{
+    char         	*str;
+    int           	integer;
+    float         	real;
+    int           	type;
+	struct
+	{
+	    char                 	*value;
+	    int   			type;
+	    int				cType;
+	    struct BackpatchList* 	trueList;
+	    struct BackpatchList* 	falseList;
+	} expr;
+	struct
+	{
+	  struct BackpatchList* 	nextList;
+	} stmt;
+	struct
+	{
+	  int				quad;
+	  struct BackpatchList* 	nextList;
+	} mark;
+	struct
+	{
+	    int				count;
+	    struct tokenList * 	queue;
+	} exp_list;
+}
 
-
-%token IDENTIFIER
-
-%token CONSTANT FLCONSTANT STRING_LITERAL
-
-%token ELLIPSIS
-
-%token PTR_OP INC_OP DEC_OP LEFT_OP RIGHT_OP LE_OP GE_OP EQ_OP NE_OP
-%token AND_OP OR_OP MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN ADD_ASSIGN
-%token SUB_ASSIGN LEFT_ASSIGN RIGHT_ASSIGN AND_ASSIGN
-%token XOR_ASSIGN OR_ASSIGN TYPE_NAME
-
-%nonassoc LOWER_THAN_ELSE
-%nonassoc ELSE
-
-%start translation_unit
+%type <str> id IDENTIFIER
+%type <type> declaration var_type
+%type <expr> expression assignment CONSTANT
+%type <stmt> statement statement_list matched_statement unmatched_statement program function_body function
+%type <exp_list> exp_list
+%type <mark> marker jump_marker
+%start program_head
 
 %%
 
-primary_expression
-	: IDENTIFIER  		{ $$=checkScope(tablePtr,lineCount); }
-	| FLCONSTANT 		{tempCheckType=4;}
-	| CONSTANT    		{ addConstant(tablePtr, lineCount);}
-	| STRING_LITERAL  	{ makeList(tablePtr, 's', lineCount);}
-	| '(' expression ')' 	{ makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); $$=$2; }
-	;
+program_head
+    : program
+	{
+	    tokenList * mainFunc = getSymbol("main");
+	    if(mainFunc == NULL){
+		printf("ERROR: Main function not found!\n");
+		yyerror();
+	    }
+	    backpatch($1.nextList,mainFunc->line+1);
+	}
+    ;
 
-postfix_expression
-	: primary_expression   {$$=$1;}
-	| postfix_expression '[' expression ']' 		{ makeList("[", 'p', lineCount); makeList("]", 'p', lineCount); }
-	| postfix_expression '(' ')' 				{ makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
-	| postfix_expression '(' argument_expression_list ')' 	{ makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
-	| postfix_expression '.' IDENTIFIER 			{ makeList(tablePtr, 'v', lineCount);}
-	| postfix_expression PTR_OP IDENTIFIER 			{ makeList(tablePtr, 'v', lineCount);}
-	| postfix_expression INC_OP  				{ makeList(tablePtr, 'o', lineCount);}
-	| postfix_expression DEC_OP  				{ makeList(tablePtr, 'o', lineCount);}
-	;
+program
+    : jump_marker function
+        {
 
-argument_expression_list
-	: assignment_expression {$$=$1;}
-	| argument_expression_list ',' assignment_expression { makeList(",",'p', lineCount); }
-	;
+	    $$.nextList = $1.nextList;
+            backpatch($2.nextList, nextquad());
 
-unary_expression
-	: postfix_expression {$$=$1;}
-	| INC_OP unary_expression 	{ makeList("++",'o', lineCount); }
-	| DEC_OP unary_expression 	{ makeList("--",'o', lineCount); }
-	| unary_operator cast_expression
-	| SIZEOF unary_expression 	{ makeList("sizeof",'o', lineCount); }
-	| SIZEOF '(' type_name ')' 	{ makeList("sizeof",'o', lineCount); } 
-					{ makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
-	;
+        }
+    | program function
+        {
 
-unary_operator
-	: '&' { makeList("&",'o', lineCount); }
-	| '*' { makeList("*",'o', lineCount); }
-	| '+' { makeList("+",'o', lineCount); }
-	| '-' { makeList("-",'o', lineCount); }
-	| '~' { makeList("~",'o', lineCount); }
-	| '!' { makeList("!",'o', lineCount); }
-	;
+	    $$.nextList = $1.nextList;
+            backpatch($2.nextList, nextquad());
 
-cast_expression
-	: unary_expression   {$$=$1;}
-	| '(' type_name ')' cast_expression { makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
-	;
-
-multiplicative_expression
-	: cast_expression {$$=$1;}
-	| multiplicative_expression '*' cast_expression { makeList("*",'o', lineCount); }
-	| multiplicative_expression '/' cast_expression { makeList("/",'o', lineCount); }
-	| multiplicative_expression '%' cast_expression { makeList("%",'o', lineCount); }
-	;
-
-additive_expression
-	: multiplicative_expression {$$=$1;}
-	| additive_expression '+' multiplicative_expression { makeList("+",'o', lineCount); }
-	| additive_expression '-' multiplicative_expression { makeList("-",'o', lineCount); }
-	;
-
-shift_expression
-	: additive_expression {$$=$1;}
-	| shift_expression LEFT_OP additive_expression 	{ makeList("<<",'o', lineCount); }
-	| shift_expression RIGHT_OP additive_expression { makeList(">>",'o', lineCount); }
-	;
-
-relational_expression
-	: shift_expression {$$=$1;}
-	| relational_expression '<' shift_expression
-	| relational_expression '>' shift_expression
-	| relational_expression LE_OP shift_expression { makeList("<=",'o', lineCount); }
-	| relational_expression GE_OP shift_expression { makeList(">=",'o', lineCount); }
-	;
-
-equality_expression
-	: relational_expression {$$=$1;}
-	| equality_expression EQ_OP relational_expression { makeList("==",'o', lineCount); }
-	| equality_expression NE_OP relational_expression { makeList("!=",'o', lineCount); }
-	;
-
-and_expression
-	: equality_expression {$$=$1;}
-	| and_expression '&' equality_expression 	{ makeList("&", 'o', lineCount);}
-	;
-
-exclusive_or_expression
-	: and_expression {$$=$1;}
-	| exclusive_or_expression '^' and_expression 	{ makeList("^", 'o', lineCount); }
-	;
-
-inclusive_or_expression
-	: exclusive_or_expression {$$=$1;}
-	| inclusive_or_expression '|' exclusive_or_expression { makeList("|", 'o', lineCount); }
-	;
-
-logical_and_expression
-	: inclusive_or_expression {$$=$1;}
-	| logical_and_expression AND_OP inclusive_or_expression { makeList("&&", 'o', lineCount); }
-	;
-
-logical_or_expression
-	: logical_and_expression {$$=$1;}
-	| logical_or_expression OR_OP logical_and_expression { makeList("||", 'o', lineCount); }
-	;
-
-conditional_expression
-	: logical_or_expression {$$=$1;}
-	| logical_or_expression '?' expression ':' conditional_expression { makeList("?:",'o', lineCount); }
-	;
-
-assignment_expression
-	: conditional_expression {$$=$1;}
-	| unary_expression assignment_operator assignment_expression {$$=$3; checkType($1,$3,lineCount);}
-	;
-
-assignment_operator
-	: '=' 		{ makeList("=",'o', lineCount); }
-	| MUL_ASSIGN 	{ makeList("*=",'o', lineCount); }
-	| DIV_ASSIGN 	{ makeList("/=",'o', lineCount); }
-	| MOD_ASSIGN 	{ makeList("%=",'o', lineCount); }
-	| ADD_ASSIGN 	{ makeList("+=",'o', lineCount); }
-	| SUB_ASSIGN 	{ makeList("-=",'o', lineCount); }
-	| LEFT_ASSIGN 	{ makeList("<<=",'o', lineCount); }
-	| RIGHT_ASSIGN 	{ makeList(">==",'o', lineCount); }
-	| AND_ASSIGN 	{ makeList("&=",'o', lineCount); }
-	| XOR_ASSIGN 	{ makeList("^=",'o', lineCount); }
-	| OR_ASSIGN 	{ makeList("|=",'o', lineCount); }
-	;
-
-expression
-	: assignment_expression {$$=$1;}
-	| expression ',' assignment_expression { makeList(",", 'p', lineCount); }
-	;
-
-constant_expression
-	: conditional_expression
-	;
-
-declaration
-	: declaration_specifiers ';' 			  { makeList(";", 'p', lineCount);typeBuffer=' '; }
-	| declaration_specifiers init_declarator_list ';' { makeList(";", 'p', lineCount); typeBuffer=' ';}
-	;
-
-declaration_specifiers
-	: storage_class_specifier
-	| storage_class_specifier declaration_specifiers
-	| type_specifier
-	| type_specifier declaration_specifiers
-	| type_qualifier
-	| type_qualifier declaration_specifiers
-	;
-
-init_declarator_list
-	: init_declarator
-	| init_declarator_list ',' init_declarator { makeList(",", 'p', lineCount); }
-	;
-
-init_declarator
-	: declarator
-	| declarator '=' initializer { makeList("=", 'o', lineCount); }
-	;
-
-storage_class_specifier
-	: TYPEDEF 	{ makeList("typedef", 'k', lineCount);}
-	| EXTERN 	{ makeList("extern", 'k', lineCount);}
-	| STATIC 	{ makeList("static", 'k', lineCount);}
-	| AUTO 		{ makeList("auto", 'k', lineCount);}
-	| REGISTER 	{ makeList("register", 'k', lineCount);}
-	;
-
-type_specifier
-	: VOID 		{ makeList("void", 'k', lineCount);typeBuffer='v';}
-	| CHAR 		{ makeList("char", 'k', lineCount); typeBuffer='c';}
-	| SHORT 	{ makeList("short", 'k', lineCount);}
-	| INT 		{ makeList("int", 'k', lineCount); typeBuffer='i';}
-	| LONG 		{ makeList("long", 'k', lineCount);}
-	| FLOAT 	{ makeList("float", 'k', lineCount);	typeBuffer='f';}
-	| DOUBLE 	{ makeList("double", 'k', lineCount);}
-	| SIGNED 	{ makeList("signed", 'k', lineCount);}
-	| UNSIGNED 	{ makeList("unsigned", 'k', lineCount);}
-	| struct_or_union_specifier
-	| enum_specifier
-	| TYPE_NAME
-	;
-
-struct_or_union_specifier
-	: struct_or_union IDENTIFIER '{' struct_declaration_list '}'
-	| struct_or_union '{' struct_declaration_list '}'
-	| struct_or_union IDENTIFIER
-	;
-
-struct_or_union
-	: STRUCT 	{ makeList("struct", 'k', lineCount);}
-	| UNION 	{ makeList("union", 'k', lineCount);}
-	;
-
-struct_declaration_list
-	: struct_declaration
-	| struct_declaration_list struct_declaration
-	;
-
-struct_declaration
-	: specifier_qualifier_list struct_declarator_list ';' { makeList(";", 'p', lineCount); }
-	;
-
-specifier_qualifier_list
-	: type_specifier specifier_qualifier_list
-	| type_specifier
-	| type_qualifier specifier_qualifier_list
-	| type_qualifier
-	;
-
-struct_declarator_list
-	: struct_declarator
-	| struct_declarator_list ',' struct_declarator { makeList(",", 'p', lineCount); }
-	;
-
-struct_declarator
-	: declarator
-	| ':' constant_expression 		{ makeList(":", 'p', lineCount); }
-	| declarator ':' constant_expression 	{ makeList(":", 'p', lineCount); }
-	;
-
-enum_specifier
-	: ENUM '{' enumerator_list '}' 			{ makeList("enum", 'k', lineCount);}
-	| ENUM IDENTIFIER '{' enumerator_list '}' 	{ makeList("enum", 'k', lineCount); makeList(tablePtr, 'v', lineCount); }
-	| ENUM IDENTIFIER 				{ makeList("enum", 'k', lineCount); makeList(tablePtr, 'v', lineCount); }
-	;
-
-enumerator_list
-	: enumerator
-	| enumerator_list ',' enumerator { makeList(",", 'p', lineCount); }
-	;
-
-enumerator
-	: IDENTIFIER 				{ makeList(tablePtr, 'v', lineCount); }
-	| IDENTIFIER '=' constant_expression 	{ makeList("=", 'o', lineCount); makeList("tablePtr", 'v', lineCount); }
-	;
-
-type_qualifier
-	: CONST 	{ makeList("const", 'k', lineCount); }
-	| VOLATILE 	{ makeList("volatile", 'k', lineCount); }
-	;
-
-declarator
-	: pointer direct_declarator
-	| direct_declarator
-	;
-
-direct_declarator
-	: IDENTIFIER 						{  checkDeclaration(tablePtr,lineCount,scopeCount);}
-	| '(' declarator ')' 					{  makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
-	| direct_declarator '[' constant_expression ']' 	{ makeList("[", 'p', lineCount); makeList("]", 'p', lineCount); }
-	| direct_declarator '[' ']' 				{ makeList("[", 'p', lineCount); makeList("]", 'p', lineCount); }
-	| direct_declarator '(' parameter_type_list ')' 	{ makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
-	| direct_declarator '(' identifier_list ')' 		{ makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
-	| direct_declarator '(' ')' 				{ makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
-	;
-
-pointer
-	: '*' 					{ makeList("*", 'o', lineCount); }
-	| '*' type_qualifier_list 		{ makeList("*", 'o', lineCount); }
-	| '*' pointer 				{ makeList("*", 'o', lineCount); }
-	| '*' type_qualifier_list pointer 	{ makeList("*", 'o', lineCount); }
-	;
-
-type_qualifier_list
-	: type_qualifier
-	| type_qualifier_list type_qualifier
-	;
+        }
+    ;
+						
 
 
-parameter_type_list
-	: parameter_list
-	| parameter_list ',' ELLIPSIS 		{ makeList(",", 'p', lineCount); makeList("::", 'o', lineCount); }
-	;
+function
+    : var_type id '(' parameter_list ')' ';'
+        {
 
-parameter_list
-	: parameter_declaration
-	| parameter_list ',' parameter_declaration { makeList(",", 'p', lineCount); }
-	;
+            addFunctionPrototype($2, paramCount, $1);
+            paramCount = 0;
+            $$.nextList = NULL;
+        }
+    | var_type id '(' parameter_list ')' function_body
+        {
 
-parameter_declaration
-	: declaration_specifiers declarator
-	| declaration_specifiers abstract_declarator
-	| declaration_specifiers
-	;
+            addFunction($2, paramCount, $1, funcLineNumber);
+            paramCount = 0;
+	    funcLineNumber = nextquad();
+            $$.nextList = $6.nextList;
+        }
+    ;
 
-identifier_list
-	: IDENTIFIER 				{ checkDeclaration(tablePtr,lineCount,scopeCount);}
-	| identifier_list ',' IDENTIFIER 	{ checkDeclaration(tablePtr,lineCount,scopeCount);makeList(",", 'p', lineCount); }
-	;
+function_body
+    : '{' statement_list  '}'
+        {
 
-type_name
-	: specifier_qualifier_list
-	| specifier_qualifier_list abstract_declarator
-	;
+            $$.nextList = $2.nextList;
+        }
+    | '{' declaration_list statement_list '}'
+        {
 
-abstract_declarator
-	: pointer
-	| direct_abstract_declarator
-	| pointer direct_abstract_declarator
-	;
-
-direct_abstract_declarator
-	: '(' abstract_declarator ')' 					{ makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
-	| '[' ']' 							{ makeList("[", 'p', lineCount); makeList("]", 'p', lineCount); }
-	| '[' constant_expression ']' 					{ makeList("[", 'p', lineCount); makeList("]", 'p', lineCount); }
-	| direct_abstract_declarator '[' ']' 				{ makeList("[", 'p', lineCount); makeList("]", 'p', lineCount); }
-	| direct_abstract_declarator '[' constant_expression ']' 	{ makeList("[", 'p', lineCount); makeList("]", 'p', lineCount); }
-	| '(' ')' 							{ makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
-	| '(' parameter_type_list ')' 					{ makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
-	| direct_abstract_declarator '(' ')' 				{ makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
-	| direct_abstract_declarator '(' parameter_type_list ')' 	{ makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
-	;
-
-initializer
-	: assignment_expression {$$=$1;}
-	| '{' initializer_list '}'
-	| '{' initializer_list ',' '}'
-	;
-
-initializer_list
-	: initializer
-	| initializer_list ',' initializer { makeList(",", 'p', lineCount); }
-	;
-
-statement
-	: labeled_statement
-	| compound_statement                  
-	| expression_statement
-	| selection_statement
-	| iteration_statement
-	| jump_statement
-	;
-
-labeled_statement
-	: IDENTIFIER ':' statement  			{ makeList(tablePtr, 'v', lineCount);  }
-	| CASE constant_expression ':'  statement 	{ makeList(":", 'p', lineCount); makeList("case", 'k', lineCount);}
-	| DEFAULT ':' statement 			{ makeList(":", 'p', lineCount); makeList("default", 'k', lineCount); }
-	;
-
-compound_statement
-	: '{' '}' 				  	
-	| '{' statement_list '}'              		
-	| '{' declaration_list '}'			
-	| '{' declaration_list statement_list '}' 	
-	;
+            $$.nextList = $3.nextList;
+        }
+    ;
 
 declaration_list
-	: declaration
-	| declaration_list declaration
-	;
+    : declaration ';'
+        {
+
+        }
+    | declaration_list declaration ';'
+        {
+
+        }
+    ;
+
+declaration
+    : INT id
+        {
+            $$ = INT_type;
+            addSymbolToQueue($2, INT_type, 0);
+
+        }
+    | FLOAT id
+        {
+            $$ = FLOAT_type;
+            addSymbolToQueue($2, FLOAT_type, 0);
+
+        }
+    | declaration ',' id
+        {
+            if(INT_type == $1) {
+                addSymbolToQueue($3, INT_type, 0);
+            } else if(FLOAT_type == $1) {
+                addSymbolToQueue($3, FLOAT_type, 0);
+            }
+
+        }
+    ;
+
+parameter_list
+    : INT id
+        {
+            paramCount++;
+            addSymbolToQueue($2, INT_type, paramCount);
+
+        }
+    | FLOAT id
+        {
+            paramCount++;
+            addSymbolToQueue($2, FLOAT_type, paramCount);
+
+        }
+    | parameter_list ',' INT id
+        {
+            paramCount++;
+            addSymbolToQueue($4, INT_type, paramCount);
+
+        }
+    | parameter_list ',' FLOAT id
+        {
+            paramCount++;
+            addSymbolToQueue($4, FLOAT_type, paramCount);
+
+        }
+    | VOID
+        {
+
+        }
+    |
+        {
+
+        }
+    ;
+
+var_type
+    : VOID
+        {
+            $$ = Return_VOID;
+
+        }
+    | INT
+        {
+            $$ = Return_INT;
+
+        }
+   
+    | FLOAT
+        {
+            $$ = Return_FLOAT;
+
+        }
+    ;
 
 statement_list
-	: statement
-	| statement_list statement
-	;
+    : statement
+        {
 
-expression_statement
-	: ';' 				{ makeList(";", 'p', lineCount); }
-	| expression ';' 	        { makeList(";", 'p', lineCount); }
-	;
+            $$.nextList = $1.nextList;
 
-selection_statement
-	: IF '(' expression ')' statement %prec LOWER_THAN_ELSE 
-				{ makeList("if", 'k', lineCount); makeList("(", 'p', lineCount); makeList(")", 'p', lineCount);}
-  	| IF '(' expression ')' statement ELSE statement 
-  				{ makeList("if", 'k', lineCount);  makeList("else", 'k', lineCount); makeList("(", 'p', lineCount); 					  makeList(")", 'p', lineCount); 
-  				}
-	| SWITCH '(' expression ')' statement 
-				{ makeList("switch", 'k', lineCount); makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
-	;
+        }
+    | statement_list marker statement
+        {
 
-iteration_statement
-	: WHILE '(' expression ')' statement  
-			{ makeList("while", 'k', lineCount); makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
-	| DO statement WHILE '(' expression ')' ';' 
-			{ makeList("do", 'k', lineCount); makeList("while", 'k', lineCount); makeList("(", 'p', lineCount);         				  makeList(")", 'p', lineCount); makeList(";", 'p', lineCount); 
-			}
-	| FOR '(' expression_statement expression_statement ')' statement  
-			{ makeList("for", 'k', lineCount); makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
-	| FOR '(' expression_statement expression_statement expression ')' statement 
-			{ makeList("for", 'k', lineCount); makeList("(", 'p', lineCount); makeList(")", 'p', lineCount); }
-	;
+	    backpatch($1.nextList,$2.quad);
+	    $$.nextList = $3.nextList;
 
-jump_statement
-	: GOTO IDENTIFIER ';' 	{ makeList("goto", 'k', lineCount); makeList(";", 'p', lineCount); makeList(tablePtr, 'v', lineCount);}
-	| CONTINUE ';' 		{ makeList("continue", 'k', lineCount); makeList(";", 'p', lineCount); }
-	| BREAK ';'  		{ makeList("break", 'k', lineCount); makeList(";", 'p', lineCount);}
-	| RETURN ';'  		{ makeList("return", 'k', lineCount); makeList(";", 'p', lineCount);}
-	| RETURN expression ';'	{ makeList("return", 'k', lineCount); makeList(";", 'p', lineCount);}
-	;
+        }
+    ;
 
-translation_unit
-	: external_declaration
-	| translation_unit external_declaration
-	;
+statement
+    : matched_statement
+        {
 
-external_declaration
-	: function_definition	
-	| declaration
-	;
+	    $$.nextList = $1.nextList;
 
-function_definition
-	: declaration_specifiers declarator declaration_list compound_statement  
-	| declaration_specifiers declarator compound_statement
-	| declarator declaration_list compound_statement
-	| declarator compound_statement
-	;
+        }
+    | unmatched_statement
+        {
 
+	    $$.nextList = $1.nextList;
+
+        }
+    ;
+
+matched_statement
+    : IF '(' assignment ')' marker matched_statement jump_marker ELSE marker matched_statement
+        {
+
+	    backpatch($3.trueList,$5.quad);
+	    backpatch($3.falseList,$9.quad);
+	    $$.nextList = mergelists($7.nextList,$10.nextList);
+	    $$.nextList = mergelists($$.nextList,$6.nextList);
+
+        }
+    | assignment ';'
+        {
+
+       
+	    $$.nextList = NULL;
+
+	}
+    | RETURN ';'
+        {
+
+
+	    $$.nextList = NULL;
+	    sprintf(icgQuad,"RETURN");
+	    appendCode(icgQuad);
+
+        }
+    | RETURN assignment ';'
+        {
+
+
+	    $$.nextList = NULL;
+            sprintf(icgQuad,"RETURN %s",$2.value);
+	    appendCode(icgQuad);
+
+        }
+    | WHILE marker '(' assignment ')' marker matched_statement jump_marker
+        {
+
+	    backpatch($4.trueList,$6.quad);
+	    $$.nextList = $4.falseList;
+	    backpatch($7.nextList,$2.quad);
+	    backpatch($8.nextList,$2.quad);
+
+        }
+    | DO marker statement WHILE '(' marker assignment ')' ';'
+        {
+	    backpatch($3.nextList,$6.quad);
+	    backpatch($7.trueList,$2.quad);
+	    $$.nextList = $7.falseList;
+        }
+    | FOR '(' assignment ';' marker assignment ';' marker assignment jump_marker ')' marker matched_statement jump_marker
+        {
+
+            if(BOOL_type == $3.type || BOOL_type == $9.type) {
+                printf("error, no boolean statements allowed as 1st or 3rd assignment in for loop\n");
+                yyerror();
+            }
+            if(BOOL_type != $6.type) {
+                printf("error, 2nd argument of for loop must be boolean\n");
+                yyerror();
+            }
+            backpatch($3.trueList, $5.quad);
+            backpatch($13.nextList, $8.quad);
+            backpatch($14.nextList, $8.quad);
+            $$.nextList = $6.falseList;
+            backpatch($6.trueList, $12.quad);
+            backpatch($9.trueList, $5.quad);
+            backpatch($10.nextList, $5.quad);
+
+        }
+    | '{' statement_list '}'
+        {
+
+	    $$.nextList = $2.nextList;
+
+        }
+    | '{' '}'
+        {	    
+
+	    $$.nextList = NULL;
+
+        }
+    ;
+
+unmatched_statement
+    : IF '(' assignment ')' marker statement
+        {
+
+	    backpatch($3.trueList,$5.quad);
+	    $$.nextList = mergelists($3.falseList,$6.nextList);
+
+        }
+    | WHILE marker '(' assignment ')' marker unmatched_statement jump_marker
+        {
+
+	    backpatch($4.trueList,$6.quad);
+	    $$.nextList = $4.falseList;
+	    backpatch($7.nextList,$2.quad);
+	    backpatch($8.nextList,$2.quad);
+
+        }
+    | FOR '(' assignment ';' marker assignment ';' marker assignment jump_marker ')' marker unmatched_statement jump_marker
+        {
+
+            if(BOOL_type == $3.type || BOOL_type == $9.type) {
+                printf("error, no boolean statements allowed as 1st or 3rd assignment in for loop\n");
+                yyerror();
+            }
+            if(BOOL_type != $6.type) {
+                printf("error, 2nd argument of for loop must be boolean\n");
+                yyerror();
+            }
+            backpatch($3.trueList, $5.quad);
+            backpatch($13.nextList, $8.quad);
+            backpatch($14.nextList, $8.quad);
+            $$.nextList = $6.falseList;
+            backpatch($6.trueList, $12.quad);
+            backpatch($9.trueList, $5.quad);
+            backpatch($10.nextList, $5.quad);
+
+        }
+
+    | IF '(' assignment ')' marker matched_statement jump_marker ELSE marker unmatched_statement
+        {
+
+	    backpatch($3.trueList,$5.quad);
+	    backpatch($3.falseList,$9.quad);
+	    $$.nextList = mergelists($7.nextList,$10.nextList);
+	    $$.nextList = mergelists($$.nextList,$6.nextList);
+
+        }
+    ;
+
+assignment
+    : expression
+        {
+
+            $$=$1;
+        }
+    | id '=' expression
+        {
+            int destType = getSymbolType($1);
+        	if(destType == 0){
+        		printf("ERROR: Not in scope");
+        	}
+            if(destType != $3.type) {
+                printf("Type error on line: %d\n", yylineno);
+                yyerror();
+            }
+
+            sprintf(icgQuad,"%s := %s",$1,$3.value);
+            appendCode(icgQuad);
+            $$.type = destType;
+            $$.trueList = $3.trueList;
+            $$.cType = VAR_type;
+            $$.value = $1;
+        }
+    ;
+
+expression
+    : INC_OP expression
+        {
+
+	    if($2.type != INT_type){
+		    printf("ERROR: Increment not allowed for types different than Integer.\n");
+		    yyerror();
+	    }
+	    //Create a variable if needed
+	    if($2.cType != VAR_type){
+		    char *var = nextIntVar();
+		    sprintf(icgQuad,"%s := %s",var,$2.value);
+		    appendCode(icgQuad);
+		    free($2.value);
+		    $2.value = var;
+		    $2.type = INT_type;
+		    $2.cType = VAR_type;
+	    }
+            sprintf(icgQuad,"%s := %s + 1",$2.value,$2.value);
+            appendCode(icgQuad);
+            //Set the attributes
+            $$ = $2;
+            $$.trueList = NULL;
+            $$.falseList = NULL;
+
+        }
+    | DEC_OP expression
+        {
+
+	    if($2.type != INT_type){
+		    printf("ERROR: Decrement not allowed for types different than Integer.\n");
+		    yyerror();
+	    }
+	    //Create a variable if needed
+	    if($2.cType != VAR_type){
+		    char *var = nextIntVar();
+		    sprintf(icgQuad,"%s := %s",var,$2.value);
+		appendCode(icgQuad);
+		    free($2.value);
+		    $2.value = var;
+		    $2.type = INT_type;
+		    $2.cType = VAR_type;
+	    }
+            sprintf(icgQuad,"%s := %s - 1",$2.value,$2.value);
+            appendCode(icgQuad);
+            //Set the attributes
+            $$ = $2;
+            $$.trueList = NULL;
+            $$.falseList = NULL;
+
+        }
+    | expression LOG_OR marker expression
+        {
+            if(BOOL_type != $1.type) {
+                sprintf(icgQuad, "IF (%s <> 0) GOTO", $1.value);
+                $1.trueList = appendToBackPatch(NULL, appendCode(icgQuad));
+                sprintf(icgQuad, "GOTO");
+                $1.falseList = appendToBackPatch(NULL, appendCode(icgQuad));
+            }
+            if(BOOL_type != $4.type) {
+                sprintf(icgQuad, "IF (%s <> 0) GOTO", $4.value);
+                $4.trueList = appendToBackPatch(NULL, appendCode(icgQuad));
+                sprintf(icgQuad, "GOTO");
+                $4.falseList = appendToBackPatch(NULL, appendCode(icgQuad));
+            }
+            $$.trueList = mergelists($1.trueList, $4.trueList);
+            backpatch($1.falseList, $3.quad);
+            $$.falseList = $4.falseList;
+            $$.type = BOOL_type;
+	}
+    | expression LOG_AND marker expression
+        {
+            if(BOOL_type != $1.type) {
+                sprintf(icgQuad, "IF (%s <> 0) GOTO", $1.value);
+                $1.trueList = appendToBackPatch(NULL, appendCode(icgQuad));
+                sprintf(icgQuad, "GOTO");
+                $1.falseList = appendToBackPatch(NULL, appendCode(icgQuad));
+            }
+            if(BOOL_type != $4.type) {
+                sprintf(icgQuad, "IF (%s <> 0) GOTO", $4.value);
+                $4.trueList = appendToBackPatch(NULL, appendCode(icgQuad));
+                sprintf(icgQuad, "GOTO");
+                $4.falseList = appendToBackPatch(NULL, appendCode(icgQuad));
+            }
+            $$.falseList = mergelists($1.falseList, $4.falseList);
+            backpatch($1.trueList, $3.quad);
+            $$.trueList = $4.trueList;
+            $$.type = BOOL_type;
+	 }
+    | expression NOT_EQUAL expression
+        {
+
+	    if($1.type != INT_type && $1.type != FLOAT_type){
+		printf("ERROR: Only Integer, Float and Bool values allowed in comparsions.\n");
+		yyerror();
+	    }
+            sprintf(icgQuad,"IF (%s <> %s) GOTO",$1.value,$3.value);
+	    $$.trueList = appendToBackPatch(NULL, appendCode(icgQuad));
+            sprintf(icgQuad,"GOTO");
+	    $$.falseList = appendToBackPatch(NULL, appendCode(icgQuad));
+	    $$.value = "TrueFalse Only!";
+	    $$.type = BOOL_type;
+	    $$.cType = NONE_type;
+
+        }
+    | expression EQUAL expression
+        {
+
+	    if($1.type != INT_type && $1.type != FLOAT_type){
+		printf("ERROR: Only Integer, Float and Bool values allowed in comparsions.\n");
+		yyerror();
+	    }
+            sprintf(icgQuad,"IF (%s = %s) GOTO",$1.value,$3.value);
+	    $$.trueList = appendToBackPatch(NULL, appendCode(icgQuad));
+            sprintf(icgQuad,"GOTO");
+	    $$.falseList = appendToBackPatch(NULL, appendCode(icgQuad));
+        if(BOOL_type == $1.type) {
+            $$.trueList = mergelists($$.trueList, $1.trueList);
+            $$.falseList = mergelists($$.falseList, $1.falseList);
+        }
+        if(BOOL_type == $3.type) {
+            $$.trueList = mergelists($$.trueList, $3.trueList);
+            $$.falseList = mergelists($$.falseList, $3.falseList);
+        }
+	    $$.value = "TrueFalse Only!";
+	    $$.type = BOOL_type;
+	    $$.cType = NONE_type;
+
+        }
+    | expression GREATER_OR_EQUAL expression
+        {
+
+	    if($1.type != INT_type && $1.type != FLOAT_type){
+		printf("ERROR: Only Integer, Float and Bool values allowed in comparsions.\n");
+		yyerror();
+	    }
+            sprintf(icgQuad,"IF (%s >= %s) GOTO",$1.value,$3.value);
+	    $$.trueList = appendToBackPatch(NULL, appendCode(icgQuad));
+            sprintf(icgQuad,"GOTO");
+	    $$.falseList = appendToBackPatch(NULL, appendCode(icgQuad));
+	    $$.value = "TrueFalse Only!";
+	    $$.type = BOOL_type;
+	    $$.cType = NONE_type;
+
+        }
+    | expression LESS_OR_EQUAL expression
+        {
+
+	    if($1.type != INT_type && $1.type != FLOAT_type){
+		printf("ERROR: Only Integer, Float and Bool values allowed in comparsions.\n");
+		yyerror();
+	    }
+	    sprintf(icgQuad,"IF (%s <= %s) GOTO",$1.value,$3.value);
+	    $$.trueList = appendToBackPatch(NULL, appendCode(icgQuad));
+	    sprintf(icgQuad,"GOTO");
+	    $$.falseList = appendToBackPatch(NULL, appendCode(icgQuad));
+	    $$.value = "TrueFalse Only!";
+	    $$.type = BOOL_type;
+	    $$.cType = NONE_type;
+
+        }
+    | expression '>' expression
+        {
+
+	    if($1.type != INT_type && $1.type != FLOAT_type){
+		printf("ERROR: Only Integer, Float and Bool values allowed in comparsions.\n");
+		yyerror();
+	    }
+	    sprintf(icgQuad,"IF (%s > %s) GOTO",$1.value,$3.value);
+	    $$.trueList = appendToBackPatch(NULL, appendCode(icgQuad));
+	    sprintf(icgQuad,"GOTO");
+	    $$.falseList = appendToBackPatch(NULL, appendCode(icgQuad));
+	    $$.value = "TrueFalse Only!";
+	    $$.type = BOOL_type;
+	    $$.cType = NONE_type;
+
+        }
+    | expression '<' expression
+        {
+
+	    if($1.type != INT_type && $1.type != FLOAT_type){
+		printf("ERROR: Only Integer, Float and Bool values allowed in comparsions.\n");
+		yyerror();
+	    }
+	    sprintf(icgQuad,"IF (%s < %s) GOTO",$1.value,$3.value);
+	    $$.trueList = appendToBackPatch(NULL, appendCode(icgQuad));
+	    sprintf(icgQuad,"GOTO");
+	    $$.falseList = appendToBackPatch(NULL, appendCode(icgQuad));
+	    $$.value = "TrueFalse Only!";
+	    $$.type = BOOL_type;
+	    $$.cType = NONE_type;
+
+        }
+   
+    | expression '+' expression
+        {
+
+	    if($1.type != INT_type && $1.type!= FLOAT_type &&  $3.type != INT_type && $3.type != FLOAT_type){
+		printf("ERROR: Only integer and float values allowed when adding numbers.\n");
+		yyerror();
+	    }
+	    int type = 0;
+	    if($1.type == $3.type){
+		type = $1.type;
+	    }
+	    else{
+		type = FLOAT_type;
+	    }
+	    
+	    char* var = NULL;
+            switch(type){
+            	case INT_type: var = nextIntVar();break;
+            	case FLOAT_type:var = nextFloatVar();break;
+            }
+            char buffer[50];
+            sprintf(icgQuad,"%s := %s + %s",var,$1.value,$3.value);
+            appendCode(icgQuad);
+            $$.value = var;
+            $$.type = type;
+            $$.cType = VAR_type;
+	    $$.trueList = NULL;
+	    $$.falseList = NULL;
+
+        }
+    | expression '-' expression
+        {
+
+	    if($1.type != INT_type && $1.type!= FLOAT_type &&  $3.type != INT_type && $3.type != FLOAT_type){
+		printf("ERROR: Only integer and float values allowed when substracting numbers.\n");
+		yyerror();
+	    }
+	    int type = 0;
+	    if($1.type == $3.type){
+		type = $1.type;
+	    }
+	    else{
+		type = FLOAT_type;
+	    }
+	    
+	    char* var = NULL;
+            switch(type){
+            	case INT_type: var = nextIntVar();break;
+            	case FLOAT_type:var = nextFloatVar();break;
+            }
+            char buffer[50];
+            sprintf(icgQuad,"%s := %s - %s",var,$1.value,$3.value);
+            appendCode(icgQuad);
+            $$.value = var;
+            $$.type = type;
+            $$.cType = VAR_type;
+	    $$.trueList = NULL;
+	    $$.falseList = NULL;
+
+        }
+    | expression '*' expression
+        {
+
+	    if($1.type != INT_type && $1.type!= FLOAT_type &&  $3.type != INT_type && $3.type != FLOAT_type){
+		printf("ERROR: Only integer and float values allowed when multiplicating numbers.\n");
+		yyerror();
+	    }
+	    int type = 0;
+	    if($1.type == $3.type){
+		type = $1.type;
+	    }
+	    else{
+		type = FLOAT_type;
+	    }
+	    
+	    char* var = NULL;
+            switch(type){
+            	case INT_type: var = nextIntVar();break;
+            	case FLOAT_type:var = nextFloatVar();break;
+            }
+            char buffer[50];
+            sprintf(icgQuad,"%s := %s * %s",var,$1.value,$3.value);
+            appendCode(icgQuad);
+            $$.value = var;
+            $$.type = type;
+            $$.cType = VAR_type;
+	    $$.trueList = NULL;
+	    $$.falseList = NULL;
+
+        }
+    | expression '/' expression
+        {
+
+	    if($1.type != INT_type && $1.type!= FLOAT_type &&  $3.type != INT_type && $3.type != FLOAT_type){
+		printf("ERROR: Only integer and float values allowed when dividing numbers.\n");
+		yyerror();
+	    }
+	    int type = 0;
+	    if($1.type == $3.type){
+		type = $1.type;
+	    }
+	    else{
+		type = FLOAT_type;
+	    }
+	    
+	    char* var = NULL;
+            switch(type){
+            	case INT_type: var = nextIntVar();break;
+            	case FLOAT_type:var = nextFloatVar();break;
+            }
+            char buffer[50];
+            sprintf(icgQuad,"%s := %s / %s",var,$1.value,$3.value);
+            appendCode(icgQuad);
+            $$.value = var;
+            $$.type = type;
+            $$.cType = VAR_type;
+	    $$.trueList = NULL;
+	    $$.falseList = NULL;
+
+        }
+    | expression '%' expression
+        {
+
+	    if($1.type != INT_type && $1.type!= FLOAT_type &&  $3.type != INT_type && $3.type != FLOAT_type){
+		printf("ERROR: Only integer and float values allowed when caluclating mod.\n");
+		yyerror();
+	    }
+	    int type = 0;
+	    if($1.type == $3.type){
+		type = $1.type;
+	    }
+	    else{
+		type = FLOAT_type;
+	    }
+	    
+	    char* var = NULL;
+            switch(type){
+            	case INT_type: var = nextIntVar();break;
+            	case FLOAT_type:var = nextFloatVar();break;
+            }
+            char buffer[50];
+            sprintf(icgQuad,"%s := %s \% %s",var,$1.value,$3.value);
+            appendCode(icgQuad);
+            $$.value = var;
+            $$.type = type;
+            $$.cType = VAR_type;
+	    $$.trueList = NULL;
+	    $$.falseList = NULL;
+
+        }
+    | '!' expression
+        {
+
+	    if($2.type != BOOL_type){
+		if($2.type != INT_type && $2.type != FLOAT_type){
+		    printf("ERROR: Only Bool, Int and Float allowed in logical expressions!\n");
+		    yyerror();
+		}
+		sprintf(icgQuad,"IF (%s <> 0) GOTO",$2.value);
+		$$.falseList = appendToBackPatch(NULL,appendCode(icgQuad));
+		sprintf(icgQuad,"GOTO",$2.value);
+		$$.trueList = appendToBackPatch(NULL,appendCode (icgQuad));
+	    }
+	    else{
+	      $$ = $2;
+	      $$.trueList = $2.falseList;
+	      $$.falseList = $2.trueList;
+	    }
+
+	}
+    | U_PLUS expression
+        {
+            if(INT_type != $2.type && FLOAT_type != $2.type) {
+                yyerror();
+            }
+            $$ = $2;
+        }
+    | U_MINUS expression
+        {
+            $$ = $2;
+            if(INT_type == $2.type) {
+                $$.value = nextIntVar();
+            } else if (FLOAT_type == $2.type) {
+                $$.value = nextFloatVar();
+            } else {
+                yyerror();
+            }
+            sprintf(icgQuad, "%s := -%s", $$.value, $2.value);
+            appendCode (icgQuad);
+       }
+    | CONSTANT
+        {
+
+            $$.value = strdup(yytext);
+            $$.trueList = NULL;
+	    $$.falseList = NULL;
+
+            
+        }
+    | '(' expression ')'
+        {
+
+	    $$ = $2;
+
+        }
+    | id '(' exp_list ')' ';'
+        {
+
+            int varType = getFunctionType($1);
+            if(varType == 0){
+            	printf("ERROR: Function %s not defined!\n",$1);
+		yyerror();
+            }
+            char* var = NULL;
+            switch(varType){
+            case Return_INT:
+                var = nextIntVar();
+                $$.type = INT_type;
+                break;
+            case Return_FLOAT:
+                var = nextFloatVar();
+                $$.type = FLOAT_type;
+                break;
+            }
+	    $$.value = var;
+	    $$.cType = VAR_type;
+	    checkAndGenerateParams($3.queue,$1,$3.count);
+            sprintf(icgQuad,"%s := CALL %s, %d",var,$1,$3.count);
+            appendCode (icgQuad);
+
+        }
+    | id '('  ')' ';'
+        {
+
+            int varType = getFunctionType($1);
+            if(varType == 0){
+            	printf("ERROR: Function %s not defined!\n",$1);
+		yyerror();
+            }
+            char* var = NULL;
+            switch(varType){
+             case Return_INT:
+                var = nextIntVar;
+                $$.type = INT_type;
+                break;
+            case Return_FLOAT:
+                var = nextFloatVar;
+                $$.type = FLOAT_type;
+                break;
+           
+            }
+	    $$.value = var;
+	    $$.cType = VAR_type;
+	    checkAndGenerateParams(NULL,$1,0);
+            sprintf(icgQuad,"%s := CALL %s, %d",var,$1,0);
+            appendCode (icgQuad);
+
+        }
+    | id
+        {
+
+	    int varType = getSymbolType($1);
+            if(varType == 0){
+            	printf("ERROR: Variable %s not in scope!\n",$1);
+		yyerror();
+            }
+	    $$.value = $1;
+	    $$.type = varType;
+	    $$.cType = VAR_type;
+
+        }
+    ;
+
+exp_list
+    : expression
+        {
+
+	    if($1.type != INT_type && $1.type != FLOAT_type){
+		printf("ERROR: Only Integer and Float are allowed as parameter types.\n");
+		yyerror();
+	    }
+	    $$.queue = addSymbolToParameterQueue(NULL,$1.value,$1.type);
+	    $$.count = 1;
+
+        }
+    | exp_list ',' expression
+        {
+
+	      if($3.type != INT_type && $3.type != FLOAT_type){
+		  printf("ERROR: Only Integer and Float are allowed as parameter types.\n");
+		  yyerror();
+	      }
+	      $$.queue = addSymbolToParameterQueue($1.queue,$3.value,$3.type);
+	      $$.count = $1.count + 1;
+
+        }
+    ;
+
+id
+    : IDENTIFIER
+        {
+
+            $$ = strdup(yytext);
+        }
+    ;
+marker
+	: {	
+
+	      $$.quad = nextquad();
+
+	};
+jump_marker
+	: {
+
+	      $$.quad = nextquad();
+	      sprintf(icgQuad,"GOTO");
+	      $$.nextList = appendToBackPatch(NULL, appendCode (icgQuad));
+
+   };
 %%
-void yyerror()
-{
-	errorFlag=1;
-	fflush(stdout);
-	printf("\n%s : %d :Syntax error \n",sourceCode,lineCount);
-}
-void main(int argc,char **argv){
-	if(argc<=1){
-		
-		printf("Invalid ,Expected Format : ./a.out <\"sourceCode\"> \n");
-		return 0;
-	}
-	
-	yyin=fopen(argv[1],"r");
-	sourceCode=(char *)malloc(strlen(argv[1])*sizeof(char));
-	sourceCode=argv[1];
-	yyparse();
-	
-	if(nestedCommentCount!=0){
-		errorFlag=1;
-    		printf("%s : %d : Comment Does Not End\n",sourceCode,lineCount);
-    		
-	}
-	if(commentFlag==1){
-		errorFlag=1;
-		printf("%s : %d : Nested Comment\n",sourceCode,lineCount);
-    	}
-	
-		
-	
-	if(!errorFlag  && !semanticErr  && arrayIndexErr!=1){
-		
-		printf("\n\n\t\t%s Parsing Completed\n\n",sourceCode);
-		
-		
-	
-		FILE *writeParsed=fopen("parsedTable.txt","w");
-    		fprintf(writeParsed,"\n\t\t\t\tParsed Table\n\n\t\tToken\t\t\t\t\t\tType\t\t\t\t\t\t\tLine Number\n");
-      		for(tokenList *ptr=parsedPtr;ptr!=NULL;ptr=ptr->next){
-  			fprintf(writeParsed,"\n%20s%30.30s%60s",ptr->token,ptr->type,ptr->line);
-		}
-  		FILE *writeSymbol=fopen("symbolTable.txt","w");
-    		fprintf(writeSymbol,"\n\t\t\t\tSymbolTable\n\n\t\tToken\t\t\t\tType\t\tLine Number\t\t\t\tScope\t\tFunction Number\n");
-      		for(tokenList *ptr=symbolPtr;ptr!=NULL;ptr=ptr->next){
-  			fprintf(writeSymbol,"\n%20s%30.30s%30s%30s\t%d\t%d",ptr->token,ptr->type,ptr->line,ptr->scope,ptr->scopeValue,ptr->funcCount+1);
-		}
-		
-		FILE *writeConstant=fopen("constantTable.txt","w");
-    		fprintf(writeConstant,"\n   \t\t\t\t\t\t\t\tConstant Table \n\n \t\t\t\t\t\tValue\t\t\t\t\t\t\tLine Number\n");
-    		for(tokenList *ptr=constantPtr;ptr!=NULL;ptr=ptr->next)
-  		fprintf(writeConstant,"\n%50s%60s",ptr->token,ptr->line);
-  	
-  	
-  		fclose(writeSymbol);
-		fclose(writeConstant);
-		fclose(writeParsed);
-	}
-printf("\n\n");	
-}
-
-

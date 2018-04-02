@@ -1,0 +1,12 @@
+
+			  Intermediate Code Generated
+			-------------------------------
+0    GOTO 1
+1    Ti_1 := a + 10
+2    a := Ti_1
+3    IF (a < 10) GOTO 5
+4    GOTO 8
+5    Ti_2 := a + 34
+6    a := Ti_2
+7    GOTO 3
+8    RETURN 0

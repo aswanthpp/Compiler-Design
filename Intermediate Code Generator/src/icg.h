@@ -1,75 +1,100 @@
-#include <stdbool.h>
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <malloc.h>
+#define PARENT_NONE NULL
 
 typedef enum
 {
-    MAIN,
-    FUNC,
-    PROTO,
-    ARRAY,
-} TOKEN_TYPE;
+     BOOL_type,
+    INT_type,
+    FLOAT_type,
+     FUNC,
+     MAIN,
+     PROTO,
+} tokenType;
 
 typedef enum
 {
-    NONE,
-    INT,
-    FLOAT,
-    BIN
+    Return_VOID,
+    Return_INT,
+    Return_FLOAT
     
-} TOKEN_DATA_TYPE;
+} tokenReturnType;
 
 typedef enum
 {
-	CONSTANT,
-	IDENTIFIER,
-	NONE
-} TOKEN_CONST_TYPE;
+	CONST_type,
+	VAR_type,
+	NONE_type
+	
+} tokenConstType;
 
-struct symbolTableEntry
+
+
+struct tokenList
 {
-    char                     *name;
-    TOKEN_TYPE               type;
-    TOKEN_DATA_TYPE           dataType;
-    long                      line;
-    char                     *parent;
-    unsigned long             parameter;
+    char *name;
+    tokenType type;
+    tokenReturnType returnType;
+    long size;
+    char *scope;
+    long line;
+    long parameter;
     
-    struct symbolTableEntry *next;
+    struct tokenList *next;
     
 };
-typedef struct symbolTableEntry SymbolTableEntry;
+typedef struct tokenList tokenList;
 
-struct icgEntry
+
+struct threeAddressCode
 {
     char *code;
-    
-    int gotoL;
+    int gotoLine;
 
-    struct icgEntry *next;
+    struct threeAddressCode *next;
     
 };
-typedef struct icgEntry icgLineEntry;
+typedef struct threeAddressCode threeAddressCode;
 
-struct backpatchList
+struct backPatchList 
 {
-    icgLineEntry *entry;
-
-    struct backpatchList *next;
+    threeAddressCode   *entry;
+    struct backPatchList  *next;
 
 };
-typedef struct  backpatchList BackpatchList;
-
-CodeLineEntry *genquad(char *code);
-
-SymbolTableEntry* addSymbol(const char *name,TOKEN_TYPE type,TOKEN_DATA_TYPE internalType,unsigned long line,char *parent,unsigned long parameter);
-
-void backpatch(BackpatchList* list, int gotoL);
-
-BackpatchList* addToList(BackpatchList* list, CodeLineEntry* entry);
-
-bool writeCode(FILE *outputFile);
-bool writeSymbolTable(FILE *outputFile);
+typedef struct backPatchList   backPatchList ;
 
 
+threeAddressCode* appendCode(char *code);
+void backpatch(backPatchList * list, int gotoL);
+backPatchList* mergelists(backPatchList  * a, backPatchList  * b);
+backPatchList* appendToBackPatch(backPatchList  * list, threeAddressCode  * entry);
+tokenList* appendToSymbolTable(char *name,tokenType type,tokenReturnType returnType,long size,long line,char *scope,long parameter);
+void writeCode(FILE *icgOut);
+void writeSymbolTable(FILE *symOut);
+
+tokenList * addSymbolToParameterQueue(tokenList * queue, char *name, tokenType type);
 
 
+int checkAndGenerateParams(tokenList * queue, char* name ,int parameterCount);
+
+int getFunctionType(char *name);
+
+int getSymbolType(char *name);
+
+char* nextFloatVar();
+
+char* nextIntVar();
+
+char* nextBoolVar();
+
+int nextquad();
+  
+void addFunction(char *name, unsigned int parameter_count, tokenReturnType  ret_type, int line);
+
+tokenList * lookup(char *name);
+
+extern tokenList *symbolTable;

@@ -1,24 +1,15 @@
 #include <stdlib.h>
-
-// This is a demo programm
-
-
+int func(int a,int b);
 int main (){
-
-	int a, b, t ,i;
-	int d;
-	a = 2;
-	b= 8;
-	t = 9;
-	while(t < 15) {
-		if (a <  b){
-			b = a;
-		}
+	int a;
+	int a;
+	a=a+10;
+	while(a<10){
+		a=a+34;
+		printf("\nHello");
 	}
-
-	for(i=0;i<10;++i)
-	  a = a + 1;
-
 	return 0;
+	
 
 }
+

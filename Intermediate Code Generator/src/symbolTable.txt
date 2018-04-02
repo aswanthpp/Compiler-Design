@@ -1,11 +1,14 @@
-SYMBOLS
--------------
-Name            Type    Int_Typ    Offset/Size    Line    Parent 
------------------------------------------------------------------
-a               Int     None       0              8       main           
-b               Int     None       4              8       main           
-t               Int     None       8              8       main           
-i               Int     None       12             8       main           
-d               Int     None       16             9       main           
-i_1             Int     None       20             20      main           
-main            Main    Int        24             0       None           
+
+			   Symbol Table
+			------------------
+
+   Name            DataType      ReturnType      Offset          Scope
+------------------------------------------------------------------------
+func                 Proto          Int            0            None        
+a                    Int            None           4            func        
+b                    Int            None           4            func        
+a                    Int            None           0            main        
+a                    Int            None           4            main        
+Ti_1                 Int            None           8            main        
+Ti_2                 Int            None           12           main        
+main                 Main           Int            16           None        
